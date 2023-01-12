@@ -1,0 +1,419 @@
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>k8s dashboard terminal源码分析 - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路,记录点滴成长"><meta name=keywords content="k8s,go"><meta itemprop=name content="k8s dashboard terminal源码分析"><meta itemprop=description content><meta itemprop=datePublished content="2022-12-20T23:48:00+08:00"><meta itemprop=dateModified content="2022-12-21T00:05:59+08:00"><meta itemprop=wordCount content="820"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content="k8s,go,"><meta property="og:title" content="k8s dashboard terminal源码分析"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/2950/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-12-20T23:48:00+08:00"><meta property="article:modified_time" content="2022-12-21T00:05:59+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="k8s dashboard terminal源码分析"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/2950/><link rel=prev href=https://www.soulchild.cn/2945/><link rel=stylesheet href=/css/style.min.db361dc4098a04afe1bcead2293b365e8f7cc7b8edaa4f919cb2562c5e35fc65.css integrity="sha256-2zYdxAmKBK/hvOrSKTs2Xo98x7jtqk+RnLJWLF41/GU="><link rel=stylesheet href=/lib/fontawesome-free/all.min.01b035efb5dfa529c512f82962ed633328222da6f33c224244806d4798c67349.css integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k="><link rel=stylesheet href=/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"k8s dashboard terminal源码分析","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/2950\/"},"genre":"posts","keywords":"k8s, go","wordcount":820,"url":"https:\/\/www.soulchild.cn\/2950\/","datePublished":"2022-12-20T23:48:00+08:00","dateModified":"2022-12-21T00:05:59+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-center"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-center"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-center has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-center"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-center"><a class=menu-link href=/about/ title=关于><i class="fa-sharp fa-solid fa-address-card fa-fw fa-sm" aria-hidden=true></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-center"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-center"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-center"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-center"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-center"><a class=menu-link href=/about/ title=关于><i class="fa-sharp fa-solid fa-address-card fa-fw fa-sm" aria-hidden=true></i> 关于</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden=true></i></h2><div class=toc-content id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>k8s dashboard terminal源码分析</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> kubernetes</a>&ensp;<a href=/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> 云原生</a>&ensp;<a href=/categories/golang/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> golang</a></span></div><div class=post-meta-line><span title="2022-12-20 23:48:00"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2022-12-20 23:48">2022-12-20 23:48</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 820 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 4 分钟</span>&nbsp;<span id=/2950/ class="leancloud_visitors comment-visitors" data-flag-title="k8s dashboard terminal源码分析">
+<i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span class=leancloud-visitors-count>-</span>&nbsp;次阅读
+</span>&nbsp;<span class=comment-count data-flag-title="k8s dashboard terminal源码分析">
+<i class="fa-regular fa-comments fa-fw" aria-hidden=true></i>&nbsp;<span data-xid=/2950/ class=valine-comment-count>-</span>&nbsp;条评论
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#源码位置>源码位置</a><ul><li><a href=#前端实现>前端实现</a></li><li><a href=#后端实现>后端实现</a></li></ul></li><li><a href=#源码分析>源码分析</a><ul><li><a href=#一socket部分>一、socket部分</a></li><li><a href=#小总结>小总结</a></li><li><a href=#二apiserver交互部分>二、apiserver交互部分</a></li></ul></li><li><a href=#功能拆解例子>功能拆解例子</a></li></ul></li></ul></nav></div></div><div class=content id=content data-end-flag=---><h3 id=源码位置>源码位置</h3><h4 id=前端实现>前端实现</h4><p><a href=https://github.com/kubernetes/dashboard/blob/v2.7.0/src/app/frontend/shell/template.html target=_blank rel="external nofollow noopener noreferrer">https://github.com/kubernetes/dashboard/blob/v2.7.0/src/app/frontend/shell/template.html<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>
+<a href=https://github.com/kubernetes/dashboard/blob/v2.7.0/src/app/frontend/shell/component.ts target=_blank rel="external nofollow noopener noreferrer">https://github.com/kubernetes/dashboard/blob/v2.7.0/src/app/frontend/shell/component.ts<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><h4 id=后端实现>后端实现</h4><p>入口有两个</p><ol><li>sockjs连接实现 <a href=https://github.com/kubernetes/dashboard/blob/v2.7.0/src/app/backend/dashboard.go target=_blank rel="external nofollow noopener noreferrer">https://github.com/kubernetes/dashboard/blob/v2.7.0/src/app/backend/dashboard.go<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></li><li>访问终端界面时的handler <a href=https://github.com/kubernetes/dashboard/blob/v2.7.0/src/app/backend/handler/apihandler.go target=_blank rel="external nofollow noopener noreferrer">https://github.com/kubernetes/dashboard/blob/v2.7.0/src/app/backend/handler/apihandler.go<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></li></ol><p>主要逻辑
+<a href=https://github.com/kubernetes/dashboard/blob/v2.7.0/src/app/backend/handler/terminal.go target=_blank rel="external nofollow noopener noreferrer">https://github.com/kubernetes/dashboard/blob/v2.7.0/src/app/backend/handler/terminal.go<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><h3 id=源码分析>源码分析</h3><h4 id=一socket部分>一、socket部分</h4><ol><li>首先通过入口开始定位，慢慢把流程串起来.</li></ol><p>通过浏览器可以定位到web terminal使用了websocket进行的通信，对话内容也可以记一下，这个顺序也有些用。</p><p><img class=lazyload src=/svg/loading.min.svg data-src=/2950/images/2958586898.png data-srcset="/2950/images/2958586898.png, /2950/images/2958586898.png 1.5x, /2950/images/2958586898.png 2x" data-sizes=auto alt=21078-lkwsyb278wc.png title=21078-lkwsyb278wc.png width=1658 height=502></p><p>在源码中找到api路由<code>/api/sockjs/491/jv0og3kn/websocket?29677d05b2b2932b300380c0cc0dcaf4</code>
+源码位置
+<a href=https://github.com/kubernetes/dashboard/blob/v2.7.0/src/app/backend/dashboard.go#L170 target=_blank rel="external nofollow noopener noreferrer">https://github.com/kubernetes/dashboard/blob/v2.7.0/src/app/backend/dashboard.go#L170<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p>这里可以看出来<code>/api/sockjs/</code>开头的路由都交给了<code>handler.CreateAttachHandler("/api/sockjs")</code>函数处理
+这个函数很简单就一句<code>return sockjs.NewHandler(path, sockjs.DefaultOptions, handleTerminalSession)</code>
+<code>/api/sockjs</code>这个路由最终的处理函数是<code>handleTerminalSession</code>，这个函数接收sockjs.Session类型参数，通过他可以读取websocket会话的消息。</p><p>这个函数前面做了一些判断err，msg变量是TerminalMessage结构体实例化出来的，主要应该用来反序列化客户端传来的消息为结构体对象的，后面两个，如果建立会话后发送的内容中msg.Op不是bind就直接return，下面会判断msg中的sessionID是否存在于terminalSessions中，不存在的sessionID也会return(什么时候将sessionID存入terminalSessions中的?在另一个入口中，后面会说到【1】)</p><p><img class=lazyload src=/svg/loading.min.svg data-src=/2950/images/2958586898.png data-srcset="/2950/images/2958586898.png, /2950/images/2958586898.png 1.5x, /2950/images/2958586898.png 2x" data-sizes=auto alt=18297-49vtn04vmhj.png title=18297-49vtn04vmhj.png width=1658 height=502></p><p>再往下，第一行是将sockjs.Session对象存入sockJSSession中，第二行是将sockjs.Session对象存入SessionMap中, sockjs.Session对象可以用来发送和接受数据
+第三行的bound是个err类型的channel，将nil放进去, 执行完应该会阻塞，由后面的<code>WaitForTerminal</code>函数来消费处理</p><p><img class=lazyload src=/svg/loading.min.svg data-src=/2950/images/2958586898.png data-srcset="/2950/images/2958586898.png, /2950/images/2958586898.png 1.5x, /2950/images/2958586898.png 2x" data-sizes=auto alt=83390-yukzu4wykv8.png title=83390-yukzu4wykv8.png width=1658 height=502></p><p>这里使用了TerminalSession结构体，terminalSession变量是在当前函数体内声明的，我没截出来。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=c1>// 这里是实例化StreamOptions需要用的一些参数，stream通过read、write方法将服务端的stdout、stdin、stderr、写入到指定的位置，具体写到哪可以看下面的实现逻辑
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>type</span> <span class=nx>PtyHandler</span> <span class=kd>interface</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>io</span><span class=p>.</span><span class=nx>Reader</span>
+</span></span><span class=line><span class=cl>	<span class=nx>io</span><span class=p>.</span><span class=nx>Writer</span>
+</span></span><span class=line><span class=cl>	<span class=nx>remotecommand</span><span class=p>.</span><span class=nx>TerminalSizeQueue</span> <span class=c1>// 终端大小，也是stream需要的option
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// TerminalSession implements PtyHandler (using a SockJS connection)
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>type</span> <span class=nx>TerminalSession</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>id</span>            <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=nx>bound</span>         <span class=kd>chan</span> <span class=kt>error</span>
+</span></span><span class=line><span class=cl>	<span class=nx>sockJSSession</span> <span class=nx>sockjs</span><span class=p>.</span><span class=nx>Session</span>
+</span></span><span class=line><span class=cl>	<span class=nx>sizeChan</span>      <span class=kd>chan</span> <span class=nx>remotecommand</span><span class=p>.</span><span class=nx>TerminalSize</span>  <span class=c1>// 这个结构体就两个属性宽和高
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 和客户端发的消息格式对应，格式不一致就无法反序列化，从而无法建立连接
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>type</span> <span class=nx>TerminalMessage</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Op</span><span class=p>,</span> <span class=nx>Data</span><span class=p>,</span> <span class=nx>SessionID</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Rows</span><span class=p>,</span> <span class=nx>Cols</span>          <span class=kt>uint16</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 主要用来存储sessionId和session的对应关系的，通过get、set方法可以读取和设置
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>type</span> <span class=nx>SessionMap</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Sessions</span> <span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=nx>TerminalSession</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Lock</span>     <span class=nx>sync</span><span class=p>.</span><span class=nx>RWMutex</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>注释中说TerminalSession实现了PtyHandler接口，并且他还拥有SockJS session对象信息，PtyHandler接口继承了io.Reader、io.Writer、remotecommand.TerminalSizeQueue，只要实现下面三个方法即可
+read 读取客户端发来的数据
+write 向客户端发送数据
+next 获取终端大小，返回给调用方</p><p>看看他实现这些方法的逻辑</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=c1>// Read方法将终端大小存入到channel中了，这个方法从channel中读出来并将结果返回
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>t</span> <span class=nx>TerminalSession</span><span class=p>)</span> <span class=nf>Next</span><span class=p>()</span> <span class=o>*</span><span class=nx>remotecommand</span><span class=p>.</span><span class=nx>TerminalSize</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>size</span> <span class=o>:=</span> <span class=o>&lt;-</span><span class=nx>t</span><span class=p>.</span><span class=nx>sizeChan</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>size</span><span class=p>.</span><span class=nx>Height</span> <span class=o>==</span> <span class=mi>0</span> <span class=o>&amp;&amp;</span> <span class=nx>size</span><span class=p>.</span><span class=nx>Width</span> <span class=o>==</span> <span class=mi>0</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=o>&amp;</span><span class=nx>size</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=p>(</span><span class=nx>t</span> <span class=nx>TerminalSession</span><span class=p>)</span> <span class=nf>Read</span><span class=p>(</span><span class=nx>p</span> <span class=p>[]</span><span class=kt>byte</span><span class=p>)</span> <span class=p>(</span><span class=kt>int</span><span class=p>,</span> <span class=kt>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>m</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>t</span><span class=p>.</span><span class=nx>sockJSSession</span><span class=p>.</span><span class=nf>Recv</span><span class=p>()</span> <span class=c1>// 读取客户端的数据
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=c1>// Send terminated signal to process to avoid resource leak
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=k>return</span> <span class=nb>copy</span><span class=p>(</span><span class=nx>p</span><span class=p>,</span> <span class=nx>END_OF_TRANSMISSION</span><span class=p>),</span> <span class=nx>err</span>   <span class=c1>// 如果读取异常则return一个终止传输的符号(\u0004-EOT)
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kd>var</span> <span class=nx>msg</span> <span class=nx>TerminalMessage</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>Unmarshal</span><span class=p>([]</span><span class=nb>byte</span><span class=p>(</span><span class=nx>m</span><span class=p>),</span> <span class=o>&amp;</span><span class=nx>msg</span><span class=p>);</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=nb>copy</span><span class=p>(</span><span class=nx>p</span><span class=p>,</span> <span class=nx>END_OF_TRANSMISSION</span><span class=p>),</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>switch</span> <span class=nx>msg</span><span class=p>.</span><span class=nx>Op</span> <span class=p>{</span>   <span class=c1>// 成功读取数据后,需要根据数据中的Op属性，判断要进行的动作
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>case</span> <span class=s>&#34;stdin&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=nb>copy</span><span class=p>(</span><span class=nx>p</span><span class=p>,</span> <span class=nx>msg</span><span class=p>.</span><span class=nx>Data</span><span class=p>),</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl>	<span class=k>case</span> <span class=s>&#34;resize&#34;</span><span class=p>:</span>  <span class=c1>// 实例化TerminalSize对象，客户端发来的终端大小放在这个对象里, 将这个对象放入sizeChan中
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>t</span><span class=p>.</span><span class=nx>sizeChan</span> <span class=o>&lt;-</span> <span class=nx>remotecommand</span><span class=p>.</span><span class=nx>TerminalSize</span><span class=p>{</span><span class=nx>Width</span><span class=p>:</span> <span class=nx>msg</span><span class=p>.</span><span class=nx>Cols</span><span class=p>,</span> <span class=nx>Height</span><span class=p>:</span> <span class=nx>msg</span><span class=p>.</span><span class=nx>Rows</span><span class=p>}</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=mi>0</span><span class=p>,</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl>	<span class=k>default</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=nb>copy</span><span class=p>(</span><span class=nx>p</span><span class=p>,</span> <span class=nx>END_OF_TRANSMISSION</span><span class=p>),</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;unknown message type &#39;%s&#39;&#34;</span><span class=p>,</span> <span class=nx>msg</span><span class=p>.</span><span class=nx>Op</span><span class=p>)</span>  <span class=c1>// 未知的Op属性，返回终止传输符号，同时返回错误信息
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 对数据序列化进行然后发送给客户端，类型是stdout
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>t</span> <span class=nx>TerminalSession</span><span class=p>)</span> <span class=nf>Write</span><span class=p>(</span><span class=nx>p</span> <span class=p>[]</span><span class=kt>byte</span><span class=p>)</span> <span class=p>(</span><span class=kt>int</span><span class=p>,</span> <span class=kt>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>msg</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>Marshal</span><span class=p>(</span><span class=nx>TerminalMessage</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Op</span><span class=p>:</span>   <span class=s>&#34;stdout&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Data</span><span class=p>:</span> <span class=nb>string</span><span class=p>(</span><span class=nx>p</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>	<span class=p>})</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=mi>0</span><span class=p>,</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=p>=</span> <span class=nx>t</span><span class=p>.</span><span class=nx>sockJSSession</span><span class=p>.</span><span class=nf>Send</span><span class=p>(</span><span class=nb>string</span><span class=p>(</span><span class=nx>msg</span><span class=p>));</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=mi>0</span><span class=p>,</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nb>len</span><span class=p>(</span><span class=nx>p</span><span class=p>),</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 发送类型为OOB的消息，暂时不管，可能适用于扩展警告信息等
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>t</span> <span class=nx>TerminalSession</span><span class=p>)</span> <span class=nf>Toast</span><span class=p>(</span><span class=nx>p</span> <span class=kt>string</span><span class=p>)</span> <span class=kt>error</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>msg</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>Marshal</span><span class=p>(</span><span class=nx>TerminalMessage</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Op</span><span class=p>:</span>   <span class=s>&#34;toast&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Data</span><span class=p>:</span> <span class=nx>p</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>	<span class=p>})</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=p>=</span> <span class=nx>t</span><span class=p>.</span><span class=nx>sockJSSession</span><span class=p>.</span><span class=nf>Send</span><span class=p>(</span><span class=nb>string</span><span class=p>(</span><span class=nx>msg</span><span class=p>));</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=小总结>小总结</h4><p>客户端发送<code>/api/sockjs/xxxx</code>后会执行<code>handleTerminalSession</code>函数进行初始化，验证连接的合法性，如果合法将websocket的session存入sessionMap中，最后向bound这个channel中放入nil，通知另一个函数当前连接已就绪</p><h4 id=二apiserver交互部分>二、apiserver交互部分</h4><p>当进入这个页面的时候，它会发送一个请求，服务端会返回一个id</p><p><img class=lazyload src=/svg/loading.min.svg data-src=/2950/images/2958586898.png data-srcset="/2950/images/2958586898.png, /2950/images/2958586898.png 1.5x, /2950/images/2958586898.png 2x" data-sizes=auto alt=54674-jgv8dqlhzi.png title=54674-jgv8dqlhzi.png width=1658 height=502></p><p><img class=lazyload src=/svg/loading.min.svg data-src=/2950/images/2958586898.png data-srcset="/2950/images/2958586898.png, /2950/images/2958586898.png 1.5x, /2950/images/2958586898.png 2x" data-sizes=auto alt=53512-olpqyd97ujr.png title=53512-olpqyd97ujr.png width=1658 height=502></p><p>后端处理逻辑分析，首先定位到它的handler是handleExecShell</p><p><img class=lazyload src=/svg/loading.min.svg data-src=/2950/images/2958586898.png data-srcset="/2950/images/2958586898.png, /2950/images/2958586898.png 1.5x, /2950/images/2958586898.png 2x" data-sizes=auto alt=72415-nvk4u09b4cs.png title=72415-nvk4u09b4cs.png width=1658 height=502></p><p>源码如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=c1>// Handles execute shell API call
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>apiHandler</span> <span class=o>*</span><span class=nx>APIHandler</span><span class=p>)</span> <span class=nf>handleExecShell</span><span class=p>(</span><span class=nx>request</span> <span class=o>*</span><span class=nx>restful</span><span class=p>.</span><span class=nx>Request</span><span class=p>,</span> <span class=nx>response</span> <span class=o>*</span><span class=nx>restful</span><span class=p>.</span><span class=nx>Response</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>sessionID</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nf>genTerminalSessionId</span><span class=p>()</span> <span class=c1>// 这里调用了genTerminalSessionId函数，随机生成一个ID
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>errors</span><span class=p>.</span><span class=nf>HandleInternalError</span><span class=p>(</span><span class=nx>response</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>k8sClient</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>apiHandler</span><span class=p>.</span><span class=nx>cManager</span><span class=p>.</span><span class=nf>Client</span><span class=p>(</span><span class=nx>request</span><span class=p>)</span> <span class=c1>// 获取k8s client，startProcess函数需要使用
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>errors</span><span class=p>.</span><span class=nf>HandleInternalError</span><span class=p>(</span><span class=nx>response</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>cfg</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>apiHandler</span><span class=p>.</span><span class=nx>cManager</span><span class=p>.</span><span class=nf>Config</span><span class=p>(</span><span class=nx>request</span><span class=p>)</span>  <span class=c1>// 获取k8s config，startProcess函数需要使用
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>errors</span><span class=p>.</span><span class=nf>HandleInternalError</span><span class=p>(</span><span class=nx>response</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>terminalSessions</span><span class=p>.</span><span class=nf>Set</span><span class=p>(</span><span class=nx>sessionID</span><span class=p>,</span> <span class=nx>TerminalSession</span><span class=p>{</span>  <span class=c1>// 将sessionID set到terminalSessions对象中，key是sessionID，value是TerminalSession对象，这里和上面的【1】对应上了
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>id</span><span class=p>:</span>       <span class=nx>sessionID</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>bound</span><span class=p>:</span>    <span class=nb>make</span><span class=p>(</span><span class=kd>chan</span> <span class=kt>error</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=nx>sizeChan</span><span class=p>:</span> <span class=nb>make</span><span class=p>(</span><span class=kd>chan</span> <span class=nx>remotecommand</span><span class=p>.</span><span class=nx>TerminalSize</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>	<span class=p>})</span>
+</span></span><span class=line><span class=cl>	<span class=k>go</span> <span class=nf>WaitForTerminal</span><span class=p>(</span><span class=nx>k8sClient</span><span class=p>,</span> <span class=nx>cfg</span><span class=p>,</span> <span class=nx>request</span><span class=p>,</span> <span class=nx>sessionID</span><span class=p>)</span>  <span class=c1>// 执行WaitForTerminal，处理客户端的请求
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>response</span><span class=p>.</span><span class=nf>WriteHeaderAndEntity</span><span class=p>(</span><span class=nx>http</span><span class=p>.</span><span class=nx>StatusOK</span><span class=p>,</span> <span class=nx>TerminalResponse</span><span class=p>{</span><span class=nx>ID</span><span class=p>:</span> <span class=nx>sessionID</span><span class=p>})</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>继续往后看<code>WaitForTerminal</code>函数，</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kd>func</span> <span class=nf>WaitForTerminal</span><span class=p>(</span><span class=nx>k8sClient</span> <span class=nx>kubernetes</span><span class=p>.</span><span class=nx>Interface</span><span class=p>,</span> <span class=nx>cfg</span> <span class=o>*</span><span class=nx>rest</span><span class=p>.</span><span class=nx>Config</span><span class=p>,</span> <span class=nx>request</span> <span class=o>*</span><span class=nx>restful</span><span class=p>.</span><span class=nx>Request</span><span class=p>,</span> <span class=nx>sessionId</span> <span class=kt>string</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>shell</span> <span class=o>:=</span> <span class=nx>request</span><span class=p>.</span><span class=nf>QueryParameter</span><span class=p>(</span><span class=s>&#34;shell&#34;</span><span class=p>)</span>  <span class=c1>// 从参数中获取要执行的shell，暂时没发现前端有可以修改的地方
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=k>select</span> <span class=p>{</span>   <span class=c1>// 通过select监听channel，10秒内bound这个channel没有收到内容，就会执行超时关闭连接
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>case</span> <span class=o>&lt;-</span><span class=nx>terminalSessions</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=nx>sessionId</span><span class=p>).</span><span class=nx>bound</span><span class=p>:</span>  <span class=c1>// 从bound这个channel获取内容，也就是上面的handleTerminalSession函数给置入的nil
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nb>close</span><span class=p>(</span><span class=nx>terminalSessions</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=nx>sessionId</span><span class=p>).</span><span class=nx>bound</span><span class=p>)</span> <span class=c1>// 获取成功后这个channel就用不上了，可以执行close
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>		<span class=kd>var</span> <span class=nx>err</span> <span class=kt>error</span>
+</span></span><span class=line><span class=cl>		<span class=nx>validShells</span> <span class=o>:=</span> <span class=p>[]</span><span class=kt>string</span><span class=p>{</span><span class=s>&#34;bash&#34;</span><span class=p>,</span> <span class=s>&#34;sh&#34;</span><span class=p>,</span> <span class=s>&#34;powershell&#34;</span><span class=p>,</span> <span class=s>&#34;cmd&#34;</span><span class=p>}</span>  <span class=c1>// 默认会执行几个shell进行测试
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=nf>isValidShell</span><span class=p>(</span><span class=nx>validShells</span><span class=p>,</span> <span class=nx>shell</span><span class=p>)</span> <span class=p>{</span>  <span class=c1>// 如果传过来的指定shell在validShells列表里就直接调用startProcess执行命令
+</span></span></span><span class=line><span class=cl><span class=c1></span>			<span class=nx>cmd</span> <span class=o>:=</span> <span class=p>[]</span><span class=kt>string</span><span class=p>{</span><span class=nx>shell</span><span class=p>}</span>
+</span></span><span class=line><span class=cl>			<span class=nx>err</span> <span class=p>=</span> <span class=nf>startProcess</span><span class=p>(</span><span class=nx>k8sClient</span><span class=p>,</span> <span class=nx>cfg</span><span class=p>,</span> <span class=nx>request</span><span class=p>,</span> <span class=nx>cmd</span><span class=p>,</span> <span class=nx>terminalSessions</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=nx>sessionId</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>for</span> <span class=nx>_</span><span class=p>,</span> <span class=nx>testShell</span> <span class=o>:=</span> <span class=k>range</span> <span class=nx>validShells</span> <span class=p>{</span>  <span class=c1>// 否则就循环一个一个测试validShells列表里的命令是否可用
+</span></span></span><span class=line><span class=cl><span class=c1></span>				<span class=nx>cmd</span> <span class=o>:=</span> <span class=p>[]</span><span class=kt>string</span><span class=p>{</span><span class=nx>testShell</span><span class=p>}</span>
+</span></span><span class=line><span class=cl>				<span class=k>if</span> <span class=nx>err</span> <span class=p>=</span> <span class=nf>startProcess</span><span class=p>(</span><span class=nx>k8sClient</span><span class=p>,</span> <span class=nx>cfg</span><span class=p>,</span> <span class=nx>request</span><span class=p>,</span> <span class=nx>cmd</span><span class=p>,</span> <span class=nx>terminalSessions</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=nx>sessionId</span><span class=p>));</span> <span class=nx>err</span> <span class=o>==</span> <span class=kc>nil</span> <span class=p>{</span> <span class=c1>// 如果可以用startProcess会阻塞，否则返回错误
+</span></span></span><span class=line><span class=cl><span class=c1></span>					<span class=k>break</span>
+</span></span><span class=line><span class=cl>				<span class=p>}</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>  <span class=c1>// 如果发生错误则关闭连接
+</span></span></span><span class=line><span class=cl><span class=c1></span>			<span class=nx>terminalSessions</span><span class=p>.</span><span class=nf>Close</span><span class=p>(</span><span class=nx>sessionId</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=nx>err</span><span class=p>.</span><span class=nf>Error</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>			<span class=k>return</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 正常退出进程的情况，触发关闭连接
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>terminalSessions</span><span class=p>.</span><span class=nf>Close</span><span class=p>(</span><span class=nx>sessionId</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=s>&#34;Process exited&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// time.After(10 * time.Second)也会返回一个channel，只不过它是10秒之后才会返回
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>case</span> <span class=o>&lt;-</span><span class=nx>time</span><span class=p>.</span><span class=nf>After</span><span class=p>(</span><span class=mi>10</span> <span class=o>*</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>):</span> 
+</span></span><span class=line><span class=cl>		<span class=c1>// Close chan and delete session when sockjs connection was timeout
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nb>close</span><span class=p>(</span><span class=nx>terminalSessions</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=nx>sessionId</span><span class=p>).</span><span class=nx>bound</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=nb>delete</span><span class=p>(</span><span class=nx>terminalSessions</span><span class=p>.</span><span class=nx>Sessions</span><span class=p>,</span> <span class=nx>sessionId</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>这里主要就是调用startProcess函数执行一个shell，后续的交互都是由startProcess来维护</p><p>startProcess代码如下，</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kd>func</span> <span class=nf>startProcess</span><span class=p>(</span><span class=nx>k8sClient</span> <span class=nx>kubernetes</span><span class=p>.</span><span class=nx>Interface</span><span class=p>,</span> <span class=nx>cfg</span> <span class=o>*</span><span class=nx>rest</span><span class=p>.</span><span class=nx>Config</span><span class=p>,</span> <span class=nx>request</span> <span class=o>*</span><span class=nx>restful</span><span class=p>.</span><span class=nx>Request</span><span class=p>,</span> <span class=nx>cmd</span> <span class=p>[]</span><span class=kt>string</span><span class=p>,</span> <span class=nx>ptyHandler</span> <span class=nx>PtyHandler</span><span class=p>)</span> <span class=kt>error</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>namespace</span> <span class=o>:=</span> <span class=nx>request</span><span class=p>.</span><span class=nf>PathParameter</span><span class=p>(</span><span class=s>&#34;namespace&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>podName</span> <span class=o>:=</span> <span class=nx>request</span><span class=p>.</span><span class=nf>PathParameter</span><span class=p>(</span><span class=s>&#34;pod&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>containerName</span> <span class=o>:=</span> <span class=nx>request</span><span class=p>.</span><span class=nf>PathParameter</span><span class=p>(</span><span class=s>&#34;container&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 实例化rest client
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>req</span> <span class=o>:=</span> <span class=nx>k8sClient</span><span class=p>.</span><span class=nf>CoreV1</span><span class=p>().</span><span class=nf>RESTClient</span><span class=p>().</span><span class=nf>Post</span><span class=p>().</span>
+</span></span><span class=line><span class=cl>		<span class=nf>Resource</span><span class=p>(</span><span class=s>&#34;pods&#34;</span><span class=p>).</span>
+</span></span><span class=line><span class=cl>		<span class=nf>Name</span><span class=p>(</span><span class=nx>podName</span><span class=p>).</span>
+</span></span><span class=line><span class=cl>		<span class=nf>Namespace</span><span class=p>(</span><span class=nx>namespace</span><span class=p>).</span>
+</span></span><span class=line><span class=cl>		<span class=nf>SubResource</span><span class=p>(</span><span class=s>&#34;exec&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 设置执行参数
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>req</span><span class=p>.</span><span class=nf>VersionedParams</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>v1</span><span class=p>.</span><span class=nx>PodExecOptions</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Container</span><span class=p>:</span> <span class=nx>containerName</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Command</span><span class=p>:</span>   <span class=nx>cmd</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Stdin</span><span class=p>:</span>     <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Stdout</span><span class=p>:</span>    <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Stderr</span><span class=p>:</span>    <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>TTY</span><span class=p>:</span>       <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>	<span class=p>},</span> <span class=nx>scheme</span><span class=p>.</span><span class=nx>ParameterCodec</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>exec</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>remotecommand</span><span class=p>.</span><span class=nf>NewSPDYExecutor</span><span class=p>(</span><span class=nx>cfg</span><span class=p>,</span> <span class=s>&#34;POST&#34;</span><span class=p>,</span> <span class=nx>req</span><span class=p>.</span><span class=nf>URL</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// Stream方法处理输入、输出和错误输出流，并将这些流转发到给定的ptyHandler，按照read、write、next来操作
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>err</span> <span class=p>=</span> <span class=nx>exec</span><span class=p>.</span><span class=nf>Stream</span><span class=p>(</span><span class=nx>remotecommand</span><span class=p>.</span><span class=nx>StreamOptions</span><span class=p>{</span>  <span class=c1>// 成功运行的话，exec.Stream会一直阻塞在这，直到客户端执行exit退出
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>Stdin</span><span class=p>:</span>             <span class=nx>ptyHandler</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Stdout</span><span class=p>:</span>            <span class=nx>ptyHandler</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Stderr</span><span class=p>:</span>            <span class=nx>ptyHandler</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>TerminalSizeQueue</span><span class=p>:</span> <span class=nx>ptyHandler</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Tty</span><span class=p>:</span>               <span class=kc>true</span><span class=p>,</span> <span class=c1>// 将命令运行在TTY终端中，可以使用终端的一些特性，例如输入行编辑、光标移动等
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=p>})</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=功能拆解例子>功能拆解例子</h3><p>代码量明显减少，方便阅读
+<a href=https://github.com/SoulChildTc/k8s-web-terminal-learn target=_blank rel="external nofollow noopener noreferrer">https://github.com/SoulChildTc/k8s-web-terminal-learn<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2022-12-21 00:05:59">更新于 2022-12-21 00:05&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/k8s/ class=post-tag>k8s</a><a href=/tags/go/ class=post-tag>go</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/2945/ class=post-nav-item rel=prev title="k8s serviceaccount创建后没有生成对应的secret"><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>k8s serviceaccount创建后没有生成对应的secret</a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wechatpay.png alt="SoulChild 微信">
+<span data-animation>微信</span></div></div></div><div id=comments><div id=valine class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://valine.js.org/ rel="external nofollow noopener noreferrer">Valine</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><div class="footer-line powered">由 <a href=https://gohugo.io/ target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.109.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v0.2.17-RC"><img class=fixit-icon src=/fixit.min.svg alt="FixIt logo">&nbsp;FixIt</a></div><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright fa-fw" aria-hidden=true></i>
+<span itemprop=copyrightYear>2017 - 2023</span><span class=author itemprop=copyrightHolder>
+<a href=https://www.soulchild.cn target=_blank rel="external nofollow noopener noreferrer">SoulChild</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class=site-time title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden=true></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor"><span id=busuanzi_container_site_uv title=总访客数><i class="fa-regular fa-user fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_uv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span><span id=busuanzi_container_site_pv class=footer-divider title=总访问量><i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_pv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span></div></div></footer></div><div class=widgets><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role=button aria-label=回到顶部><i class="fa-solid fa-arrow-up fa-fw" aria-hidden=true></i><span class=variant-numeric>0%</span></div><div class="fixed-button view-comments d-none" role=button aria-label=查看评论><i class="fa-solid fa-comment fa-fw" aria-hidden=true></i></div></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0;--bg-progress:#438a55;--bg-progress-dark:#438a55></div><noscript><div class=noscript-warning>FixIt 主题在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/valine/valine.min.css><link rel=stylesheet href=/lib/katex/katex.min.a1609a6c27cf7783a2db5c2a65ecc14b3fda9eda38558709a9cf6c33d2334139.css integrity="sha256-oWCabCfPd4Oi21wqZezBSz/anto4VYcJqc9sM9IzQTk="><link rel=stylesheet href=/lib/pace/themes/green/pace-theme-bounce.891b6ea26e5a8eb1153db8d015312704467abd016189fa2b7284caecb5cb574e.css integrity="sha256-iRtuom5ajrEVPbjQFTEnBEZ6vQFhiforcoTK7LXLV04="><script src=/lib/valine/Valine.min.3da7a85585e6535c297344e2b69dc4eb7f0a75046eda9a4f26eb36ede3f1a7d9.js integrity="sha256-PaeoVYXmU1wpc0Titp3E638KdQRu2ppPJus27ePxp9k="></script><script src=/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8=" defer></script><script src=/lib/algoliasearch/algoliasearch-lite.umd.min.6967a37fd7ef3676c81376993b3a6583dcb7d378478e6e2975c4fc682edeb1d5.js integrity="sha256-aWejf9fvNnbIE3aZOzplg9y303hHjm4pdcT8aC7esdU=" defer></script><script src=/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys=" async defer></script><script src=/lib/typeit/index.umd.ad0aaee416d34d2340d0a352523ab3cc24cb6cf3e876cd9bad7374ee4a63fb6c.js integrity="sha256-rQqu5BbTTSNA0KNSUjqzzCTLbPPods2brXN07kpj+2w=" defer></script><script src=/lib/katex/katex.min.13870312562afc8fad155a133018c3f2a4ef1cb2e6765b73f40151ab664ff8d6.js integrity="sha256-E4cDElYq/I+tFVoTMBjD8qTvHLLmdltz9AFRq2ZP+NY=" defer></script><script src=/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y+KzPOwaJ0PYhsf7R6c=" defer></script><script src=/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script src=/lib/katex/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E=" defer></script><script src=/lib/pangu/pangu.min.8feca3e7a71d118d82c2456d1b2cf5f1f3726c51a930627c2711b7192c8edbe2.js integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" defer></script><script src=/lib/cell-watermark/watermark.min.8518c89a43d8bcbcf981bbd3d6364ce91a5142b15e0e584e2a39dc36661d6b13.js integrity="sha256-hRjImkPYvLz5gbvT1jZM6RpRQrFeDlhOKjncNmYdaxM=" defer></script><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async defer></script><script src=/lib/pace/pace.min.82a77b6138e0fc1b5fa964b0b093af9dd97407173c8052262c4917413f3eaa3d.js integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" async defer></script><script>window.config={autoBookmark:!0,code:{copyTitle:"复制到剪贴板",editLockTitle:"锁定可编辑代码块",editUnLockTitle:"解锁可编辑代码块",editable:!0,maxShownLines:50},comment:{enable:!0,expired:!1,valine:{appId:"Ea1KZ2YXg5HPcKpzkojf93jf-gzGzoHsz",appKey:"HGISPAHhJF9rSgLdqKX6nwk2",avatar:"mp",el:"#valine",emojiCDN:"https://cdn.jsdelivr.net/npm/emoji-datasource-google@14.0.0/img/google/64/",emojiMaps:{100:"1f4af.png",alien:"1f47d.png",anger:"1f4a2.png",angry:"1f620.png",anguished:"1f627.png",astonished:"1f632.png",black_heart:"1f5a4.png",blue_heart:"1f499.png",blush:"1f60a.png",bomb:"1f4a3.png",boom:"1f4a5.png",broken_heart:"1f494.png",brown_heart:"1f90e.png",clown_face:"1f921.png",cold_face:"1f976.png",cold_sweat:"1f630.png",confounded:"1f616.png",confused:"1f615.png",cry:"1f622.png",crying_cat_face:"1f63f.png",cupid:"1f498.png",dash:"1f4a8.png",disappointed:"1f61e.png",disappointed_relieved:"1f625.png",dizzy:"1f4ab.png",dizzy_face:"1f635.png",drooling_face:"1f924.png",exploding_head:"1f92f.png",expressionless:"1f611.png",face_vomiting:"1f92e.png",face_with_cowboy_hat:"1f920.png",face_with_hand_over_mouth:"1f92d.png",face_with_head_bandage:"1f915.png",face_with_monocle:"1f9d0.png",face_with_raised_eyebrow:"1f928.png",face_with_rolling_eyes:"1f644.png",face_with_symbols_on_mouth:"1f92c.png",face_with_thermometer:"1f912.png",fearful:"1f628.png",flushed:"1f633.png",frowning:"1f626.png",ghost:"1f47b.png",gift_heart:"1f49d.png",green_heart:"1f49a.png",grimacing:"1f62c.png",grin:"1f601.png",grinning:"1f600.png",hankey:"1f4a9.png",hear_no_evil:"1f649.png",heart:"2764-fe0f.png",heart_decoration:"1f49f.png",heart_eyes:"1f60d.png",heart_eyes_cat:"1f63b.png",heartbeat:"1f493.png",heartpulse:"1f497.png",heavy_heart_exclamation_mark_ornament:"2763-fe0f.png",hole:"1f573-fe0f.png",hot_face:"1f975.png",hugging_face:"1f917.png",hushed:"1f62f.png",imp:"1f47f.png",innocent:"1f607.png",japanese_goblin:"1f47a.png",japanese_ogre:"1f479.png",joy:"1f602.png",joy_cat:"1f639.png",kiss:"1f48b.png",kissing:"1f617.png",kissing_cat:"1f63d.png",kissing_closed_eyes:"1f61a.png",kissing_heart:"1f618.png",kissing_smiling_eyes:"1f619.png",laughing:"1f606.png",left_speech_bubble:"1f5e8-fe0f.png",love_letter:"1f48c.png",lying_face:"1f925.png",mask:"1f637.png",money_mouth_face:"1f911.png",nauseated_face:"1f922.png",nerd_face:"1f913.png",neutral_face:"1f610.png",no_mouth:"1f636.png",open_mouth:"1f62e.png",orange_heart:"1f9e1.png",partying_face:"1f973.png",pensive:"1f614.png",persevere:"1f623.png",pleading_face:"1f97a.png",pouting_cat:"1f63e.png",purple_heart:"1f49c.png",rage:"1f621.png",relaxed:"263a-fe0f.png",relieved:"1f60c.png",revolving_hearts:"1f49e.png",right_anger_bubble:"1f5ef-fe0f.png",robot_face:"1f916.png",rolling_on_the_floor_laughing:"1f923.png",scream:"1f631.png",scream_cat:"1f640.png",see_no_evil:"1f648.png",shushing_face:"1f92b.png",skull:"1f480.png",skull_and_crossbones:"2620-fe0f.png",sleeping:"1f634.png",sleepy:"1f62a.png",slightly_frowning_face:"1f641.png",slightly_smiling_face:"1f642.png",smile:"1f604.png",smile_cat:"1f638.png",smiley:"1f603.png",smiley_cat:"1f63a.png",smiling_face_with_3_hearts:"1f970.png",smiling_imp:"1f608.png",smirk:"1f60f.png",smirk_cat:"1f63c.png",sneezing_face:"1f927.png",sob:"1f62d.png",space_invader:"1f47e.png",sparkling_heart:"1f496.png",speak_no_evil:"1f64a.png",speech_balloon:"1f4ac.png","star-struck":"1f929.png",stuck_out_tongue:"1f61b.png",stuck_out_tongue_closed_eyes:"1f61d.png",stuck_out_tongue_winking_eye:"1f61c.png",sunglasses:"1f60e.png",sweat:"1f613.png",sweat_drops:"1f4a6.png",sweat_smile:"1f605.png",thinking_face:"1f914.png",thought_balloon:"1f4ad.png",tired_face:"1f62b.png",triumph:"1f624.png",two_hearts:"1f495.png",unamused:"1f612.png",upside_down_face:"1f643.png",weary:"1f629.png",white_frowning_face:"2639-fe0f.png",white_heart:"1f90d.png",wink:"1f609.png",woozy_face:"1f974.png",worried:"1f61f.png",yawning_face:"1f971.png",yellow_heart:"1f49b.png",yum:"1f60b.png",zany_face:"1f92a.png",zipper_mouth_face:"1f910.png",zzz:"1f4a4.png"},enableQQ:!1,highlight:!0,lang:"",pageSize:10,placeholder:"你的评论 ...",recordIP:!0,visitor:!0}},data:{"typeit-header-subtitle-desktop":"rm -fr /*","typeit-header-subtitle-mobile":"rm -fr /*"},enablePWA:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},pangu:{enable:!0,selector:"article"},search:{algoliaAppID:"CE9G7Q4H6N",algoliaIndex:"soulchild-blog",algoliaSearchKey:"0f69a431d92a03c2cf4143d8dbc6af0a",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},siteTime:"2017-06-08T21:38:36+08:00",typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},duration:-1,speed:100},watermark:{appendto:".wrapper\u003emain",colspacing:300,content:"SoulChild随笔记",enable:!0,fontfamily:"inherit",fontsize:.85,height:300,opacity:.1,rotate:15,rowspacing:100,width:300}}</script><script src=/js/theme.min.3a644f1974b1a5147db2d33a5280ac330e360ea5a40f77faac70087886f48252.js integrity="sha256-OmRPGXSxpRR9stM6UoCsMw42DqWkD3f6rHAIeIb0glI=" defer></script></body></html>
