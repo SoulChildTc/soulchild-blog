@@ -1,0 +1,497 @@
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>k8s 使用statefulset部署mysql主从 - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路,记录点滴成长"><meta name=keywords content="mysql,k8s"><meta itemprop=name content="k8s 使用statefulset部署mysql主从"><meta itemprop=description content><meta itemprop=datePublished content="2021-07-19T14:21:00+08:00"><meta itemprop=dateModified content="2021-07-20T14:30:14+08:00"><meta itemprop=wordCount content="876"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content="mysql,k8s,"><meta property="og:title" content="k8s 使用statefulset部署mysql主从"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/2577/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-07-19T14:21:00+08:00"><meta property="article:modified_time" content="2021-07-20T14:30:14+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="k8s 使用statefulset部署mysql主从"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/2577/><link rel=prev href=https://www.soulchild.cn/post/2568/><link rel=next href=https://www.soulchild.cn/post/2579/><link rel=stylesheet href=/css/style.min.db361dc4098a04afe1bcead2293b365e8f7cc7b8edaa4f919cb2562c5e35fc65.css integrity="sha256-2zYdxAmKBK/hvOrSKTs2Xo98x7jtqk+RnLJWLF41/GU="><link rel=stylesheet href=/lib/fontawesome-free/all.min.01b035efb5dfa529c512f82962ed633328222da6f33c224244806d4798c67349.css integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k="><link rel=stylesheet href=/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"k8s 使用statefulset部署mysql主从","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/2577\/"},"genre":"posts","keywords":"mysql, k8s","wordcount":876,"url":"https:\/\/www.soulchild.cn\/post\/2577\/","datePublished":"2021-07-19T14:21:00+08:00","dateModified":"2021-07-20T14:30:14+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden=true></i></h2><div class=toc-content id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>k8s 使用statefulset部署mysql主从</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> kubernetes</a></span></div><div class=post-meta-line><span title="2021-07-19 14:21:00"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2021-07-19 14:21">2021-07-19 14:21</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 876 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 5 分钟</span>&nbsp;<span id=/post/2577/ class="leancloud_visitors comment-visitors" data-flag-title="k8s 使用statefulset部署mysql主从">
+<i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span class=leancloud-visitors-count>-</span>&nbsp;次阅读
+</span>&nbsp;<span class=comment-count data-flag-title="k8s 使用statefulset部署mysql主从">
+<i class="fa-regular fa-comments fa-fw" aria-hidden=true></i>&nbsp;<span data-xid=/post/2577/ class=valine-comment-count>-</span>&nbsp;条评论
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#前言>前言</a></li><li><a href=#1创建configmap-mysql配置文件>1.创建configmap mysql配置文件</a></li><li><a href=#2创建svc>2.创建svc</a></li><li><a href=#3创建statefulset>3.创建statefulset</a></li><li><a href=#4-statefulset配置说明>4. statefulset配置说明</a><ul><li><a href=#41-initcontainer>4.1 initContainer</a></li><li><a href=#42-常驻容器>4.2 常驻容器</a></li></ul></li><li><a href=#5测试>5.测试</a><ul><li><a href=#主节点造数据>主节点造数据</a></li><li><a href=#从节点查数据>从节点查数据</a></li></ul></li></ul></li></ul></nav></div></div><div class=content id=content data-end-flag=---><div class="details admonition warning open"><div class="details-summary admonition-title"><i class="icon fa-solid fa-exclamation-triangle fa-fw" aria-hidden=true></i>警告<i class="details-icon fa-solid fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>本文最后更新于 2021-07-20 14:30，文中内容可能已过时。</div></div></div><h3 id=前言>前言</h3><p>原文档地址: <a href=https://kubernetes.io/zh/docs/tasks/run-application/run-replicated-stateful-application/ target=_blank rel="external nofollow noopener noreferrer">https://kubernetes.io/zh/docs/tasks/run-application/run-replicated-stateful-application/<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>
+使用本文档部署需要集群中提前配置好storage-class，或者手动创建pv，pvc</p><h3 id=1创建configmap-mysql配置文件>1.创建configmap mysql配置文件</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ConfigMap</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>mysql</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>mysql</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>data</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>master.cnf</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>    [mysqld]
+</span></span></span><span class=line><span class=cl><span class=sd>    log-bin</span><span class=w>    
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>slave.cnf</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>    [mysqld]
+</span></span></span><span class=line><span class=cl><span class=sd>    super-read-only</span><span class=w>    
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=2创建svc>2.创建svc</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>apiVersion: v1
+</span></span><span class=line><span class=cl>kind: Service
+</span></span><span class=line><span class=cl>metadata:
+</span></span><span class=line><span class=cl>  name: mysql
+</span></span><span class=line><span class=cl>  labels:
+</span></span><span class=line><span class=cl>    app: mysql
+</span></span><span class=line><span class=cl>spec:
+</span></span><span class=line><span class=cl>  ports:
+</span></span><span class=line><span class=cl>  - name: mysql
+</span></span><span class=line><span class=cl>    port: <span class=m>3306</span>
+</span></span><span class=line><span class=cl>  clusterIP: None
+</span></span><span class=line><span class=cl>  selector:
+</span></span><span class=line><span class=cl>    app: mysql
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>apiVersion: v1
+</span></span><span class=line><span class=cl>kind: Service
+</span></span><span class=line><span class=cl>metadata:
+</span></span><span class=line><span class=cl>  name: mysql-read
+</span></span><span class=line><span class=cl>  labels:
+</span></span><span class=line><span class=cl>    app: mysql
+</span></span><span class=line><span class=cl>spec:
+</span></span><span class=line><span class=cl>  ports:
+</span></span><span class=line><span class=cl>  - name: mysql
+</span></span><span class=line><span class=cl>    port: <span class=m>3306</span>
+</span></span><span class=line><span class=cl>  selector:
+</span></span><span class=line><span class=cl>    app: mysql
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>一个headless service和一个普通service，headless用于statefulset,给每个pod提供一个固定的dns记录，普通service提供负载均衡</p></blockquote><h3 id=3创建statefulset>3.创建statefulset</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>apiVersion: apps/v1
+</span></span><span class=line><span class=cl>kind: StatefulSet
+</span></span><span class=line><span class=cl>metadata:
+</span></span><span class=line><span class=cl>  name: mysql
+</span></span><span class=line><span class=cl>spec:
+</span></span><span class=line><span class=cl>  selector:
+</span></span><span class=line><span class=cl>    matchLabels:
+</span></span><span class=line><span class=cl>      app: mysql
+</span></span><span class=line><span class=cl>  <span class=c1># service-headless为每个pod提供一个固定的dns解析,eg:mysql-0.mysql,mysql-1.mysql</span>
+</span></span><span class=line><span class=cl>  serviceName: mysql
+</span></span><span class=line><span class=cl>  replicas: <span class=m>3</span>
+</span></span><span class=line><span class=cl>  template:
+</span></span><span class=line><span class=cl>    metadata:
+</span></span><span class=line><span class=cl>      labels:
+</span></span><span class=line><span class=cl>        app: mysql
+</span></span><span class=line><span class=cl>    spec:
+</span></span><span class=line><span class=cl>      initContainers:
+</span></span><span class=line><span class=cl>      <span class=c1># 用于生成主从配置文件的容器</span>
+</span></span><span class=line><span class=cl>      - name: init-mysql
+</span></span><span class=line><span class=cl>        image: mysql:5.7
+</span></span><span class=line><span class=cl>        volumeMounts:
+</span></span><span class=line><span class=cl>        - name: conf
+</span></span><span class=line><span class=cl>          mountPath: /mnt/conf.d
+</span></span><span class=line><span class=cl>        - name: config-map
+</span></span><span class=line><span class=cl>          mountPath: /mnt/config-map
+</span></span><span class=line><span class=cl>        command:
+</span></span><span class=line><span class=cl>        - bash
+</span></span><span class=line><span class=cl>        - <span class=s2>&#34;-c&#34;</span>
+</span></span><span class=line><span class=cl>        - <span class=p>|</span>
+</span></span><span class=line><span class=cl>          <span class=nb>set</span> -ex
+</span></span><span class=line><span class=cl>          <span class=c1># 使用正则匹配pod序号,结果会存在BASH_REMATCH变量中</span>
+</span></span><span class=line><span class=cl>          <span class=o>[[</span> <span class=sb>`</span>hostname<span class=sb>`</span> <span class=o>=</span>~ -<span class=o>([</span>0-9<span class=o>]</span>+<span class=o>)</span>$ <span class=o>]]</span> <span class=o>||</span> <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>          <span class=c1># 获取序号</span>
+</span></span><span class=line><span class=cl>          <span class=nv>ordinal</span><span class=o>=</span><span class=si>${</span><span class=nv>BASH_REMATCH</span><span class=p>[1]</span><span class=si>}</span>
+</span></span><span class=line><span class=cl>          <span class=c1># server-id=0有特出含义,因此给ID+100来避开它</span>
+</span></span><span class=line><span class=cl>          <span class=nv>serverid</span><span class=o>=</span><span class=k>$((</span><span class=nv>$ordinal</span><span class=o>+</span><span class=m>100</span><span class=k>))</span>
+</span></span><span class=line><span class=cl>          <span class=c1># 写入到配置文件中</span>
+</span></span><span class=line><span class=cl>          <span class=nb>echo</span> -e <span class=s2>&#34;[mysqld]\nserver-id=</span><span class=nv>$serverid</span><span class=s2>&#34;</span> &gt; /mnt/conf.d/server-id.cnf
+</span></span><span class=line><span class=cl>          <span class=c1># 如果是主节点,将主节点配置文件复制到/mnt/conf.d,负责复制从节点</span>
+</span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=o>[[</span> <span class=nv>$ordinal</span> <span class=o>==</span> <span class=m>0</span> <span class=o>]]</span><span class=p>;</span><span class=k>then</span>
+</span></span><span class=line><span class=cl>            cp /mnt/config-map/master.cnf /mnt/conf.d/
+</span></span><span class=line><span class=cl>          <span class=k>else</span>
+</span></span><span class=line><span class=cl>            cp /mnt/config-map/slave.cnf /mnt/conf.d/
+</span></span><span class=line><span class=cl>          <span class=k>fi</span>
+</span></span><span class=line><span class=cl>      <span class=c1># 用于从节点容器启动时复制数据</span>
+</span></span><span class=line><span class=cl>      - name: clone-mysql
+</span></span><span class=line><span class=cl>        image: registry.cn-shanghai.aliyuncs.com/soulchild/xtrabackup:2.4
+</span></span><span class=line><span class=cl>        volumeMounts:
+</span></span><span class=line><span class=cl>        - name: mysql-data
+</span></span><span class=line><span class=cl>          mountPath: /var/lib/mysql
+</span></span><span class=line><span class=cl>          subPath: mysql
+</span></span><span class=line><span class=cl>        command:
+</span></span><span class=line><span class=cl>        - bash
+</span></span><span class=line><span class=cl>        - -c
+</span></span><span class=line><span class=cl>        - <span class=p>|</span>
+</span></span><span class=line><span class=cl>          <span class=nb>set</span> -ex
+</span></span><span class=line><span class=cl>          <span class=c1># 复制数据操作只有在第一次没有数据的时候需要,所以判断数据存在则跳过</span>
+</span></span><span class=line><span class=cl>          <span class=o>[[</span> -d /var/lib/mysql/mysql <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nb>exit</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>          <span class=c1># 正则匹配序号,匹配失败则异常退出</span>
+</span></span><span class=line><span class=cl>          <span class=o>[[</span> <span class=sb>`</span>hostname<span class=sb>`</span> <span class=o>=</span>~ -<span class=o>([</span>0-9<span class=o>]</span>+$<span class=o>)</span> <span class=o>]]</span> <span class=o>||</span> <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>          <span class=c1># 获取序号</span>
+</span></span><span class=line><span class=cl>          <span class=nv>ordinal</span><span class=o>=</span><span class=si>${</span><span class=nv>BASH_REMATCH</span><span class=p>[1]</span><span class=si>}</span>
+</span></span><span class=line><span class=cl>          <span class=c1># 主节点不需要复制操作</span>
+</span></span><span class=line><span class=cl>          <span class=o>[[</span> <span class=nv>$ordinal</span> <span class=o>==</span> <span class=m>0</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nb>exit</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>          <span class=c1># 使用ncat从前一个节点中复制数据,3307端口是我们启动的一个sidecar容器，他是使用ncat运行的一个服务,这个服务的具体操作可以看xtrabackup容器的配置</span>
+</span></span><span class=line><span class=cl>          ncat --recv-only mysql-<span class=k>$((</span>ordinal-1<span class=k>))</span>.mysql <span class=m>3307</span> <span class=p>|</span> xbstream -x -C /var/lib/mysql
+</span></span><span class=line><span class=cl>          <span class=c1># --prepare参数,在备份完成后，数据尚且不能用于恢复操作，因为备份的数据中可能会包含尚未提交的事务或已经提交但尚未同步至数据文件中的事务.</span>
+</span></span><span class=line><span class=cl>          xtrabackup --prepare --target-dir<span class=o>=</span>/var/lib/mysql
+</span></span><span class=line><span class=cl>      containers:
+</span></span><span class=line><span class=cl>      - name: mysql
+</span></span><span class=line><span class=cl>        image: mysql:5.7
+</span></span><span class=line><span class=cl>        ports:
+</span></span><span class=line><span class=cl>        - name: mysql
+</span></span><span class=line><span class=cl>          containerPort: <span class=m>3306</span>
+</span></span><span class=line><span class=cl>        env:
+</span></span><span class=line><span class=cl>        - name: MYSQL_ALLOW_EMPTY_PASSWORD
+</span></span><span class=line><span class=cl>          value: <span class=s2>&#34;1&#34;</span>
+</span></span><span class=line><span class=cl>        volumeMounts:
+</span></span><span class=line><span class=cl>        - name: mysql-data
+</span></span><span class=line><span class=cl>          mountPath: /var/lib/mysql
+</span></span><span class=line><span class=cl>          subPath: mysql
+</span></span><span class=line><span class=cl>        - name: conf
+</span></span><span class=line><span class=cl>          mountPath: /etc/mysql/conf.d
+</span></span><span class=line><span class=cl>        resources:
+</span></span><span class=line><span class=cl>          requests:
+</span></span><span class=line><span class=cl>            memory: 1Gi
+</span></span><span class=line><span class=cl>            cpu: 500m
+</span></span><span class=line><span class=cl>          limits:
+</span></span><span class=line><span class=cl>            memory: 1Gi
+</span></span><span class=line><span class=cl>            cpu: 500m
+</span></span><span class=line><span class=cl>        startupProbe:
+</span></span><span class=line><span class=cl>          exec:
+</span></span><span class=line><span class=cl>            command: <span class=o>[</span><span class=s2>&#34;mysql&#34;</span>, <span class=s2>&#34;-h&#34;</span>, <span class=s2>&#34;127.0.0.1&#34;</span>, <span class=s2>&#34;-e&#34;</span>, <span class=s2>&#34;select 1&#34;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>        livenessProbe:
+</span></span><span class=line><span class=cl>          exec:
+</span></span><span class=line><span class=cl>            command: <span class=o>[</span><span class=s2>&#34;mysqladmin&#34;</span>, <span class=s2>&#34;ping&#34;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>          initialDelaySeconds: <span class=m>10</span>
+</span></span><span class=line><span class=cl>          periodSeconds: <span class=m>10</span>
+</span></span><span class=line><span class=cl>          timeoutSeconds: <span class=m>5</span>
+</span></span><span class=line><span class=cl>        readinessProbe:
+</span></span><span class=line><span class=cl>          exec:
+</span></span><span class=line><span class=cl>            command: <span class=o>[</span><span class=s2>&#34;mysql&#34;</span>, <span class=s2>&#34;-h&#34;</span>, <span class=s2>&#34;127.0.0.1&#34;</span>, <span class=s2>&#34;-e&#34;</span>, <span class=s2>&#34;select 1&#34;</span><span class=o>]</span>
+</span></span><span class=line><span class=cl>          initialDelaySeconds: <span class=m>10</span>
+</span></span><span class=line><span class=cl>          periodSeconds: <span class=m>5</span>
+</span></span><span class=line><span class=cl>          timeoutSeconds: <span class=m>2</span>
+</span></span><span class=line><span class=cl>      - name: xtrabackup
+</span></span><span class=line><span class=cl>        image: registry.cn-shanghai.aliyuncs.com/soulchild/xtrabackup:2.4
+</span></span><span class=line><span class=cl>        volumeMounts:
+</span></span><span class=line><span class=cl>        - name: mysql-data
+</span></span><span class=line><span class=cl>          mountPath: /var/lib/mysql
+</span></span><span class=line><span class=cl>          subPath: mysql
+</span></span><span class=line><span class=cl>        - name: conf
+</span></span><span class=line><span class=cl>          mountPath: /etc/mysql/conf.d
+</span></span><span class=line><span class=cl>        command:
+</span></span><span class=line><span class=cl>        - bash
+</span></span><span class=line><span class=cl>        - <span class=s2>&#34;-c&#34;</span>
+</span></span><span class=line><span class=cl>        - <span class=p>|</span>
+</span></span><span class=line><span class=cl>          <span class=nb>set</span> -ex
+</span></span><span class=line><span class=cl>          <span class=nb>cd</span> /var/lib/mysql
+</span></span><span class=line><span class=cl>          <span class=c1># xtrabackup备份后会生成一个文件,有两种情况,xtrabackup_slave_info和xtrabackup_binlog_info</span>
+</span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=o>[[</span> -f xtrabackup_slave_info <span class=o>]]</span><span class=p>;</span><span class=k>then</span>
+</span></span><span class=line><span class=cl>              <span class=c1># xtrabackup_slave_info存在则表示这个备份来自一个从节点,文件包含change master to sql语句,将这个文件改为change_master_to.sql.in</span>
+</span></span><span class=line><span class=cl>              cat xtrabackup_slave_info <span class=p>|</span> sed -E <span class=s1>&#39;s/;$//g&#39;</span> &gt; change_master_to.sql.in
+</span></span><span class=line><span class=cl>              rm -f xtrabackup_slave_info
+</span></span><span class=line><span class=cl>          <span class=k>elif</span> <span class=o>[[</span> -f xtrabackup_binlog_info <span class=o>]]</span><span class=p>;</span><span class=k>then</span>
+</span></span><span class=line><span class=cl>              <span class=c1># 如果只存在xtrabackup_binlog_info文件则备份来自主节点,这个文件包含了bin-log文件名和position偏移量,需要我们自己解析成change master to sql</span>
+</span></span><span class=line><span class=cl>              <span class=c1># 使用正则解析获取binlog信息,并生成change master to sql</span>
+</span></span><span class=line><span class=cl>              <span class=o>[[</span> <span class=sb>`</span>cat xtrabackup_binlog_info<span class=sb>`</span> <span class=o>=</span>~ ^<span class=o>(</span>.*?<span class=o>)[[</span>:space:<span class=o>]]</span>+<span class=o>([</span>0-9<span class=o>]</span>+<span class=o>)</span>$ <span class=o>]]</span> <span class=o>||</span> <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>              <span class=nb>echo</span> <span class=s2>&#34;CHANGE MASTER TO MASTER_LOG_FILE=&#39;</span><span class=si>${</span><span class=nv>BASH_REMATCH</span><span class=p>[1]</span><span class=si>}</span><span class=s2>&#39;, MASTER_LOG_POS=</span><span class=si>${</span><span class=nv>BASH_REMATCH</span><span class=p>[2]</span><span class=si>}</span><span class=s2>&#34;</span> &gt; change_master_to.sql.in
+</span></span><span class=line><span class=cl>              <span class=c1># 删除xtrabackup_binlog_info,防止下一次没有经过备份时,重复生成change_master_to.sql.in</span>
+</span></span><span class=line><span class=cl>              rm -f xtrabackup_binlog_info
+</span></span><span class=line><span class=cl>          <span class=k>fi</span>
+</span></span><span class=line><span class=cl>          <span class=c1># 判断initcontainer是否进行了备份,如果进行了备份会经过我们上面的逻辑生成change_master_to.sql.in,如果存在change_master_to.sql.in，则需要执行相应的sql</span>
+</span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=o>[[</span> -f change_master_to.sql.in <span class=o>]]</span><span class=p>;</span><span class=k>then</span>
+</span></span><span class=line><span class=cl>              <span class=c1># 等待mysql容器启动</span>
+</span></span><span class=line><span class=cl>              <span class=nb>echo</span> <span class=s1>&#39;Waiting for mysqld to be ready (accept connections)&#39;</span>
+</span></span><span class=line><span class=cl>              <span class=k>until</span> mysql -h 127.0.0.1 -e <span class=s1>&#39;select 1&#39;</span><span class=p>;</span><span class=k>do</span> sleep 1<span class=p>;</span><span class=k>done</span>
+</span></span><span class=line><span class=cl>              sleep <span class=m>5</span>
+</span></span><span class=line><span class=cl>              <span class=nb>echo</span> <span class=s1>&#39;Initializing replication from clone position&#39;</span>
+</span></span><span class=line><span class=cl>              <span class=c1># 执行change master sql</span>
+</span></span><span class=line><span class=cl>              <span class=nv>sql</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>&lt;change_master_to.sql.in<span class=k>)</span><span class=s2>, master_host=&#39;mysql-0.mysql&#39;, master_user=&#39;root&#39;, master_password=&#39;&#39;, master_connect_retry=10; start slave;&#34;</span>
+</span></span><span class=line><span class=cl>              mysql -h 127.0.0.1 -e <span class=s2>&#34;</span><span class=nv>$sql</span><span class=s2>&#34;</span> <span class=o>||</span> <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>              <span class=c1># 重命名change_master_to.sql.in文件，防止重复执行change master</span>
+</span></span><span class=line><span class=cl>              mv change_master_to.sql.in change_master_to.sql.in.orig
+</span></span><span class=line><span class=cl>          <span class=k>fi</span>
+</span></span><span class=line><span class=cl>          <span class=c1># 使用ncat监听3307端口,在收到传输请求时会执行xtrabackup备份操作,然后传输数据给请求数据的节点</span>
+</span></span><span class=line><span class=cl>          <span class=c1># 使用exec将ncat作为常驻进程,决定这个容器的生命周期</span>
+</span></span><span class=line><span class=cl>          <span class=nb>exec</span> ncat --listen --keep-open --send-only --max-conns<span class=o>=</span><span class=m>1</span> <span class=m>3307</span> -c <span class=s2>&#34;xtrabackup --backup --slave-info --stream=xbstream --host=127.0.0.1 --user=root&#34;</span>
+</span></span><span class=line><span class=cl>      volumes:
+</span></span><span class=line><span class=cl>      - name: conf
+</span></span><span class=line><span class=cl>        emptyDir: <span class=o>{}</span>
+</span></span><span class=line><span class=cl>      - name: config-map
+</span></span><span class=line><span class=cl>        configMap:
+</span></span><span class=line><span class=cl>          name: mysql
+</span></span><span class=line><span class=cl>  volumeClaimTemplates:
+</span></span><span class=line><span class=cl>  - metadata:
+</span></span><span class=line><span class=cl>      name: mysql-data
+</span></span><span class=line><span class=cl>    spec:
+</span></span><span class=line><span class=cl>      storageClassName: nfs-storage
+</span></span><span class=line><span class=cl>      accessModes:
+</span></span><span class=line><span class=cl>      - ReadWriteOnce
+</span></span><span class=line><span class=cl>      resources:
+</span></span><span class=line><span class=cl>        requests:
+</span></span><span class=line><span class=cl>          storage: 10Gi
+</span></span></code></pre></td></tr></table></div></div><h3 id=4-statefulset配置说明>4. statefulset配置说明</h3><h4 id=41-initcontainer>4.1 initContainer</h4><p>下面介绍的是两个初始化容器配置，会在pod启动时优先启动的容器</p><p><strong>1.init-mysql容器</strong></p><p>该容器挂载了两个volume，分别是conf，config-map(在volumes中定义)。conf是pod中容器之间的共享卷(使用的emptyDir)，configmap是分别包含mysql主从的配置文件。conf挂载到/mnt/conf.d目录，configmap挂载到/mnt/config-map目录</p><p>这个容器在启动时会判断当前pod属否为master节点，这里的mysql-0指定为master节点，如果pod id是0则将id+100作为mysql server-id，并将配置内容写入到/mnt/conf.d/server-id.conf，同时将mysql主配置文件复制到/mnt/conf.d/目录下</p><p>此时conf这个卷包含了mysql主的配置文件和server-id配置文件</p><p><strong>2.clone-mysql容器</strong></p><p>这个容器是为从节点准备的,从节点在第一次启动时需要从主节点或前一个从节点进行全量数据同步
+同样这里也使用了数据卷mysql-data，挂载到了/var/lib/mysql，同步的数据会存放在/var/lib/mysql中,提供给mysql主容器使用</p><p>mysql-data是通过pvc模版配置，这个卷的内容在每个pod中是不一样的。这需要你的k8s集群中支持storage-class</p><h4 id=42-常驻容器>4.2 常驻容器</h4><p>下面介绍的是pod中的两个常驻容器，一个是mysql用于提供mysql服务。另一个是xtrabackup用于提供在其他节点首次启动时同步数据的功能和执行change master to sql将当前节点配置为从节点</p><p><strong>1.mysql容器</strong></p><p>这个容器挂载了两个数据卷，一个是conf用于存放mysql配置文件的，挂载到了/etc/mysql/conf.d中
+另一个是mysql-data用于存放mysql数据文件，这个卷挂载到了/var/lib/mysql下，这个目录的数据由clone-mysql容器提供</p><p><strong>2.xtrabackup容器</strong>
+这个容器挂载了mysql-data数据卷，用于判断当前pod中的mysql是否需要执行change to master sql</p><p>第二个功能是使用ncat开启一个常驻进程，提供tcp传输mysql备份数据的能力</p><h3 id=5测试>5.测试</h3><h4 id=主节点造数据>主节点造数据</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>k <span class=nb>exec</span> -it mysql-0 mysql
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>mysql&gt; create database soulchild<span class=p>;</span>
+</span></span><span class=line><span class=cl>mysql&gt; use soulchild
+</span></span><span class=line><span class=cl>mysql&gt; create table my_test<span class=o>(</span>id int<span class=o>)</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>mysql&gt; insert into my_test values<span class=o>(</span>1<span class=o>)</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=从节点查数据>从节点查数据</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>k <span class=nb>exec</span> -it mysql-1 -- mysql -e <span class=s1>&#39;show databases;&#39;</span>
+</span></span><span class=line><span class=cl>+------------------------+
+</span></span><span class=line><span class=cl><span class=p>|</span> Database               <span class=p>|</span>
+</span></span><span class=line><span class=cl>+------------------------+
+</span></span><span class=line><span class=cl><span class=p>|</span> information_schema     <span class=p>|</span>
+</span></span><span class=line><span class=cl><span class=p>|</span> mysql                  <span class=p>|</span>
+</span></span><span class=line><span class=cl><span class=p>|</span> performance_schema     <span class=p>|</span>
+</span></span><span class=line><span class=cl><span class=p>|</span> soulchild              <span class=p>|</span>
+</span></span><span class=line><span class=cl><span class=p>|</span> sys                    <span class=p>|</span>
+</span></span><span class=line><span class=cl><span class=p>|</span> xtrabackup_backupfiles <span class=p>|</span>
+</span></span><span class=line><span class=cl>+------------------------+
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>k <span class=nb>exec</span> -it mysql-1 -- mysql -e <span class=s1>&#39;use soulchild;show tables;&#39;</span>
+</span></span><span class=line><span class=cl>+---------------------+
+</span></span><span class=line><span class=cl><span class=p>|</span> Tables_in_soulchild <span class=p>|</span>
+</span></span><span class=line><span class=cl>+---------------------+
+</span></span><span class=line><span class=cl><span class=p>|</span> my_test             <span class=p>|</span>
+</span></span><span class=line><span class=cl>+---------------------+
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>k <span class=nb>exec</span> -it mysql-1 -- mysql -e <span class=s1>&#39;use soulchild;select id from my_test;&#39;</span>
+</span></span><span class=line><span class=cl>+------+
+</span></span><span class=line><span class=cl><span class=p>|</span> id   <span class=p>|</span>
+</span></span><span class=line><span class=cl>+------+
+</span></span><span class=line><span class=cl><span class=p>|</span>    <span class=m>1</span> <span class=p>|</span>
+</span></span><span class=line><span class=cl>+------+
+</span></span></code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2021-07-20 14:30:14">更新于 2021-07-20 14:30&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/mysql/ class=post-tag>mysql</a><a href=/tags/k8s/ class=post-tag>k8s</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/2568/ class=post-nav-item rel=prev title="mysql MHA部署配置"><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>mysql MHA部署配置</a>
+<a href=/post/2579/ class=post-nav-item rel=next title="k8s 创建pod和deployment的流程">k8s 创建pod和deployment的流程<i class="fa-solid fa-angle-right fa-fw" aria-hidden=true></i></a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wechatpay.png alt="SoulChild 微信">
+<span data-animation>微信</span></div></div></div><div id=comments><div id=valine class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://valine.js.org/ rel="external nofollow noopener noreferrer">Valine</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><div class="footer-line powered">由 <a href=https://gohugo.io/ target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.109.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v0.2.17-RC"><img class=fixit-icon src=/fixit.min.svg alt="FixIt logo">&nbsp;FixIt</a></div><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright fa-fw" aria-hidden=true></i>
+<span itemprop=copyrightYear>2017 - 2023</span><span class=author itemprop=copyrightHolder>
+<a href=https://www.soulchild.cn target=_blank rel="external nofollow noopener noreferrer">SoulChild</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class=site-time title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden=true></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor"><span id=busuanzi_container_site_uv title=总访客数><i class="fa-regular fa-user fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_uv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span><span id=busuanzi_container_site_pv class=footer-divider title=总访问量><i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_pv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span></div></div></footer></div><div class=widgets><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role=button aria-label=回到顶部><i class="fa-solid fa-arrow-up fa-fw" aria-hidden=true></i><span class=variant-numeric>0%</span></div><div class="fixed-button view-comments d-none" role=button aria-label=查看评论><i class="fa-solid fa-comment fa-fw" aria-hidden=true></i></div></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0;--bg-progress:#438a55;--bg-progress-dark:#438a55></div><noscript><div class=noscript-warning>FixIt 主题在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/valine/valine.min.css><link rel=stylesheet href=/lib/katex/katex.min.a1609a6c27cf7783a2db5c2a65ecc14b3fda9eda38558709a9cf6c33d2334139.css integrity="sha256-oWCabCfPd4Oi21wqZezBSz/anto4VYcJqc9sM9IzQTk="><link rel=stylesheet href=/lib/pace/themes/green/pace-theme-bounce.891b6ea26e5a8eb1153db8d015312704467abd016189fa2b7284caecb5cb574e.css integrity="sha256-iRtuom5ajrEVPbjQFTEnBEZ6vQFhiforcoTK7LXLV04="><script src=/lib/valine/Valine.min.3da7a85585e6535c297344e2b69dc4eb7f0a75046eda9a4f26eb36ede3f1a7d9.js integrity="sha256-PaeoVYXmU1wpc0Titp3E638KdQRu2ppPJus27ePxp9k="></script><script src=/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8=" defer></script><script src=/lib/algoliasearch/algoliasearch-lite.umd.min.6967a37fd7ef3676c81376993b3a6583dcb7d378478e6e2975c4fc682edeb1d5.js integrity="sha256-aWejf9fvNnbIE3aZOzplg9y303hHjm4pdcT8aC7esdU=" defer></script><script src=/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys=" async defer></script><script src=/lib/typeit/index.umd.ad0aaee416d34d2340d0a352523ab3cc24cb6cf3e876cd9bad7374ee4a63fb6c.js integrity="sha256-rQqu5BbTTSNA0KNSUjqzzCTLbPPods2brXN07kpj+2w=" defer></script><script src=/lib/katex/katex.min.13870312562afc8fad155a133018c3f2a4ef1cb2e6765b73f40151ab664ff8d6.js integrity="sha256-E4cDElYq/I+tFVoTMBjD8qTvHLLmdltz9AFRq2ZP+NY=" defer></script><script src=/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y+KzPOwaJ0PYhsf7R6c=" defer></script><script src=/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script src=/lib/katex/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E=" defer></script><script src=/lib/pangu/pangu.min.8feca3e7a71d118d82c2456d1b2cf5f1f3726c51a930627c2711b7192c8edbe2.js integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" defer></script><script src=/lib/cell-watermark/watermark.min.8518c89a43d8bcbcf981bbd3d6364ce91a5142b15e0e584e2a39dc36661d6b13.js integrity="sha256-hRjImkPYvLz5gbvT1jZM6RpRQrFeDlhOKjncNmYdaxM=" defer></script><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async defer></script><script src=/lib/pace/pace.min.82a77b6138e0fc1b5fa964b0b093af9dd97407173c8052262c4917413f3eaa3d.js integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" async defer></script><script>window.config={autoBookmark:!0,code:{copyTitle:"复制到剪贴板",editLockTitle:"锁定可编辑代码块",editUnLockTitle:"解锁可编辑代码块",editable:!0,maxShownLines:50},comment:{enable:!0,expired:!1,valine:{appId:"Ea1KZ2YXg5HPcKpzkojf93jf-gzGzoHsz",appKey:"HGISPAHhJF9rSgLdqKX6nwk2",avatar:"mp",el:"#valine",emojiCDN:"https://cdn.jsdelivr.net/npm/emoji-datasource-google@14.0.0/img/google/64/",emojiMaps:{100:"1f4af.png",alien:"1f47d.png",anger:"1f4a2.png",angry:"1f620.png",anguished:"1f627.png",astonished:"1f632.png",black_heart:"1f5a4.png",blue_heart:"1f499.png",blush:"1f60a.png",bomb:"1f4a3.png",boom:"1f4a5.png",broken_heart:"1f494.png",brown_heart:"1f90e.png",clown_face:"1f921.png",cold_face:"1f976.png",cold_sweat:"1f630.png",confounded:"1f616.png",confused:"1f615.png",cry:"1f622.png",crying_cat_face:"1f63f.png",cupid:"1f498.png",dash:"1f4a8.png",disappointed:"1f61e.png",disappointed_relieved:"1f625.png",dizzy:"1f4ab.png",dizzy_face:"1f635.png",drooling_face:"1f924.png",exploding_head:"1f92f.png",expressionless:"1f611.png",face_vomiting:"1f92e.png",face_with_cowboy_hat:"1f920.png",face_with_hand_over_mouth:"1f92d.png",face_with_head_bandage:"1f915.png",face_with_monocle:"1f9d0.png",face_with_raised_eyebrow:"1f928.png",face_with_rolling_eyes:"1f644.png",face_with_symbols_on_mouth:"1f92c.png",face_with_thermometer:"1f912.png",fearful:"1f628.png",flushed:"1f633.png",frowning:"1f626.png",ghost:"1f47b.png",gift_heart:"1f49d.png",green_heart:"1f49a.png",grimacing:"1f62c.png",grin:"1f601.png",grinning:"1f600.png",hankey:"1f4a9.png",hear_no_evil:"1f649.png",heart:"2764-fe0f.png",heart_decoration:"1f49f.png",heart_eyes:"1f60d.png",heart_eyes_cat:"1f63b.png",heartbeat:"1f493.png",heartpulse:"1f497.png",heavy_heart_exclamation_mark_ornament:"2763-fe0f.png",hole:"1f573-fe0f.png",hot_face:"1f975.png",hugging_face:"1f917.png",hushed:"1f62f.png",imp:"1f47f.png",innocent:"1f607.png",japanese_goblin:"1f47a.png",japanese_ogre:"1f479.png",joy:"1f602.png",joy_cat:"1f639.png",kiss:"1f48b.png",kissing:"1f617.png",kissing_cat:"1f63d.png",kissing_closed_eyes:"1f61a.png",kissing_heart:"1f618.png",kissing_smiling_eyes:"1f619.png",laughing:"1f606.png",left_speech_bubble:"1f5e8-fe0f.png",love_letter:"1f48c.png",lying_face:"1f925.png",mask:"1f637.png",money_mouth_face:"1f911.png",nauseated_face:"1f922.png",nerd_face:"1f913.png",neutral_face:"1f610.png",no_mouth:"1f636.png",open_mouth:"1f62e.png",orange_heart:"1f9e1.png",partying_face:"1f973.png",pensive:"1f614.png",persevere:"1f623.png",pleading_face:"1f97a.png",pouting_cat:"1f63e.png",purple_heart:"1f49c.png",rage:"1f621.png",relaxed:"263a-fe0f.png",relieved:"1f60c.png",revolving_hearts:"1f49e.png",right_anger_bubble:"1f5ef-fe0f.png",robot_face:"1f916.png",rolling_on_the_floor_laughing:"1f923.png",scream:"1f631.png",scream_cat:"1f640.png",see_no_evil:"1f648.png",shushing_face:"1f92b.png",skull:"1f480.png",skull_and_crossbones:"2620-fe0f.png",sleeping:"1f634.png",sleepy:"1f62a.png",slightly_frowning_face:"1f641.png",slightly_smiling_face:"1f642.png",smile:"1f604.png",smile_cat:"1f638.png",smiley:"1f603.png",smiley_cat:"1f63a.png",smiling_face_with_3_hearts:"1f970.png",smiling_imp:"1f608.png",smirk:"1f60f.png",smirk_cat:"1f63c.png",sneezing_face:"1f927.png",sob:"1f62d.png",space_invader:"1f47e.png",sparkling_heart:"1f496.png",speak_no_evil:"1f64a.png",speech_balloon:"1f4ac.png","star-struck":"1f929.png",stuck_out_tongue:"1f61b.png",stuck_out_tongue_closed_eyes:"1f61d.png",stuck_out_tongue_winking_eye:"1f61c.png",sunglasses:"1f60e.png",sweat:"1f613.png",sweat_drops:"1f4a6.png",sweat_smile:"1f605.png",thinking_face:"1f914.png",thought_balloon:"1f4ad.png",tired_face:"1f62b.png",triumph:"1f624.png",two_hearts:"1f495.png",unamused:"1f612.png",upside_down_face:"1f643.png",weary:"1f629.png",white_frowning_face:"2639-fe0f.png",white_heart:"1f90d.png",wink:"1f609.png",woozy_face:"1f974.png",worried:"1f61f.png",yawning_face:"1f971.png",yellow_heart:"1f49b.png",yum:"1f60b.png",zany_face:"1f92a.png",zipper_mouth_face:"1f910.png",zzz:"1f4a4.png"},enableQQ:!1,highlight:!0,lang:"",pageSize:10,placeholder:"你的评论 ...",recordIP:!0,visitor:!0}},data:{"typeit-header-subtitle-desktop":"rm -fr /*","typeit-header-subtitle-mobile":"rm -fr /*"},enablePWA:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},pangu:{enable:!0,selector:"article"},search:{algoliaAppID:"CE9G7Q4H6N",algoliaIndex:"soulchild-blog",algoliaSearchKey:"0f69a431d92a03c2cf4143d8dbc6af0a",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},siteTime:"2017-06-08T21:38:36+08:00",typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},duration:-1,speed:100},watermark:{appendto:".wrapper\u003emain",colspacing:300,content:"SoulChild随笔记",enable:!0,fontfamily:"inherit",fontsize:.85,height:300,opacity:.1,rotate:15,rowspacing:100,width:300}}</script><script src=/js/theme.min.3a644f1974b1a5147db2d33a5280ac330e360ea5a40f77faac70087886f48252.js integrity="sha256-OmRPGXSxpRR9stM6UoCsMw42DqWkD3f6rHAIeIb0glI=" defer></script></body></html>

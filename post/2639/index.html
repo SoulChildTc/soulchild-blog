@@ -1,0 +1,730 @@
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>vim配置方案 - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路,记录点滴成长"><meta name=keywords content="vim"><meta itemprop=name content="vim配置方案"><meta itemprop=description content><meta itemprop=datePublished content="2020-08-24T16:01:00+08:00"><meta itemprop=dateModified content="2022-12-18T11:18:08+08:00"><meta itemprop=wordCount content="1484"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content="vim,"><meta property="og:title" content="vim配置方案"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/2639/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-08-24T16:01:00+08:00"><meta property="article:modified_time" content="2022-12-18T11:18:08+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="vim配置方案"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/2639/><link rel=prev href=https://www.soulchild.cn/post/1927/><link rel=next href=https://www.soulchild.cn/post/1930/><link rel=stylesheet href=/css/style.min.db361dc4098a04afe1bcead2293b365e8f7cc7b8edaa4f919cb2562c5e35fc65.css integrity="sha256-2zYdxAmKBK/hvOrSKTs2Xo98x7jtqk+RnLJWLF41/GU="><link rel=stylesheet href=/lib/fontawesome-free/all.min.01b035efb5dfa529c512f82962ed633328222da6f33c224244806d4798c67349.css integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k="><link rel=stylesheet href=/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"vim配置方案","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/2639\/"},"genre":"posts","keywords":"vim","wordcount":1484,"url":"https:\/\/www.soulchild.cn\/post\/2639\/","datePublished":"2020-08-24T16:01:00+08:00","dateModified":"2022-12-18T11:18:08+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>vim配置方案</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/%E5%85%B6%E4%BB%96/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> 其他</a></span></div><div class=post-meta-line><span title="2020-08-24 16:01:00"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2020-08-24 16:01">2020-08-24 16:01</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 1484 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 7 分钟</span>&nbsp;<span id=/post/2639/ class="leancloud_visitors comment-visitors" data-flag-title=vim配置方案>
+<i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span class=leancloud-visitors-count>-</span>&nbsp;次阅读
+</span>&nbsp;<span class=comment-count data-flag-title=vim配置方案>
+<i class="fa-regular fa-comments fa-fw" aria-hidden=true></i>&nbsp;<span data-xid=/post/2639/ class=valine-comment-count>-</span>&nbsp;条评论
+</span>&nbsp;</div></div><div class=content id=content data-end-flag=---><p>效果
+<img class=lazyload src=/svg/loading.min.svg data-src=/post/2639/images/2286465899.png data-srcset="/post/2639/images/2286465899.png, /post/2639/images/2286465899.png 1.5x, /post/2639/images/2286465899.png 2x" data-sizes=auto alt=16136-rtytmf4ycw.png title=16136-rtytmf4ycw.png width=1135 height=599></p><ol><li>下载配色</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>mkdir <span class=nv>$HOME</span>/.vim/colors
+</span></span><span class=line><span class=cl>wget https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim -O <span class=nv>$HOME</span>/.vim/colors/molokai.vim
+</span></span></code></pre></td></tr></table></div></div><p>2.修改vimrc
+vim $HOME/.vimrc</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span><span class=lnt>194
+</span><span class=lnt>195
+</span><span class=lnt>196
+</span><span class=lnt>197
+</span><span class=lnt>198
+</span><span class=lnt>199
+</span><span class=lnt>200
+</span><span class=lnt>201
+</span><span class=lnt>202
+</span><span class=lnt>203
+</span><span class=lnt>204
+</span><span class=lnt>205
+</span><span class=lnt>206
+</span><span class=lnt>207
+</span><span class=lnt>208
+</span><span class=lnt>209
+</span><span class=lnt>210
+</span><span class=lnt>211
+</span><span class=lnt>212
+</span><span class=lnt>213
+</span><span class=lnt>214
+</span><span class=lnt>215
+</span><span class=lnt>216
+</span><span class=lnt>217
+</span><span class=lnt>218
+</span><span class=lnt>219
+</span><span class=lnt>220
+</span><span class=lnt>221
+</span><span class=lnt>222
+</span><span class=lnt>223
+</span><span class=lnt>224
+</span><span class=lnt>225
+</span><span class=lnt>226
+</span><span class=lnt>227
+</span><span class=lnt>228
+</span><span class=lnt>229
+</span><span class=lnt>230
+</span><span class=lnt>231
+</span><span class=lnt>232
+</span><span class=lnt>233
+</span><span class=lnt>234
+</span><span class=lnt>235
+</span><span class=lnt>236
+</span><span class=lnt>237
+</span><span class=lnt>238
+</span><span class=lnt>239
+</span><span class=lnt>240
+</span><span class=lnt>241
+</span><span class=lnt>242
+</span><span class=lnt>243
+</span><span class=lnt>244
+</span><span class=lnt>245
+</span><span class=lnt>246
+</span><span class=lnt>247
+</span><span class=lnt>248
+</span><span class=lnt>249
+</span><span class=lnt>250
+</span><span class=lnt>251
+</span><span class=lnt>252
+</span><span class=lnt>253
+</span><span class=lnt>254
+</span><span class=lnt>255
+</span><span class=lnt>256
+</span><span class=lnt>257
+</span><span class=lnt>258
+</span><span class=lnt>259
+</span><span class=lnt>260
+</span><span class=lnt>261
+</span><span class=lnt>262
+</span><span class=lnt>263
+</span><span class=lnt>264
+</span><span class=lnt>265
+</span><span class=lnt>266
+</span><span class=lnt>267
+</span><span class=lnt>268
+</span><span class=lnt>269
+</span><span class=lnt>270
+</span><span class=lnt>271
+</span><span class=lnt>272
+</span><span class=lnt>273
+</span><span class=lnt>274
+</span><span class=lnt>275
+</span><span class=lnt>276
+</span><span class=lnt>277
+</span><span class=lnt>278
+</span><span class=lnt>279
+</span><span class=lnt>280
+</span><span class=lnt>281
+</span><span class=lnt>282
+</span><span class=lnt>283
+</span><span class=lnt>284
+</span><span class=lnt>285
+</span><span class=lnt>286
+</span><span class=lnt>287
+</span><span class=lnt>288
+</span><span class=lnt>289
+</span><span class=lnt>290
+</span><span class=lnt>291
+</span><span class=lnt>292
+</span><span class=lnt>293
+</span><span class=lnt>294
+</span><span class=lnt>295
+</span><span class=lnt>296
+</span><span class=lnt>297
+</span><span class=lnt>298
+</span><span class=lnt>299
+</span><span class=lnt>300
+</span><span class=lnt>301
+</span><span class=lnt>302
+</span><span class=lnt>303
+</span><span class=lnt>304
+</span><span class=lnt>305
+</span><span class=lnt>306
+</span><span class=lnt>307
+</span><span class=lnt>308
+</span><span class=lnt>309
+</span><span class=lnt>310
+</span><span class=lnt>311
+</span><span class=lnt>312
+</span><span class=lnt>313
+</span><span class=lnt>314
+</span><span class=lnt>315
+</span><span class=lnt>316
+</span><span class=lnt>317
+</span><span class=lnt>318
+</span><span class=lnt>319
+</span><span class=lnt>320
+</span><span class=lnt>321
+</span><span class=lnt>322
+</span><span class=lnt>323
+</span><span class=lnt>324
+</span><span class=lnt>325
+</span><span class=lnt>326
+</span><span class=lnt>327
+</span><span class=lnt>328
+</span><span class=lnt>329
+</span><span class=lnt>330
+</span><span class=lnt>331
+</span><span class=lnt>332
+</span><span class=lnt>333
+</span><span class=lnt>334
+</span><span class=lnt>335
+</span><span class=lnt>336
+</span><span class=lnt>337
+</span><span class=lnt>338
+</span><span class=lnt>339
+</span><span class=lnt>340
+</span><span class=lnt>341
+</span><span class=lnt>342
+</span><span class=lnt>343
+</span><span class=lnt>344
+</span><span class=lnt>345
+</span><span class=lnt>346
+</span><span class=lnt>347
+</span><span class=lnt>348
+</span><span class=lnt>349
+</span><span class=lnt>350
+</span><span class=lnt>351
+</span><span class=lnt>352
+</span><span class=lnt>353
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> <span class=o>=</span>&gt; General
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> Sets how many lines of <span class=nb>history</span> VIM has to remember
+</span></span><span class=line><span class=cl><span class=s2>&#34; &#34;</span><span class=nb>set</span> <span class=nv>history</span><span class=o>=</span><span class=m>500</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> cursorcolumn
+</span></span><span class=line><span class=cl><span class=s2>&#34; display numbers
+</span></span></span><span class=line><span class=cl><span class=s2>set nu
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>visual edit everywhere
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;</span><span class=nb>set</span> <span class=nv>virtualedit</span><span class=o>=</span>all
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;show command
+</span></span></span><span class=line><span class=cl><span class=s2>set showcmd
+</span></span></span><span class=line><span class=cl><span class=s2>set cmdheight=2
+</span></span></span><span class=line><span class=cl><span class=s2>set scrolloff=3
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> Enable filetype plugins
+</span></span><span class=line><span class=cl>filetype plugin on
+</span></span><span class=line><span class=cl>filetype indent on
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34; Set to auto read when a file is changed from the outside
+</span></span></span><span class=line><span class=cl><span class=s2>set autoread
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>set nocompatible
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> Search
+</span></span><span class=line><span class=cl><span class=nb>set</span> ignorecase    <span class=s2>&#34; Ignore case when searching
+</span></span></span><span class=line><span class=cl><span class=s2>set smartcase     &#34;</span> When searching try to be smart about cases
+</span></span><span class=line><span class=cl><span class=nb>set</span> hlsearch      <span class=s2>&#34; Highlight search results
+</span></span></span><span class=line><span class=cl><span class=s2>set incsearch     &#34;</span> Makes search act like search in modern browsers
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34; Don&#39;t redraw while executing macros (good performance config)
+</span></span></span><span class=line><span class=cl><span class=s2>set lazyredraw
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> For regular expressions turn magic on
+</span></span><span class=line><span class=cl><span class=nb>set</span> magic
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34; Show matching brackets when text indicator is over them
+</span></span></span><span class=line><span class=cl><span class=s2>set showmatch
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> How many tenths of a second to blink when matching brackets
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>mat</span><span class=o>=</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34; No annoying sound on errors
+</span></span></span><span class=line><span class=cl><span class=s2>set noerrorbells
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span><span class=nb>set</span> novisualbell
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>t_vb</span><span class=o>=</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>tm</span><span class=o>=</span><span class=m>500</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34; Add a bit extra margin to the left
+</span></span></span><span class=line><span class=cl><span class=s2>set foldcolumn=1
+</span></span></span><span class=line><span class=cl><span class=s2>set fdm=marker
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34; =&gt; Colors and Fonts
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34; Enable syntax highlighting
+</span></span></span><span class=line><span class=cl><span class=s2>syntax enable
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>colorscheme molokai
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>colorscheme monokai
+</span></span><span class=line><span class=cl><span class=s2>&#34;colorscheme murphy
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>colorscheme solarized
+</span></span><span class=line><span class=cl><span class=s2>&#34;let g:solarized_termcolors=256
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span><span class=nb>let</span> g:solarized_contrast<span class=o>=</span><span class=s2>&#34;high&#34;</span>    <span class=s2>&#34;default value is normal
+</span></span></span><span class=line><span class=cl><span class=s2>set t_Co=256      &#34;</span><span class=nb>set</span> vim terminal color
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>background</span><span class=o>=</span>dark
+</span></span><span class=line><span class=cl><span class=s2>&#34;set guifont=Mono\ 13
+</span></span></span><span class=line><span class=cl><span class=s2>set guifont=monaco\ 14
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34; =&gt; Statusline setting
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>statusline</span><span class=o>=</span>%1*<span class=se>\ </span><span class=o>[</span>%<span class=o>{</span>Disp_Mode<span class=o>()}]</span><span class=se>\ </span>%*<span class=se>\ </span>%-5.58<span class=o>(</span>%F%m%r%h%w%<span class=o>)</span><span class=se>\ </span>%2*<span class=se>\ </span>%-5.58<span class=o>(</span>CWD:<span class=se>\ </span>%<span class=o>{</span>getcwd<span class=o>()}</span>%<span class=o>)</span><span class=se>\ </span>%*<span class=se>\ </span>Format:<span class=se>\ </span><span class=o>[</span>%<span class=o>{</span><span class=p>&amp;</span>fenc!<span class=o>=</span><span class=s1>&#39;&#39;</span>?<span class=p>&amp;</span>fenc:<span class=p>&amp;</span>enc<span class=o>}]</span><span class=se>\ </span>%3*<span class=se>\ </span>FileType:<span class=se>\ </span>%y<span class=se>\ </span>%*<span class=se>\ </span>%<span class=o>([</span>L:<span class=se>\ </span>%l,C:<span class=se>\ </span>%c<span class=o>][</span>%p%%<span class=o>]</span>%<span class=o>)</span>%&lt;
+</span></span><span class=line><span class=cl>hi User1 <span class=nv>guibg</span><span class=o>=</span>slateblue <span class=nv>guifg</span><span class=o>=</span>Gray <span class=nv>ctermfg</span><span class=o>=</span>Gray <span class=nv>ctermbg</span><span class=o>=</span><span class=m>93</span>
+</span></span><span class=line><span class=cl>hi User2 <span class=nv>guibg</span><span class=o>=</span><span class=c1>#4876FF guifg=Gray ctermfg=Gray ctermbg=53</span>
+</span></span><span class=line><span class=cl>hi User3 <span class=nv>guibg</span><span class=o>=</span>Brown <span class=nv>guifg</span><span class=o>=</span>Gray <span class=nv>ctermfg</span><span class=o>=</span>Gray <span class=nv>ctermbg</span><span class=o>=</span><span class=m>160</span>
+</span></span><span class=line><span class=cl>hi StatusLine <span class=nv>guibg</span><span class=o>=</span><span class=c1>#cccccc guifg=#222222</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>laststatus</span><span class=o>=</span><span class=m>2</span>  <span class=s2>&#34;2:always display
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34; =&gt; file coding and decoding
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34; Set utf8 as standard encoding and en_US as the standard language
+</span></span></span><span class=line><span class=cl><span class=s2>set termencoding=utf-8
+</span></span></span><span class=line><span class=cl><span class=s2>set encoding=utf8
+</span></span></span><span class=line><span class=cl><span class=s2>set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,latin1     &#34;</span>decoding list
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>fileencoding</span><span class=o>=</span>utf-8
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> <span class=o>=</span>&gt; Files, backups and undo
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> Turn backup off, since most stuff is in SVN, git et.c anyway...
+</span></span><span class=line><span class=cl><span class=nb>set</span> nobackup
+</span></span><span class=line><span class=cl><span class=nb>set</span> nowb
+</span></span><span class=line><span class=cl><span class=nb>set</span> noswapfile
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> <span class=o>=</span>&gt; Text, tab and indent related
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> <span class=m>1</span> <span class=nv>tab</span> <span class=o>==</span> <span class=m>4</span> spaces
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>shiftwidth</span><span class=o>=</span><span class=m>4</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>tabstop</span><span class=o>=</span><span class=m>4</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>softtabstop</span><span class=o>=</span><span class=m>4</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34; Use spaces instead of tabs
+</span></span></span><span class=line><span class=cl><span class=s2>set expandtab
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> Be smart when using tabs
+</span></span><span class=line><span class=cl><span class=nb>set</span> smarttab
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;toggle paste mode with hitting F2 key
+</span></span></span><span class=line><span class=cl><span class=s2>set pastetoggle=&lt;F2&gt;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span><span class=nb>set</span> paste    <span class=s2>&#34;open paste mode
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>set ai &#34;</span>Auto indent
+</span></span><span class=line><span class=cl><span class=nb>set</span> si <span class=s2>&#34;Smart indent
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34; Wrap and breakline setting
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34; Linebreak on 500 characters
+</span></span></span><span class=line><span class=cl><span class=s2>set lbr                 &#34;</span>linebreak
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>tw</span><span class=o>=</span><span class=m>500</span>              <span class=s2>&#34;break at 500 words
+</span></span></span><span class=line><span class=cl><span class=s2>set showbreak==&gt;\          &#34;</span>show <span class=s2>&#34;=&gt;&#34;</span> before the <span class=nb>break</span> line
+</span></span><span class=line><span class=cl><span class=nb>set</span> wrap <span class=s2>&#34;Wrap lines
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>configure backspace
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>backspace</span><span class=o>=</span>eol,start,indent
+</span></span><span class=line><span class=cl><span class=nb>set</span> <span class=nv>whichwrap</span><span class=o>+=</span>&lt;,&gt;,h,l
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34; Highlight the current line
+</span></span></span><span class=line><span class=cl><span class=s2>set cursorline
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>highlight CursorLine          <span class=nv>guibg</span><span class=o>=</span><span class=c1>#003853 ctermbg=24  gui=none cterm=none</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;set clipboard=unnamed    &#34;</span>yank unnamed register to the system register
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34; Return to last edit position when opening files (You want this!)  
+</span></span></span><span class=line><span class=cl><span class=s2>autocmd! BufReadPost *  
+</span></span></span><span class=line><span class=cl><span class=s2>     \ if line(&#34;</span><span class=s1>&#39;\&#34;&#34;) &gt; 0 &amp;&amp; line(&#34;&#39;</span><span class=se>\&#34;</span><span class=s2>&#34;) &lt;= line(&#34;$&#34;) |  
+</span></span></span><span class=line><span class=cl><span class=s2>     \   exe &#34;</span>normal! g<span class=sb>`</span><span class=se>\&#34;</span><span class=s2>&#34; |  
+</span></span></span><span class=line><span class=cl><span class=s2>     \ endif
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>auto load ~/.vimrc
+</span></span><span class=line><span class=cl>autocmd! BufWritePost <span class=nv>$MYVIMRC</span> <span class=nb>source</span> <span class=nv>$MYVIMRC</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;let mapleader = &#39;,&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>let g:mapleader = &#39;,&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>save and quit
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;quit without save
+</span></span></span><span class=line><span class=cl><span class=s2>map &lt;leader&gt;q :q!&lt;cr&gt;    
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>save and quit
+</span></span><span class=line><span class=cl>map &lt;leader&gt;w :wq!&lt;cr&gt;    
+</span></span><span class=line><span class=cl><span class=s2>&#34;save force with :W
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>command! W w !sudo tee % &gt; /dev/null
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;save and quit
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>map &lt;leader&gt;tn :tabnew&lt;cr&gt;
+</span></span></span><span class=line><span class=cl><span class=s2>map &lt;leader&gt;tc :tabclose&lt;cr&gt;
+</span></span></span><span class=line><span class=cl><span class=s2>map &lt;C-tab&gt; :tabn&lt;cr&gt;
+</span></span></span><span class=line><span class=cl><span class=s2>map &lt;C-S-tab&gt; :tabp&lt;cr&gt;
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> no highlight
+</span></span><span class=line><span class=cl>map &lt;leader&gt;/ :nohl&lt;cr&gt;
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34; Merge selected text into one line
+</span></span></span><span class=line><span class=cl><span class=s2>vmap &lt;leader&gt;m J
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> change all the tab into space
+</span></span><span class=line><span class=cl>nmap &lt;leader&gt;rt :retab!&lt;cr&gt;
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34; update when diff two files
+</span></span></span><span class=line><span class=cl><span class=s2>nmap &lt;leader&gt;du :diffupdate&lt;cr&gt;
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>auto <span class=nb>complete</span> <span class=o>()</span>,<span class=o>[]</span>,<span class=o>{}</span>and so on
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>  
+</span></span><span class=line><span class=cl>:inoremap <span class=o>(</span> <span class=o>()</span>&lt;Left&gt;
+</span></span><span class=line><span class=cl>:inoremap <span class=o>)</span> &lt;c-r&gt;<span class=o>=</span>ClosePair<span class=o>(</span><span class=s1>&#39;)&#39;</span><span class=o>)</span>&lt;CR&gt;
+</span></span><span class=line><span class=cl>:inoremap <span class=o>{</span> <span class=o>{}</span>&lt;Left&gt;
+</span></span><span class=line><span class=cl>autocmd FileType c,cpp :inoremap <span class=o>{</span> <span class=o>{</span>&lt;CR&gt;<span class=o>}</span>&lt;ESC&gt;O
+</span></span><span class=line><span class=cl>:inoremap <span class=o>}</span> &lt;c-r&gt;<span class=o>=</span>ClosePair<span class=o>(</span><span class=s1>&#39;}&#39;</span><span class=o>)</span>&lt;CR&gt;
+</span></span><span class=line><span class=cl>:inoremap <span class=o>[</span> <span class=o>[]</span>&lt;Left&gt;
+</span></span><span class=line><span class=cl>:inoremap <span class=o>]</span> &lt;c-r&gt;<span class=o>=</span>ClosePair<span class=o>(</span><span class=s1>&#39;]&#39;</span><span class=o>)</span>&lt;CR&gt;
+</span></span><span class=line><span class=cl>:inoremap <span class=s2>&#34; &#34;&#34;&lt;Left&gt;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>autocmd Filetype c,cpp,python,perl :inoremap <span class=s1>&#39; &#39;&#39;&lt;ESC&gt;i
+</span></span></span><span class=line><span class=cl><span class=s1>function! ClosePair(char)
+</span></span></span><span class=line><span class=cl><span class=s1>    if getline(&#39;</span>.<span class=s1>&#39;)[col(&#39;</span>.<span class=s1>&#39;) - 1] == a:char
+</span></span></span><span class=line><span class=cl><span class=s1>        return &#34;\&lt;Right&gt;&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>    else
+</span></span></span><span class=line><span class=cl><span class=s1>        return a:char
+</span></span></span><span class=line><span class=cl><span class=s1>    endif
+</span></span></span><span class=line><span class=cl><span class=s1>endfunction
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>&#34;自动插入文件头
+</span></span></span><span class=line><span class=cl><span class=s1>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>autocmd! BufNewFile * silent! 0r ~/.vim/skel/Template.%:e
+</span></span></span><span class=line><span class=cl><span class=s1>autocmd! BufNewFile *.cpp,*.[ch],*.sh,*.java,*.v,*.sv,*.vhd,*.py exec &#34;:call SetTitle()&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>function! SetTitle()
+</span></span></span><span class=line><span class=cl><span class=s1>    &#34;如果文件类型为脚本文件
+</span></span></span><span class=line><span class=cl><span class=s1>    if &amp;filetype =~ &#39;</span>sh<span class=se>\|</span>perl<span class=se>\|</span>python<span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>        if &amp;filetype == &#39;</span>sh<span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>            call setline(1,&#34;#!/bin/bash&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        elseif &amp;filetype == &#39;</span>perl<span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>            call setline(1,&#34;#!/usr/bin/perl -w&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        elseif &amp;filetype == &#39;</span>python<span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>            call setline(1,&#34;#!/usr/bin/env python&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        endif
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;), &#34;&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>    elseif &amp;filetype =~ &#39;</span>verilog<span class=se>\|</span>systemverilog<span class=se>\|</span>c<span class=se>\|</span>cpp<span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>        call setline(1          , &#34;\//------------------------------------------------------------------------&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)   , &#34;\// File Name   : &#34;.expand(&#34;%&#34;))
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+1 , &#34;\// Author      : xxxxx (xxxxx@163.com)&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+2 , &#34;\// Version     : V0.1 &#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+3 , &#34;\//------------------------------------------------------------------------&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+4 , &#34;\// Description :&#34; )
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+5 , &#34;\//     &#34; )
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+6 , &#34;\//------------------------------------------------------------------------&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+7 , &#34;\// Revision History:&#34; )
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+8 , &#34;\// *Version* | *Modifier* | *Modified Date* | *Description*&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+9 , &#34;\//   V0.1    |   Victor   |   &#34;.strftime(&#34;%Y-%m-%d&#34;).&#34;    | Fisrt Created.&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+10, &#34;\//------------------------------------------------------------------------&#34;)        
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+11, &#34;&#34; )
+</span></span></span><span class=line><span class=cl><span class=s1>    endif
+</span></span></span><span class=line><span class=cl><span class=s1>    if &amp;filetype == &#39;</span>cpp<span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+12, &#34;#include&lt;iostream&gt;&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+13, &#34;using namespace std;&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+14, &#34;&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>    endif
+</span></span></span><span class=line><span class=cl><span class=s1>    if &amp;filetype == &#39;</span>c<span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+12, &#34;#include&lt;stdio.h&gt;&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        call append(line(&#34;.&#34;)+13, &#34;&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>    endif
+</span></span></span><span class=line><span class=cl><span class=s1>    if &amp;filetype =~ &#39;</span>verilog<span class=se>\|</span>systemverilog<span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>        if expand(&#34;%:r&#34;) =~ &#39;</span>tb<span class=s1>$&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+12, &#34;`timescale 1ns/1ps&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+13, &#34;&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+14, &#34;module &#34;.expand(&#34;%:r&#34;).&#34;();&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+15, &#34;&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+16, &#34;initial begin&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+17, &#34;    $fsdbDumpfile(\&#34;wave.fsdb\&#34;);&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+18, &#34;    $fsdbDumpvars(0);&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+19, &#34;\//    $fsdbDumpMDA(0);&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+20, &#34;end&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+21, &#34;&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+22, &#34;endmodule&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        else
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+12, &#34;module &#34;.expand(&#34;%:r&#34;).&#34;(&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+13, &#34;    input clk   ,&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+14, &#34;    input rst_n ,&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+15, &#34;);&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+16, &#34;&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+17, &#34;\//==============================================&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+18, &#34;\// Definition of regs and wires&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+19, &#34;\//==============================================&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+20, &#34;&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+21, &#34;\//**********************************************&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+22, &#34;\// Function&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+23, &#34;\//**********************************************&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+24, &#34;&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>            call append(line(&#34;.&#34;)+25, &#34;endmodule&#34;)
+</span></span></span><span class=line><span class=cl><span class=s1>        endif
+</span></span></span><span class=line><span class=cl><span class=s1>    endif
+</span></span></span><span class=line><span class=cl><span class=s1>    &#34;新建文件后，自动定位到文件末尾
+</span></span></span><span class=line><span class=cl><span class=s1>    exec &#34;normal G&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>endfunc
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>&#34;&#34;实现上面函数中的，Last Modified功能
+</span></span></span><span class=line><span class=cl><span class=s1>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>&#34;autocmd! BufWrite,BufWritePre,FileWritePre  *.cpp,*.[ch],*.sh,*.java,*.v,*.sv,*.vhd,*.py  ks|call LastModified()|&#39;</span>s  
+</span></span><span class=line><span class=cl><span class=s2>&#34;function! LastModified()
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>       <span class=k>if</span> line<span class=o>(</span><span class=s2>&#34;</span>$<span class=s2>&#34;</span><span class=o>)</span> &gt; <span class=m>20</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;               let l = 20
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>       <span class=k>else</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;               let l = line(&#34;$&#34;)
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>       endif
+</span></span><span class=line><span class=cl><span class=s2>&#34;       exec &#34;</span>1,<span class=s2>&#34;.l.&#34;</span>g/Last Modified: /s/Last Modified: .*/Last Modified:<span class=s2>&#34;.
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span>                       <span class=se>\s</span>trftime<span class=o>(</span><span class=s2>&#34; %Y-%m-%d %H:%M:%S&#34;</span><span class=o>)</span> . <span class=s2>&#34;/e&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;endfunc
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> Returns <span class=nb>true</span> <span class=k>if</span> paste mode is enabled
+</span></span><span class=line><span class=cl><span class=k>function</span>! HasPaste<span class=o>()</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>&amp;</span>paste
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=s1>&#39;[PASTE MODE]  &#39;</span>
+</span></span><span class=line><span class=cl>    endif
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=s1>&#39;&#39;</span>
+</span></span><span class=line><span class=cl>endfunction
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> <span class=k>return</span> vim mode
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>function! Disp_Mode()
+</span></span></span><span class=line><span class=cl><span class=s2>    let mode=mode()
+</span></span></span><span class=line><span class=cl><span class=s2>    if mode ==# &#39;v&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        return &#39;Visual&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>    elseif mode ==# &#39;V&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        return &#39;V-Line&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>    elseif mode ==# &#39;&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        return &#39;V-Block&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>    elseif mode ==# &#39;s&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        return &#39;Select&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        elseif mode ==# &#39;S&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        return &#39;S-Line&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        elseif mode ==# &#39;&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        return &#39;S-Block&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        elseif mode =~# &#39;\vi&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        return &#39;Insert&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        elseif mode =~# &#39;\v(R|Rv)&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        return &#39;Replace&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        else
+</span></span></span><span class=line><span class=cl><span class=s2>        return &#39;Normal&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>        endif
+</span></span></span><span class=line><span class=cl><span class=s2>endfunction
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34; filetype
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>au BufNewFile,BufRead readme,README setf <span class=nb>help</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;</span> plugin: supertab
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>let g:SuperTabDefaultCompletionType = &#34;</span>context<span class=s2>&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>let g:SuperTabMappingForward = &#39;&lt;s-space&gt;&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>let g:SuperTabMappingBackward = &#39;&lt;s-c-space&gt;&#39;
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34; plugin: NERDTree
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;autocmd vimenter * NERDTree
+</span></span></span><span class=line><span class=cl><span class=s2>autocmd bufenter * if (winnr(&#34;$&#34;) == 1 &amp;&amp; exists(&#34;</span>b:NERDTreeType<span class=s2>&#34;) &amp;&amp; b:NERDTreeType == &#34;</span>primary<span class=s2>&#34;) | q | endif
+</span></span></span><span class=line><span class=cl><span class=s2>map &lt;F3&gt; :NERDTreeToggle&lt;CR&gt;
+</span></span></span><span class=line><span class=cl><span class=s2>let NERDTreeShowHidden=0
+</span></span></span><span class=line><span class=cl><span class=s2>let NERDTreeWinSize=25
+</span></span></span><span class=line><span class=cl><span class=s2>let NERDTreeIgnore=[&#39;\~</span>$<span class=s2>&#39;, &#39;\.swap</span>$<span class=s2>&#39;, &#39;.pyc</span>$<span class=s2>&#39;]
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34; plugin: UltiSnips
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>let</span> g:UltiSnipsExpandTrigger<span class=o>=</span><span class=s2>&#34;&lt;tab&gt;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>let</span> g:UltiSnipsJumpForwardTrigger<span class=o>=</span><span class=s2>&#34;&lt;tab&gt;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>let</span> g:UltiSnipsJumpBackwardTrigger<span class=o>=</span><span class=s2>&#34;&lt;c-b&gt;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34; If you want :UltiSnipsEdit to split your window.
+</span></span></span><span class=line><span class=cl><span class=s2>let g:UltiSnipsEditSplit=&#34;</span>vertical<span class=s2>&#34;
+</span></span></span></code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2022-12-18 11:18:08">更新于 2022-12-18 11:18&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/vim/ class=post-tag>vim</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/1927/ class=post-nav-item rel=prev title=find根据时间属性查找文件><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>find根据时间属性查找文件</a>
+<a href=/post/1930/ class=post-nav-item rel=next title=容器中文字体问题,使用aspose.word转换pdf中文乱码>容器中文字体问题,使用aspose.word转换pdf中文乱码<i class="fa-solid fa-angle-right fa-fw" aria-hidden=true></i></a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wechatpay.png alt="SoulChild 微信">
+<span data-animation>微信</span></div></div></div><div id=comments><div id=valine class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://valine.js.org/ rel="external nofollow noopener noreferrer">Valine</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><div class="footer-line powered">由 <a href=https://gohugo.io/ target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.109.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v0.2.17-RC"><img class=fixit-icon src=/fixit.min.svg alt="FixIt logo">&nbsp;FixIt</a></div><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright fa-fw" aria-hidden=true></i>
+<span itemprop=copyrightYear>2017 - 2023</span><span class=author itemprop=copyrightHolder>
+<a href=https://www.soulchild.cn target=_blank rel="external nofollow noopener noreferrer">SoulChild</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class=site-time title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden=true></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor"><span id=busuanzi_container_site_uv title=总访客数><i class="fa-regular fa-user fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_uv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span><span id=busuanzi_container_site_pv class=footer-divider title=总访问量><i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_pv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span></div></div></footer></div><div class=widgets><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role=button aria-label=回到顶部><i class="fa-solid fa-arrow-up fa-fw" aria-hidden=true></i><span class=variant-numeric>0%</span></div><div class="fixed-button view-comments d-none" role=button aria-label=查看评论><i class="fa-solid fa-comment fa-fw" aria-hidden=true></i></div></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0;--bg-progress:#438a55;--bg-progress-dark:#438a55></div><noscript><div class=noscript-warning>FixIt 主题在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/valine/valine.min.css><link rel=stylesheet href=/lib/katex/katex.min.a1609a6c27cf7783a2db5c2a65ecc14b3fda9eda38558709a9cf6c33d2334139.css integrity="sha256-oWCabCfPd4Oi21wqZezBSz/anto4VYcJqc9sM9IzQTk="><link rel=stylesheet href=/lib/pace/themes/green/pace-theme-bounce.891b6ea26e5a8eb1153db8d015312704467abd016189fa2b7284caecb5cb574e.css integrity="sha256-iRtuom5ajrEVPbjQFTEnBEZ6vQFhiforcoTK7LXLV04="><script src=/lib/valine/Valine.min.3da7a85585e6535c297344e2b69dc4eb7f0a75046eda9a4f26eb36ede3f1a7d9.js integrity="sha256-PaeoVYXmU1wpc0Titp3E638KdQRu2ppPJus27ePxp9k="></script><script src=/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8=" defer></script><script src=/lib/algoliasearch/algoliasearch-lite.umd.min.6967a37fd7ef3676c81376993b3a6583dcb7d378478e6e2975c4fc682edeb1d5.js integrity="sha256-aWejf9fvNnbIE3aZOzplg9y303hHjm4pdcT8aC7esdU=" defer></script><script src=/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys=" async defer></script><script src=/lib/typeit/index.umd.ad0aaee416d34d2340d0a352523ab3cc24cb6cf3e876cd9bad7374ee4a63fb6c.js integrity="sha256-rQqu5BbTTSNA0KNSUjqzzCTLbPPods2brXN07kpj+2w=" defer></script><script src=/lib/katex/katex.min.13870312562afc8fad155a133018c3f2a4ef1cb2e6765b73f40151ab664ff8d6.js integrity="sha256-E4cDElYq/I+tFVoTMBjD8qTvHLLmdltz9AFRq2ZP+NY=" defer></script><script src=/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y+KzPOwaJ0PYhsf7R6c=" defer></script><script src=/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script src=/lib/katex/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E=" defer></script><script src=/lib/pangu/pangu.min.8feca3e7a71d118d82c2456d1b2cf5f1f3726c51a930627c2711b7192c8edbe2.js integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" defer></script><script src=/lib/cell-watermark/watermark.min.8518c89a43d8bcbcf981bbd3d6364ce91a5142b15e0e584e2a39dc36661d6b13.js integrity="sha256-hRjImkPYvLz5gbvT1jZM6RpRQrFeDlhOKjncNmYdaxM=" defer></script><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async defer></script><script src=/lib/pace/pace.min.82a77b6138e0fc1b5fa964b0b093af9dd97407173c8052262c4917413f3eaa3d.js integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" async defer></script><script>window.config={autoBookmark:!0,code:{copyTitle:"复制到剪贴板",editLockTitle:"锁定可编辑代码块",editUnLockTitle:"解锁可编辑代码块",editable:!0,maxShownLines:50},comment:{enable:!0,expired:!1,valine:{appId:"Ea1KZ2YXg5HPcKpzkojf93jf-gzGzoHsz",appKey:"HGISPAHhJF9rSgLdqKX6nwk2",avatar:"mp",el:"#valine",emojiCDN:"https://cdn.jsdelivr.net/npm/emoji-datasource-google@14.0.0/img/google/64/",emojiMaps:{100:"1f4af.png",alien:"1f47d.png",anger:"1f4a2.png",angry:"1f620.png",anguished:"1f627.png",astonished:"1f632.png",black_heart:"1f5a4.png",blue_heart:"1f499.png",blush:"1f60a.png",bomb:"1f4a3.png",boom:"1f4a5.png",broken_heart:"1f494.png",brown_heart:"1f90e.png",clown_face:"1f921.png",cold_face:"1f976.png",cold_sweat:"1f630.png",confounded:"1f616.png",confused:"1f615.png",cry:"1f622.png",crying_cat_face:"1f63f.png",cupid:"1f498.png",dash:"1f4a8.png",disappointed:"1f61e.png",disappointed_relieved:"1f625.png",dizzy:"1f4ab.png",dizzy_face:"1f635.png",drooling_face:"1f924.png",exploding_head:"1f92f.png",expressionless:"1f611.png",face_vomiting:"1f92e.png",face_with_cowboy_hat:"1f920.png",face_with_hand_over_mouth:"1f92d.png",face_with_head_bandage:"1f915.png",face_with_monocle:"1f9d0.png",face_with_raised_eyebrow:"1f928.png",face_with_rolling_eyes:"1f644.png",face_with_symbols_on_mouth:"1f92c.png",face_with_thermometer:"1f912.png",fearful:"1f628.png",flushed:"1f633.png",frowning:"1f626.png",ghost:"1f47b.png",gift_heart:"1f49d.png",green_heart:"1f49a.png",grimacing:"1f62c.png",grin:"1f601.png",grinning:"1f600.png",hankey:"1f4a9.png",hear_no_evil:"1f649.png",heart:"2764-fe0f.png",heart_decoration:"1f49f.png",heart_eyes:"1f60d.png",heart_eyes_cat:"1f63b.png",heartbeat:"1f493.png",heartpulse:"1f497.png",heavy_heart_exclamation_mark_ornament:"2763-fe0f.png",hole:"1f573-fe0f.png",hot_face:"1f975.png",hugging_face:"1f917.png",hushed:"1f62f.png",imp:"1f47f.png",innocent:"1f607.png",japanese_goblin:"1f47a.png",japanese_ogre:"1f479.png",joy:"1f602.png",joy_cat:"1f639.png",kiss:"1f48b.png",kissing:"1f617.png",kissing_cat:"1f63d.png",kissing_closed_eyes:"1f61a.png",kissing_heart:"1f618.png",kissing_smiling_eyes:"1f619.png",laughing:"1f606.png",left_speech_bubble:"1f5e8-fe0f.png",love_letter:"1f48c.png",lying_face:"1f925.png",mask:"1f637.png",money_mouth_face:"1f911.png",nauseated_face:"1f922.png",nerd_face:"1f913.png",neutral_face:"1f610.png",no_mouth:"1f636.png",open_mouth:"1f62e.png",orange_heart:"1f9e1.png",partying_face:"1f973.png",pensive:"1f614.png",persevere:"1f623.png",pleading_face:"1f97a.png",pouting_cat:"1f63e.png",purple_heart:"1f49c.png",rage:"1f621.png",relaxed:"263a-fe0f.png",relieved:"1f60c.png",revolving_hearts:"1f49e.png",right_anger_bubble:"1f5ef-fe0f.png",robot_face:"1f916.png",rolling_on_the_floor_laughing:"1f923.png",scream:"1f631.png",scream_cat:"1f640.png",see_no_evil:"1f648.png",shushing_face:"1f92b.png",skull:"1f480.png",skull_and_crossbones:"2620-fe0f.png",sleeping:"1f634.png",sleepy:"1f62a.png",slightly_frowning_face:"1f641.png",slightly_smiling_face:"1f642.png",smile:"1f604.png",smile_cat:"1f638.png",smiley:"1f603.png",smiley_cat:"1f63a.png",smiling_face_with_3_hearts:"1f970.png",smiling_imp:"1f608.png",smirk:"1f60f.png",smirk_cat:"1f63c.png",sneezing_face:"1f927.png",sob:"1f62d.png",space_invader:"1f47e.png",sparkling_heart:"1f496.png",speak_no_evil:"1f64a.png",speech_balloon:"1f4ac.png","star-struck":"1f929.png",stuck_out_tongue:"1f61b.png",stuck_out_tongue_closed_eyes:"1f61d.png",stuck_out_tongue_winking_eye:"1f61c.png",sunglasses:"1f60e.png",sweat:"1f613.png",sweat_drops:"1f4a6.png",sweat_smile:"1f605.png",thinking_face:"1f914.png",thought_balloon:"1f4ad.png",tired_face:"1f62b.png",triumph:"1f624.png",two_hearts:"1f495.png",unamused:"1f612.png",upside_down_face:"1f643.png",weary:"1f629.png",white_frowning_face:"2639-fe0f.png",white_heart:"1f90d.png",wink:"1f609.png",woozy_face:"1f974.png",worried:"1f61f.png",yawning_face:"1f971.png",yellow_heart:"1f49b.png",yum:"1f60b.png",zany_face:"1f92a.png",zipper_mouth_face:"1f910.png",zzz:"1f4a4.png"},enableQQ:!1,highlight:!0,lang:"",pageSize:10,placeholder:"你的评论 ...",recordIP:!0,visitor:!0}},data:{"typeit-header-subtitle-desktop":"rm -fr /*","typeit-header-subtitle-mobile":"rm -fr /*"},enablePWA:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},pangu:{enable:!0,selector:"article"},search:{algoliaAppID:"CE9G7Q4H6N",algoliaIndex:"soulchild-blog",algoliaSearchKey:"0f69a431d92a03c2cf4143d8dbc6af0a",highlightTag:"em",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},siteTime:"2017-06-08T21:38:36+08:00",typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},duration:-1,speed:100},watermark:{appendto:".wrapper\u003emain",colspacing:300,content:"SoulChild随笔记",enable:!0,fontfamily:"inherit",fontsize:.85,height:300,opacity:.1,rotate:15,rowspacing:100,width:300}}</script><script src=/js/theme.min.3a644f1974b1a5147db2d33a5280ac330e360ea5a40f77faac70087886f48252.js integrity="sha256-OmRPGXSxpRR9stM6UoCsMw42DqWkD3f6rHAIeIb0glI=" defer></script></body></html>
