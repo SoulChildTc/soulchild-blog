@@ -26,7 +26,7 @@
     ],
     "theme_color": "#7547bb",
     "background_color": "#50ce55",
-    "start_url": "https://www.soulchild.cn",
+    "start_url": "/",
     "display": "standalone",
     "description": "第二个大脑",
     "dir": "auto",
