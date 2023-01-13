@@ -94,7 +94,7 @@ Docker把UnionFS的想像力发挥到了容器的镜像。你是否还记得我�
 
 下图来自Docker的官方文档Layer，其很好的展示了Docker用UnionFS搭建的分层镜像。
 
-![38252-3yzl8jcxokj.png](images/210893056.png)
+![38252-3yzl8jcxokj.png](images/2504610050.png)
 
 关于docker的分层镜像，除了aufs，docker还支持btrfs, devicemapper和vfs，你可以使用 -s 或 –storage-driver= 选项来指定相关的镜像存储。在Ubuntu 14.04下，docker默认Ubuntu的 aufs（在CentOS7下，用的是devicemapper，关于devicemapper，我会以以后的文章中讲解）你可以在下面的目录中查看相关的每个层的镜像：
 `/var/lib/docker/aufs/diff/<id> `
@@ -222,9 +222,9 @@ IBM的研究中心对Docker的性能给了一份非常不错的性能报告（PD
 
 我截了两张图出来，第一张是顺序读写，第二张是随机读写。基本没有什么性能损失的问题。而KVM在随机读写的情况也就有点慢了（但是，如果硬盘是SSD的呢？）
 
-![20660-44jefr87f1m.png](images/210893056.png)
+![20660-44jefr87f1m.png](images/1322734855.png)
 
-![18324-26iv6mrrvw8.png](images/210893056.png)
+![18324-26iv6mrrvw8.png](images/1223410990.png)
 
 
 ---

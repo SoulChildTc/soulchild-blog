@@ -38,13 +38,13 @@ systemctl enable zabbix-agent.service
 
 <img src="images/9abb8eadeb36799c3013312abda43361.png" />
 
-<img src="images/9abb8eadeb36799c3013312abda43361.png" />
+<img src="images/4db0b2eb4f95210e78e67d0a65f97443.png" />
 
 添加linux模板
 
-<img src="images/9abb8eadeb36799c3013312abda43361.png" />
+<img src="images/b6881b2033ce798e31d409d1618bb042.png" />
 
-<img src="images/9abb8eadeb36799c3013312abda43361.png" />
+<img src="images/6370b57eab249155ea75ee8dbb6593be.png" />
 
 &nbsp;
 

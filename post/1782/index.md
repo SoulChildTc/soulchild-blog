@@ -93,7 +93,7 @@ auth-user-pass
 ```
 
 客户端填写用户名密码
-![20302-ekztnpyyhjj.png](images/1820984079.png)
+![20302-ekztnpyyhjj.png](images/3249462211.png)
 
 
 

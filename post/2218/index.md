@@ -8,7 +8,7 @@
 文件路径：`C:\Program Files\Java\jre1.8.0_271\lib\security\java.security`
 
 注释jdk.tls.disabledAlgorithms
-![08705-cyfop0plttr.png](images/3547027775.png)
+![08705-cyfop0plttr.png](images/1010816809.png)
 
 以上为临时解决方案，最好还是升级idrac,一般可以解决
 

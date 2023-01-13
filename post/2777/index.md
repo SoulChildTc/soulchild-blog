@@ -87,7 +87,7 @@ spec:
 > random-max-percent（表示选出占符合条件的 Pod 中不超过指定百分比的 Pod）
 
 ### 4.最终效果
-![86448-cnm9oar8tju.png](images/779256225.png)
+![86448-cnm9oar8tju.png](images/3160615710.png)
 
 
 ---

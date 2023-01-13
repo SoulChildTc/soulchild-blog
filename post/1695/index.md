@@ -34,7 +34,7 @@ output{
 
 新建一个终端链接查看是否有日志输出
 
-<img src="images/94b2a152a029900e008e03e19e6646b8.png" />
+<img src="images/4b2c1626b8465ff5d9380aadabc9f4fe.png" />
 
 &nbsp;
 
@@ -55,7 +55,7 @@ output{
 }</code></pre>
 连接kafka消费端，新建终端看看效果
 
-<img src="images/94b2a152a029900e008e03e19e6646b8.png" />
+<img src="images/5b058f4e3f77e98beb4c6f395471fbb5.png" />
 
 &nbsp;
 

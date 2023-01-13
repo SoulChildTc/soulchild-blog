@@ -118,23 +118,23 @@ spec:
 
 **kk-dev的服务访问pp-dev的服务**
 nginx正常访问
-![67253-0dfubigby71.png](images/2650144005.png)
+![67253-0dfubigby71.png](images/2380616026.png)
 
 **kk-dev的服务访问kk-test和pp-test的服务**
 nginx访问超时
-![56095-ef68x96t15u.png](images/2650144005.png)
+![56095-ef68x96t15u.png](images/860365358.png)
 
-![91091-o6doszl9uk.png](images/2650144005.png)
+![91091-o6doszl9uk.png](images/1966657322.png)
 
 **pp-test访问kk-test的服务**
 nginx正常访问
-![96370-859rk8nqv7u.png](images/2650144005.png)
+![96370-859rk8nqv7u.png](images/3386539089.png)
 
 **pp-test访问pp-dev和kk-dev的服务**
 nginx访问超时
-![70378-1a96k23ldul.png](images/2650144005.png)
+![70378-1a96k23ldul.png](images/112309263.png)
 
-![42119-loufx5xxqw.png](images/2650144005.png)
+![42119-loufx5xxqw.png](images/2259482951.png)
 
 ### 四、总结
 含有enable-env-isolate-policy="true"的namespace才会应用我们定义的网络策略。

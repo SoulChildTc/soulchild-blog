@@ -75,7 +75,7 @@ spec:
 ```
 ### 五、测试流量
 通过访问nginx-controller查看virtualservice规则是否生效
-![99556-eecbsqu7vec.png](images/3922728315.png)
+![99556-eecbsqu7vec.png](images/159987004.png)
 
 
 

@@ -73,17 +73,17 @@ Scheduler会确保Node上所有的Pod Resource Request不超过NodeAllocatable�
 
 ### Kubernetes会检查的cgroup subsystem
 - 在Kubernetes 1.7版本，Kubelet启动会检查以下cgroup subsystem的存在：
-![66962-3c5ft5jbar4.png](images/1298335041.png)
+![66962-3c5ft5jbar4.png](images/1164187936.png)
 
 
 - 在Kubernetes 1.8及1.9版本，Kubelet启动会检查以下cgroup subsystem的存在：
-![06512-bmgk8tochvc.png](images/1298335041.png)
+![06512-bmgk8tochvc.png](images/3926772016.png)
 
 对于Centos系统，cpuset和hugetlb subsystem是默认没有初始化system.slice，因此需要手动创建，否则会报Failed to start ContainerManager Failed to enforce System Reserved Cgroup Limits on "/system.slice": "/system.slice" cgroup does not exist的错误日志。
 
 我们可以通过在kubelet service中配置ExecStartPre来实现。
 
-![79097-8gp5vn1w0z2.png](images/1298335041.png)
+![79097-8gp5vn1w0z2.png](images/2852051063.png)
 
 
 

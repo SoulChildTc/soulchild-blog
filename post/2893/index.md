@@ -8,7 +8,7 @@
 
 2.当我们执行`ssh-add`时，提示如下
 
-![15128-30bmqpdy82.png](images/896502403.png)
+![15128-30bmqpdy82.png](images/2856366189.png)
 
 
 ssh-add会通过`SSH_AUTH_SOCK`环境变量，获取与ssh-agent通信的unix套接字,所以我们下面需要设置最开始提示的环境变量。
@@ -19,7 +19,7 @@ ssh-add会通过`SSH_AUTH_SOCK`环境变量，获取与ssh-agent通信的unix套
 SSH_AUTH_SOCK=/tmp/ssh-8DzA6Dlx4wHO/agent.10547; export SSH_AUTH_SOCK;
 ssh-add
 ```
-![27709-ybdyc76azv.png](images/896502403.png)
+![27709-ybdyc76azv.png](images/361786076.png)
 
 可以看到已经可以使用了，在第一次执行命令的结果中，还有一个`SSH_AGENT_PID`环境变量，这个是`ssh-agent`的进程ID,使用`ssh-agent -k`可以用来退出代理程序。
 
@@ -37,7 +37,7 @@ eval可以将字符串作为命令来执行，在我们直接执行`ssh-agent`�
 ```bash
 eval $(ssh-agent)
 ```
-![04505-0zvqsslretxa.png](images/896502403.png)
+![04505-0zvqsslretxa.png](images/1461507940.png)
 > 首先执行`ssh-agent`，输出的结果是三行命令，通过eval来执行这三行命令，就达到了自动添加环境变量的目的.因为第三行是一个echo命令，所以将pid输出了出来。
 
 

@@ -171,13 +171,13 @@ candidate_master=1
 ```bash
 masterha_check_ssh --conf=/etc/mha/app1.conf
 ```
-![11186-2wqivpvc0p7.png](images/3319064206.png)
+![11186-2wqivpvc0p7.png](images/927540583.png)
 
 2.检查主从状态
 ```bash
 masterha_check_repl --conf=/etc/mha/app1.conf
 ```
-![42710-33fqfj426tq.png](images/3319064206.png)
+![42710-33fqfj426tq.png](images/3154792908.png)
 
 这里报错找不到mysqlbinlog，解决方法如下,再次执行检查，看到MySQL Replication Health is OK.就代表没问题了
 ```bash
@@ -195,7 +195,7 @@ nohup masterha_manager --conf=/etc/mha/app1.conf --ignore_last_failover &> /var/
 检查运行状态
 `masterha_check_status --conf /etc/mha/app1.conf`
 
-![34753-r122eijri.png](images/3319064206.png)
+![34753-r122eijri.png](images/3895766790.png)
 
 > 停止mha: `masterha_stop --conf /etc/mha/app1.conf`
 
@@ -206,7 +206,7 @@ systemctl stop mysqld
 ```
 
 2.查看当前master是否切换
-![39079-lzrgecfm5o.png](images/3319064206.png)
+![39079-lzrgecfm5o.png](images/456753831.png)
 
 
 3.将旧master作为slave加入到集群
@@ -438,7 +438,7 @@ nohup masterha_manager --conf=/etc/mha/app1.conf --ignore_last_failover &> /var/
 4.测试
 请查看`十一、故障模拟`
 
-![64189-quqryhyfu4i.png](images/3319064206.png)
+![64189-quqryhyfu4i.png](images/2510283667.png)
 
 
 ---

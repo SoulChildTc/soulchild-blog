@@ -61,15 +61,15 @@ zabbix_get -s 172.16.1.7 -k sda_tps
 
 <img src="images/6f7194d608289a517cc84048effbd9e4.png" />
 
-<img src="images/6f7194d608289a517cc84048effbd9e4.png" />
+<img src="images/2425187de003a678f12d680c16092ed2.png" />
 
 名称可以随便写，键值就是配置文件中的key值
 
-<img src="images/6f7194d608289a517cc84048effbd9e4.png" />
+<img src="images/bf889ed3d2c9eea244c4e6579e06dfd4.png" />
 
 添加完成后，查看最新数据
 
-<img src="images/6f7194d608289a517cc84048effbd9e4.png" />
+<img src="images/2bc12864c3ef33eee8feab99fb4429bf.png" />
 
 
 ---

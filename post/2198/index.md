@@ -120,7 +120,7 @@ spec:
 
 由于域名没有备案，不能访问，我这里直接解析到traefik pod ip，访问测试
 
-![96068-0h8126hyenof.png](images/4041263185.png)
+![96068-0h8126hyenof.png](images/1399640050.png)
 
 
 

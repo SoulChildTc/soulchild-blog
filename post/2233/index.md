@@ -5,7 +5,7 @@ zabbix状态：
 ![99010-pukpeuwghok.png](images/2793765967.png)
 
 手动通过snmpwalk获取：
-![02202-v851ipc0ux.png](images/2793765967.png)
+![02202-v851ipc0ux.png](images/3728620162.png)
 
 服务器状态是没问题的，不知道是什么原因导致的。最后去ilo控制台看日志(Integrated Management Log)，把日志清掉就没问题了。
 

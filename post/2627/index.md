@@ -198,7 +198,7 @@ spec:
 运行后通过如下命令查看结果
 `k get taskrun build-id-m9q4t  -o jsonpath={.status.taskResults} | jq .`
 
-![92353-e6wemti92tt.png](images/2754694827.png)
+![92353-e6wemti92tt.png](images/3819385080.png)
 
 ## 四、示例
 https://hub.tekton.dev 这里可以看到很多可以复用的tekton资源

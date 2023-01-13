@@ -18,7 +18,7 @@
 
 ### 2、创建Deployment流程
 
-![26432-2orcxruqs6c.png](images/4216047982.png)
+![26432-2orcxruqs6c.png](images/697731502.png)
 
 图片来源书籍: kubernetes in action
 

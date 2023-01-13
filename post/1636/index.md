@@ -11,19 +11,19 @@
 
 加一个webhook参数，用于判断触发构建的类型：
 
-<img src="images/47e886e74992bbb1db166215aff11199.png" />
+<img src="images/ae0bf0a61e6a907d7d33033868aec526.png" />
 
 &nbsp;
 
 填写token：
 
-<img src="images/47e886e74992bbb1db166215aff11199.png" />
+<img src="images/6591b3162d6c9dbfb09827db52c77016.png" />
 
 &nbsp;
 
 打印相关内容和变量，方便调试：
 
-<img src="images/47e886e74992bbb1db166215aff11199.png" />
+<img src="images/7ceff1dba92b85144a08e3bf3d9cc0f4.png" />
 
 &nbsp;
 
@@ -31,7 +31,7 @@
 
 URL：http://10.0.0.51:8080/generic-webhook-trigger/invoke?token=demo-maven-service_PUSH&amp;runType=gitlabpush
 
-<img src="images/47e886e74992bbb1db166215aff11199.png" />
+<img src="images/1133196075888fece5a27d21b51f87a6.png" />
 
 &nbsp;
 

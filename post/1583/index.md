@@ -111,7 +111,7 @@ spec:
 访问：soulchild.cn:30960
 
 </div>
-<img src="images/7ffc0ec90f448733a13853b84693eb32.png" />
+<img src="images/196380b0a34bfb5ca778080fb5a00345.png" />
 
 &nbsp;
 
@@ -139,7 +139,7 @@ spec:
           servicePort: nginx-http</code></pre>
 &nbsp;
 
-<img src="images/7ffc0ec90f448733a13853b84693eb32.png" />
+<img src="images/564db0495aa90d028cbe1bc1830d1ff9.png" />
 
 &nbsp;
 
@@ -164,7 +164,7 @@ spec:
           servicePort: nginx-http</code></pre>
 &nbsp;
 
-<img src="images/7ffc0ec90f448733a13853b84693eb32.png" />
+<img src="images/12af409ca9994ddda7ef7f616456c2a9.png" />
 
 &nbsp;
 

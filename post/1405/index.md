@@ -21,21 +21,21 @@ systemctl restart zabbix-agent
 
 修改IP范围和检查条件
 
-<img src="images/b4136209d26a84d627453151f2b55357.png" />
+<img src="images/d6b3a5d62346d21ee7c35b8a016a897f.png" />
 
 &nbsp;
 
 2.创建自动发现动作
 
-<img src="images/b4136209d26a84d627453151f2b55357.png" />
+<img src="images/65be28dda5bff1b8eddc49a5e88b6998.png" />
 
 添加执行动作条件
 
-<img src="images/b4136209d26a84d627453151f2b55357.png" />
+<img src="images/4394046a1372067219f35db56a954fc2.png" />
 
 配置执行动作
 
-<img src="images/b4136209d26a84d627453151f2b55357.png" />
+<img src="images/1532bd32d5c765c8f799defd5602b99c.png" />
 
 &nbsp;
 

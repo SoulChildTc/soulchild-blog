@@ -94,7 +94,7 @@ func main() {
 
 
 通过http访问
-![81660-uibkq6q5ft.png](images/3016782814.png)
+![81660-uibkq6q5ft.png](images/2894836840.png)
 
 
 ---

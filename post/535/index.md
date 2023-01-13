@@ -13,7 +13,7 @@ virsh edit centos7
 
 2.设置镜像文件路径
 
-<img src="images/40c003b8a54a8fb5897b3901a493baed.png" />
+<img src="images/3b1789961b16afc4ef8e940845180780.png" />
 
 3.重启测试
 

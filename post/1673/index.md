@@ -55,9 +55,9 @@ mytopic这个Topic举例解释:
 
 此时在生产者控制台输入内容，会直接被消费者取出：
 
-<img src="images/d8e3c45c934afbf34f87604e52cf17fe.png" />
+<img src="images/df819454daf8d640b09c246856fc7bd2.png" />
 
-<img src="images/d8e3c45c934afbf34f87604e52cf17fe.png" />
+<img src="images/b3125098248861863b12cd0699d8ca91.png" />
 
 添加--from-beginning参数可以一次性取出所有消息
 

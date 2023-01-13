@@ -50,13 +50,13 @@ $ tree .
 ### 2.配置argocd仓库
 ![53645-7p12nzzzj1q.png](images/2626979973.png)
 
-![44264-8p8dcz4gba.png](images/2626979973.png)
+![44264-8p8dcz4gba.png](images/1447757259.png)
 
 ### 3.创建应用
-![08298-w403pblpvnd.png](images/2626979973.png)
+![08298-w403pblpvnd.png](images/3750386508.png)
 
 ### 4.查看结果
-![74565-97zgp2ps7j.png](images/2626979973.png)
+![74565-97zgp2ps7j.png](images/1163064635.png)
 
 ## 三、cli使用
 ### 3.1 快速入门操作
@@ -64,7 +64,7 @@ $ tree .
 ```bash
 argocd login ArgoCD_Address:Port
 ```
-![37459-3hgps5l2tl4.png](images/2626979973.png)
+![37459-3hgps5l2tl4.png](images/1263065726.png)
 
 2.修改密码
 ```bash
@@ -87,7 +87,7 @@ argocd app get guestbook
 ```bash
 argocd app sync guestbook
 ```
-![72158-qlb856vuy8.png](images/2626979973.png)
+![72158-qlb856vuy8.png](images/95528995.png)
 
 
 ### 3.2 管理项目

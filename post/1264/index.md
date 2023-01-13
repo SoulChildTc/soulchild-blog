@@ -77,7 +77,7 @@ show master status;</code></pre>
 change master to master_host='<span style="color: #ff0000;">10.0.0.30</span>',master_user='repl',master_password='replpass',master_log_file='<span style="color: #ff0000;">mysql-bin.000001</span>',master_log_pos=<span style="color: #ff0000;">704</span>;
 strart slave;
 show slave status\G</code></pre>
-<img src="images/74d89fda9e4aa48ae20340fb1e7849cc.png" />
+<img src="images/0cc7360faa6cee268672fee26b9835de.png" />
 
 &nbsp;
 
@@ -88,7 +88,7 @@ show slave status\G</code></pre>
 grant all on blog.* to 'blog'@'10.0.0.%' identified by 'blog123';
 #记录两个值File和Position
 show master status;</code></pre>
-<img src="images/74d89fda9e4aa48ae20340fb1e7849cc.png" />
+<img src="images/57606e28cb6ed6abac89fa8e8f82280d.png" />
 
 2.<span style="color: #ff0000;"><strong>master-01</strong></span>中执行，指定master-02服务器作为主服务器
 <pre class="line-numbers" data-start="1"><code class="language-bash">#mysql-bin.000003和704为上面获取的值

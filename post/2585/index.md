@@ -88,7 +88,7 @@ roleRef:
 # 获取kube-system命名空间下的所有pod名称
 curl -k -s https://172.17.20.200:6443/api/v1/namespaces/kube-system/pods/ --cert ./soulchild.pem --key ./soulchild-key.pem | jq -c '.items[]?.metadata.name'
 ```
-![28590-xbayz0qsj8q.png](images/3807431905.png)
+![28590-xbayz0qsj8q.png](images/3445015195.png)
 
 ### 五、使用kubeconfig访问
 ```bash
@@ -103,7 +103,7 @@ k get pod --context soulchild
 ```
 > 这里留个备忘: 使用serviceaccount创建用户时，可以使用k config set-credentials soulchild --token=xxxxx添加用户
 
-![84825-3a5h4w52x66.png](images/3807431905.png)
+![84825-3a5h4w52x66.png](images/557017454.png)
 
 
 

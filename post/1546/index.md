@@ -48,7 +48,7 @@ ab -c 10 -n 1000 http://192.168.2.200/
 
 其中有1个访问是失败的
 
-<img src="images/2b291f676588d1934a41ec97d0cf554a.png" />
+<img src="images/d959feb814b7156290fa6658cb20e8c2.png" />
 
 
 ### 第二种：limit_req_zone，用于限制单一的IP地址的请求的处理速率。
@@ -77,10 +77,10 @@ limit_req zone=addr_req burst=5;
 
 `ab -c 10 -n 10 http://192.168.2.210/` 10个连接发送10个请求，我们限制的是每秒1个请求，第一个请求会被处理，后面的请求会放到缓冲区，超过5个会返回错误。所以会有6个请求是成功的。
 
-<img src="images/2b291f676588d1934a41ec97d0cf554a.png" />
+<img src="images/87894c16ffd030789e46af6185dd85e7.png" />
 
 
-<img src="images/2b291f676588d1934a41ec97d0cf554a.png" />
+<img src="images/61259367a550ab13b98df3ccfa69ac1f.png" />
 
 
 ### 第三种：ngx_http_upstream_module模块的max_conns(在nginx 1.11.5版本以后可用)
@@ -91,9 +91,9 @@ limit_req zone=addr_req burst=5;
 
 ab -c 3 -n 10 http://192.168.2.210/
 
-<img src="images/2b291f676588d1934a41ec97d0cf554a.png" />
+<img src="images/fee75e0c20dbec06b8662b2ec058367d.png" />
 
-<img src="images/2b291f676588d1934a41ec97d0cf554a.png" />
+<img src="images/2941c31d93f98bb9cd47bb9884ca4b2d.png" />
 
 
 

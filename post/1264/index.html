@@ -48,10 +48,10 @@ grant all on blog.* to 'blog'@'10.0.0.%' identified by 'blog123';
 show master status;</code></pre><img src=images/74d89fda9e4aa48ae20340fb1e7849cc.png><p> </p><p>2.master-02中执行，指定master-01服务器作为主服务器</p><pre class=line-numbers data-start=1><code class=language-bash>#mysql-bin.000001和704为上面获取的值
 change master to master_host='<span style=color:red>10.0.0.30</span>',master_user='repl',master_password='replpass',master_log_file='<span style=color:red>mysql-bin.000001</span>',master_log_pos=<span style=color:red>704</span>;
 strart slave;
-show slave status\G</code></pre><img src=images/74d89fda9e4aa48ae20340fb1e7849cc.png><p> </p><p>三、配置<span style=color:red><strong>msater-02主</strong></span>,<span style=color:red><strong>master-01从</strong></span></p><p>1.添加主从复制用户，<strong><span style=color:red>master-02</span></strong>执行</p><pre class=line-numbers data-start=1><code class=language-bash>grant replication slave on *.* to 'repl'@'10.0.0.%' identified by 'replpass';
+show slave status\G</code></pre><img src=images/0cc7360faa6cee268672fee26b9835de.png><p> </p><p>三、配置<span style=color:red><strong>msater-02主</strong></span>,<span style=color:red><strong>master-01从</strong></span></p><p>1.添加主从复制用户，<strong><span style=color:red>master-02</span></strong>执行</p><pre class=line-numbers data-start=1><code class=language-bash>grant replication slave on *.* to 'repl'@'10.0.0.%' identified by 'replpass';
 grant all on blog.* to 'blog'@'10.0.0.%' identified by 'blog123';
 #记录两个值File和Position
-show master status;</code></pre><img src=images/74d89fda9e4aa48ae20340fb1e7849cc.png><p>2.<span style=color:red><strong>master-01</strong></span>中执行，指定master-02服务器作为主服务器</p><pre class=line-numbers data-start=1><code class=language-bash>#mysql-bin.000003和704为上面获取的值
+show master status;</code></pre><img src=images/57606e28cb6ed6abac89fa8e8f82280d.png><p>2.<span style=color:red><strong>master-01</strong></span>中执行，指定master-02服务器作为主服务器</p><pre class=line-numbers data-start=1><code class=language-bash>#mysql-bin.000003和704为上面获取的值
 change master to master_host='<span style=color:red>10.0.0.35</span>',master_user='repl',master_password='replpass',master_log_file='<span style=color:red>mysql-bin.000003</span>',master_log_pos=<span style=color:red>704</span>;
 strart slave;
 show slave status\G</code></pre><p> </p><p>测试数据同步：</p><pre class=line-numbers data-start=1><code class=language-bash>master-<span style=color:red>01</span>[blog]&gt;create database blog;

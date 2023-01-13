@@ -25,7 +25,7 @@ output{
 
 output{
   stdout{codec =&gt; rubydebug}
-}</code></pre><p>./logstash -f test.conf</p><p>新建一个终端链接查看是否有日志输出</p><img src=images/94b2a152a029900e008e03e19e6646b8.png><p> </p><p>2.1 将日志输出到kafka中</p><p>./logstash -f test.conf</p><pre class=pure-highlightjs><code class=null>input {
+}</code></pre><p>./logstash -f test.conf</p><p>新建一个终端链接查看是否有日志输出</p><img src=images/4b2c1626b8465ff5d9380aadabc9f4fe.png><p> </p><p>2.1 将日志输出到kafka中</p><p>./logstash -f test.conf</p><pre class=pure-highlightjs><code class=null>input {
   file{
     path =&gt; "/var/log/messages"
   }
@@ -36,7 +36,7 @@ output{
     bootstrap_servers =&gt; "log1:9092"
     topic_id =&gt; "test_kafka"
   }
-}</code></pre><p>连接kafka消费端，新建终端看看效果</p><img src=images/94b2a152a029900e008e03e19e6646b8.png><p> </p><p>后台方式运行logstash</p><pre class=pure-highlightjs><code class=null>nohup ./logstash -f test.conf &amp;&gt; logstash.log &amp;</code></pre><p> </p><p> </p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2020-05-30 17:09:39">更新于 2020-05-30 17:09&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/elk/ class=post-tag>elk</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/1689/ class=post-nav-item rel=prev title=logstash6.8.9安装和常用插件说明><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>logstash6.8.9安装和常用插件说明</a>
+}</code></pre><p>连接kafka消费端，新建终端看看效果</p><img src=images/5b058f4e3f77e98beb4c6f395471fbb5.png><p> </p><p>后台方式运行logstash</p><pre class=pure-highlightjs><code class=null>nohup ./logstash -f test.conf &amp;&gt; logstash.log &amp;</code></pre><p> </p><p> </p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2020-05-30 17:09:39">更新于 2020-05-30 17:09&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/elk/ class=post-tag>elk</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/1689/ class=post-nav-item rel=prev title=logstash6.8.9安装和常用插件说明><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>logstash6.8.9安装和常用插件说明</a>
 <a href=/post/1699/ class=post-nav-item rel=next title=logstash使用filebeat作为日志源>logstash使用filebeat作为日志源<i class="fa-solid fa-angle-right fa-fw" aria-hidden=true></i></a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
 <label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wx.png alt="SoulChild 微信号">
 <span data-animation>微信号</span></div><div><img src=/images/wechatpay.png alt="SoulChild 微信打赏">

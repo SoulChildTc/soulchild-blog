@@ -290,13 +290,13 @@ systemctl enable kubelet
 ![91213-lidhaws11ye.png](images/3336268838.png)
 
 #### 等待一会，可以看到服务端证书的csr
-![48653-1pm8g7p98eb.png](images/3336268838.png)
+![48653-1pm8g7p98eb.png](images/3823486415.png)
 
 #### 这需要我们手动批准，其他节点请自行操作
-![37398-983zndtu1w.png](images/3336268838.png)
+![37398-983zndtu1w.png](images/1902251992.png)
 
 ### 九、查看node状态
-![35370-2m3nmcn04uf.png](images/3336268838.png)
+![35370-2m3nmcn04uf.png](images/2000641848.png)
 
 
 

@@ -225,7 +225,7 @@ ETCDCTL_API=3 etcdctl \
 --cacert=/etc/kubernetes/pki/ca/ca.pem --cert=/etc/kubernetes/pki/etcd/etcd.pem \
 --key=/etc/kubernetes/pki/etcd/etcd-key.pem endpoint status
 ```
-![23477-u5g7bmvnx7.png](images/1673714355.png)
+![23477-u5g7bmvnx7.png](images/526972229.png)
 
 
 ---

@@ -20,7 +20,7 @@ yum install -y openssl openssl-devel
 
 #再次执行
 /usr/local/apache2/bin/apxs -i -a -c modules/ssl/mod_ssl.c
-</code></pre><p> </p><p>报错：</p><img src=images/eee3ed7c430ed3d9e935c8e8cc998b96.png><p> </p><p>google到的一个解决方法：</p><pre class=line-numbers data-start=1><code class=language-bash>#把apache源码包里的modules/md文件夹中的所有文件复制到/usr/inlude文件夹下面
+</code></pre><p> </p><p>报错：</p><img src=images/85f9f8ac7dccffa30f228cdf51e527fd.png><p> </p><p>google到的一个解决方法：</p><pre class=line-numbers data-start=1><code class=language-bash>#把apache源码包里的modules/md文件夹中的所有文件复制到/usr/inlude文件夹下面
 cp modules/md/* /usr/include/
 
 #执行

@@ -34,12 +34,12 @@
 
 这个函数前面做了一些判断err，msg变量是TerminalMessage结构体实例化出来的，主要应该用来反序列化客户端传来的消息为结构体对象的，后面两个，如果建立会话后发送的内容中msg.Op不是bind就直接return，下面会判断msg中的sessionID是否存在于terminalSessions中，不存在的sessionID也会return(什么时候将sessionID存入terminalSessions中的?在另一个入口中，后面会说到【1】)
 
-![18297-49vtn04vmhj.png](images/2958586898.png)
+![18297-49vtn04vmhj.png](images/371888345.png)
 
 再往下，第一行是将sockjs.Session对象存入sockJSSession中，第二行是将sockjs.Session对象存入SessionMap中, sockjs.Session对象可以用来发送和接受数据
 第三行的bound是个err类型的channel，将nil放进去, 执行完应该会阻塞，由后面的`WaitForTerminal`函数来消费处理
 
-![83390-yukzu4wykv8.png](images/2958586898.png)
+![83390-yukzu4wykv8.png](images/1877022725.png)
 
 这里使用了TerminalSession结构体，terminalSession变量是在当前函数体内声明的，我没截出来。 
 ```go
@@ -148,13 +148,13 @@ func (t TerminalSession) Toast(p string) error {
 #### 二、apiserver交互部分
 当进入这个页面的时候，它会发送一个请求，服务端会返回一个id
 
-![54674-jgv8dqlhzi.png](images/2958586898.png)
+![54674-jgv8dqlhzi.png](images/2690686211.png)
 
-![53512-olpqyd97ujr.png](images/2958586898.png)
+![53512-olpqyd97ujr.png](images/17284899.png)
 
 后端处理逻辑分析，首先定位到它的handler是handleExecShell
 
-![72415-nvk4u09b4cs.png](images/2958586898.png)
+![72415-nvk4u09b4cs.png](images/3520568696.png)
 
 源码如下
 ```go

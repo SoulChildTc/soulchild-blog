@@ -21,7 +21,7 @@ docker run -it --rm --network container:bba31a6eabfd busybox:1.23 'cat /sys/clas
 ```bash
 ip link |grep ^42
 ```
-![76251-iyk6ufvobqo.png](images/3247532968.png)
+![76251-iyk6ufvobqo.png](images/1134687318.png)
 
 
 
@@ -29,7 +29,7 @@ ip link |grep ^42
 ```bash
 tcpdump -i vetha6b03cb1 port 80 -nn 
 ```
-![68833-kcxiuiu3xym.png](images/3247532968.png)
+![68833-kcxiuiu3xym.png](images/82409397.png)
 
 
 ---

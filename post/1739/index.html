@@ -83,7 +83,7 @@
     timekey 60
     timekey_wait 5
   &lt;/buffer&gt;
-&lt;/match&gt;</code></pre><p>根据不同时间输出到新的日志文件中</p><img src=images/c612db3efe75bb0d08da551651d4398a.png><p> </p><p><strong>其他区块键：</strong></p><p>当指定其他(非time/tag)键时，这些键将作为记录的字段名处理。 输出插件将根据这些字段的值将事件分成块。</p><p>可以看下下面这个例子。</p><pre class=pure-highlightjs><code class=null>&lt;source&gt;
+&lt;/match&gt;</code></pre><p>根据不同时间输出到新的日志文件中</p><img src=images/9ad915089f910dd1f26cba468dfc67f8.png><p> </p><p><strong>其他区块键：</strong></p><p>当指定其他(非time/tag)键时，这些键将作为记录的字段名处理。 输出插件将根据这些字段的值将事件分成块。</p><p>可以看下下面这个例子。</p><pre class=pure-highlightjs><code class=null>&lt;source&gt;
   @type tail
   path /var/log/messages
   tag  os.messages
@@ -123,7 +123,7 @@
     timekey 60
     timekey_wait 5
   &lt;/buffer&gt;
-&lt;/match&gt;</code></pre><p> </p><p>文件名称中的${host}，被替换为日志记录中的host字段</p><img src=images/c612db3efe75bb0d08da551651d4398a.png><p> </p><h4 id=可以使用记录访问器语法来使用嵌套字段>可以使用记录访问器语法来使用嵌套字段</h4><p><code>&lt;buffer $.nest.field></code> # 访问记录的nest.field字段</p><h4 id=组合键>组合键</h4><p>缓冲区块键可以指定2个或更多的键——事件将通过块键值的组合被分割成块</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+&lt;/match&gt;</code></pre><p> </p><p>文件名称中的${host}，被替换为日志记录中的host字段</p><img src=images/b1307b977468287d10ad8d8b816e8363.png><p> </p><h4 id=可以使用记录访问器语法来使用嵌套字段>可以使用记录访问器语法来使用嵌套字段</h4><p><code>&lt;buffer $.nest.field></code> # 访问记录的nest.field字段</p><h4 id=组合键>组合键</h4><p>缓冲区块键可以指定2个或更多的键——事件将通过块键值的组合被分割成块</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4

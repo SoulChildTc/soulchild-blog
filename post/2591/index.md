@@ -211,51 +211,51 @@ k get secret -n devops $(k get sa -n devops jenkins -o jsonpath={.secrets[0].nam
 
 ** 2.创建jenkins凭据 **
 
-![22840-ngajm3rzzwj.png](images/3322518429.png)
+![22840-ngajm3rzzwj.png](images/1897261849.png)
 
-![65046-vg7a39pfnl.png](images/3322518429.png)
+![65046-vg7a39pfnl.png](images/1627309972.png)
 
 ** 将第一步的token填入到secret即可 **
 
-![79630-uzprr44r3a8.png](images/3322518429.png)
+![79630-uzprr44r3a8.png](images/3779969821.png)
 
 ** 3.配置kubernetes插件 **
 
-![41961-i2ldor2m4g.png](images/3322518429.png)
+![41961-i2ldor2m4g.png](images/3397173460.png)
 
-![37873-z5k2ofaw81c.png](images/3322518429.png)
+![37873-z5k2ofaw81c.png](images/3725548941.png)
 
-![60773-z6gmpfbqjw.png](images/3322518429.png)
+![60773-z6gmpfbqjw.png](images/481984616.png)
 
-![86260-g1ioxstsg29.png](images/3322518429.png)
+![86260-g1ioxstsg29.png](images/20370169.png)
 
 ** 连接测试后，显示Connected to kubernetes v1.xx.x即正常 **
 
-![97210-3ngztdum8vc.png](images/3322518429.png)
+![97210-3ngztdum8vc.png](images/504911113.png)
 
-![28033-ixci6olfhk9.png](images/3322518429.png)
+![28033-ixci6olfhk9.png](images/112184447.png)
 
 最后保存即可。
 
 
 ** 4.配置Pod模板 **
-![40796-686soldwlzq.png](images/3322518429.png)
+![40796-686soldwlzq.png](images/2118307141.png)
 
-![66722-eowqak1olbf.png](images/3322518429.png)
+![66722-eowqak1olbf.png](images/841793327.png)
 
 这里只配置了最基本的内容,默认情况下kubernetes插件会包含一个jnlp的容器,用于连接到jenkins master,保存后进行一个简单的测试
 
 ** 5.测试 **
 创建一个job
-![12280-iydbah0rend.png](images/3322518429.png)
+![12280-iydbah0rend.png](images/49375092.png)
 
-![42410-shiawppa6ub.png](images/3322518429.png)
+![42410-shiawppa6ub.png](images/885666531.png)
 
 构建过程中jenkins会在k8s中创建jenkins-slave-xx pod作为节点,并在这个节点中运行我们指定的命令
-![95982-ssnxl1r5cn.png](images/3322518429.png)
+![95982-ssnxl1r5cn.png](images/3289901874.png)
 
 构建结果
-![79562-yr0morispgc.png](images/3322518429.png)
+![79562-yr0morispgc.png](images/3033308462.png)
 
 
 ---
