@@ -5,25 +5,20 @@
 
 临时修改：
 
-sysctl -w net.ipv4.ip_forward=1
+`sysctl -w net.ipv4.ip_forward=1`
 
 重新加载：
 
-sysctl -p
+`sysctl -p`
 
-&nbsp;
-
-&nbsp;
+---
 
 永久修改：
 
 修改配置文件
-
 vim /etc/sysctl.conf
 
-net.ipv4.ip_forward=1
-
-&nbsp;
+`net.ipv4.ip_forward=1`
 
 
 ---
