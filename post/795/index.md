@@ -9,7 +9,7 @@ https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json
 
 进入插件管理----&gt;高级
 
-<img src="images/1d15052062149346e2ff6557508eb648.png "1d15052062149346e2ff6557508eb648"" />
+<img src="images/1d15052062149346e2ff6557508eb648.png" />
 
 &nbsp;
 

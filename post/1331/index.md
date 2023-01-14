@@ -44,7 +44,7 @@ http://IP:9000/
 
 7.生成token令牌
 
-<img src="images/34f4e2196f2d98b18467c0e4bf59148a.png "34f4e2196f2d98b18467c0e4bf59148a"" />
+<img src="images/34f4e2196f2d98b18467c0e4bf59148a.png" />
 
 &nbsp;
 

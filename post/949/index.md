@@ -10,9 +10,9 @@ prefork模式可以算是很古老但是非常稳定的模式。Apache在启动�
 
 在Unix系统中，父进程通常以root身份运行以便邦定80端口，而 Apache产生的子进程通常以一个低特权的用户运行。User和Group指令用于配置子进程的低特权用户。运行子进程的用户必须要对他所服务的内容有读取的权限，但是对服务内容之外的其他资源必须拥有尽可能少的权限。
 
-<img src="images/e3667f413a6de112a92d4be73ef5d157.png "e3667f413a6de112a92d4be73ef5d157"" />
+<img src="images/e3667f413a6de112a92d4be73ef5d157.png" />
 
-<img src="images/0c65dafcac2ab2c99e6a641152777553.png "0c65dafcac2ab2c99e6a641152777553"" />
+<img src="images/0c65dafcac2ab2c99e6a641152777553.png" />
 
 <strong>优点</strong>：成熟，兼容所有新老模块。进程之间完全独立，使得它非常稳定。同时，不需要担心线程安全的问题。（我们常用的mod_php，PHP的拓展不需要支持线程安全）
 
@@ -62,7 +62,7 @@ Apache总是试图维持一个备用(spare)或是空闲的服务线程池。这�
 
 &nbsp;
 
-<img src="images/0e9464d8eaee7729ed03a8578bc93fec.png "0e9464d8eaee7729ed03a8578bc93fec"" />
+<img src="images/0e9464d8eaee7729ed03a8578bc93fec.png" />
 
 <strong>优点：</strong>占据更少的内存，高并发下表现更优秀。
 
@@ -118,7 +118,7 @@ event MPM在遇到某些不兼容的模块时，会失效，将会回退到worke
 &nbsp;
 <div class="markdown_views">
 
-<img src="images/d78841f9f8ed72b5b8cd378d052bc910.png "d78841f9f8ed72b5b8cd378d052bc910"" />
+<img src="images/d78841f9f8ed72b5b8cd378d052bc910.png" />
 
 &nbsp;
 

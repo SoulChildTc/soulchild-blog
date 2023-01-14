@@ -13,7 +13,7 @@ mv kafka_2.12-2.0.1 /usr/local/kafka</code></pre>
 
 /usr/local/kafka/config/zookeeper.properties
 
-<img src="images/780ea5adc1dad0610d228163c140b265.png "780ea5adc1dad0610d228163c140b265"" />
+<img src="images/780ea5adc1dad0610d228163c140b265.png" />
 
 3. 创建 /tmp/zookeeper/myid文件
 <pre class="pure-highlightjs"><code class="null">echo 1 &gt; /tmp/zookeeper/myid</code></pre>

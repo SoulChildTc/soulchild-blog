@@ -3,7 +3,7 @@
 <!--more-->
 1.命令行运行一个简单的输入输出
 <pre class="pure-highlightjs"><code class="null">./logstash -e 'input{stdin{}} output{stdout{codec=&gt;rubydebug}}'</code></pre>
-<img src="images/94b2a152a029900e008e03e19e6646b8.png "94b2a152a029900e008e03e19e6646b8"" />
+<img src="images/94b2a152a029900e008e03e19e6646b8.png" />
 
 将上面的配置写到配置文件中，以配置文件的方式加载
 
@@ -34,7 +34,7 @@ output{
 
 新建一个终端链接查看是否有日志输出
 
-<img src="images/4b2c1626b8465ff5d9380aadabc9f4fe.png "4b2c1626b8465ff5d9380aadabc9f4fe"" />
+<img src="images/4b2c1626b8465ff5d9380aadabc9f4fe.png" />
 
 &nbsp;
 
@@ -55,7 +55,7 @@ output{
 }</code></pre>
 连接kafka消费端，新建终端看看效果
 
-<img src="images/5b058f4e3f77e98beb4c6f395471fbb5.png "5b058f4e3f77e98beb4c6f395471fbb5"" />
+<img src="images/5b058f4e3f77e98beb4c6f395471fbb5.png" />
 
 &nbsp;
 

@@ -38,7 +38,7 @@ setenforce 0</pre>
 yum源使用的是阿里云的
 <pre>curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</pre>
 <span style="color: #ff0000;"><strong>kubernetes架构图：</strong></span>
-<img src="images/68f5af7bba8335c53a0f91a98ef38b3a.png "68f5af7bba8335c53a0f91a98ef38b3a"" />
+<img src="images/68f5af7bba8335c53a0f91a98ef38b3a.png" />
 
 <span style="color: #ff0000; font-size: 14pt;"><strong>一、首先配置k8s-master</strong></span>
 

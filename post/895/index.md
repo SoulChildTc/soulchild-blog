@@ -20,7 +20,7 @@ cd /server/httpd-2.4.39/
 </code></pre>
 报错：
 
-<img src="images/eee3ed7c430ed3d9e935c8e8cc998b96.png "eee3ed7c430ed3d9e935c8e8cc998b96"" />
+<img src="images/eee3ed7c430ed3d9e935c8e8cc998b96.png" />
 
 &nbsp;
 
@@ -35,7 +35,7 @@ yum install -y openssl openssl-devel
 
 报错：
 
-<img src="images/85f9f8ac7dccffa30f228cdf51e527fd.png "85f9f8ac7dccffa30f228cdf51e527fd"" />
+<img src="images/85f9f8ac7dccffa30f228cdf51e527fd.png" />
 
 &nbsp;
 

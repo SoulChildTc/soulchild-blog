@@ -62,7 +62,7 @@ logging.level: debug</code></pre>
 nohup ./filebeat -e -c filebeat.yml &amp;</code></pre>
 4.查看kafka：
 <pre class="pure-highlightjs"><code class="null">sh kafka-console-consumer.sh --bootstrap-server elk1:9092,elk2:9092,elk3:9092 --topic osmessage</code></pre>
-<img src="images/8d9752fa3dd90bac96f4949877705213.png "8d9752fa3dd90bac96f4949877705213"" />
+<img src="images/8d9752fa3dd90bac96f4949877705213.png" />
 
 &nbsp;
 

@@ -280,10 +280,6 @@ func startProcess(k8sClient kubernetes.Interface, cfg *rest.Config, request *res
 [https://github.com/SoulChildTc/k8s-web-terminal-learn](https://github.com/SoulChildTc/k8s-web-terminal-learn)
 
 
-
-
-
-
 ---
 
 > 作者: [SoulChild](https://www.soulchild.cn)  

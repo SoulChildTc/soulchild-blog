@@ -34,17 +34,17 @@ systemctl restart zabbix-agent
 
 1.创建
 
-<img src="images/fa79c23467e5c3784b105fc3f71c5014.png "fa79c23467e5c3784b105fc3f71c5014"" />
+<img src="images/fa79c23467e5c3784b105fc3f71c5014.png" />
 
 &nbsp;
 
 &nbsp;
 
-<img src="images/fc87734b378a828dc95d1a7a7348c0b1.png "fc87734b378a828dc95d1a7a7348c0b1"" />
+<img src="images/fc87734b378a828dc95d1a7a7348c0b1.png" />
 
 &nbsp;
 
-<img src="images/63f4d185a36f289c3da0b5f4a00941f5.png "63f4d185a36f289c3da0b5f4a00941f5"" />
+<img src="images/63f4d185a36f289c3da0b5f4a00941f5.png" />
 
 &nbsp;
 

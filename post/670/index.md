@@ -46,7 +46,7 @@ systemctl restart docker</pre>
 
 http://10.0.0.13:8500/ui/#/dc1/kv/docker/nodes/
 
-<img src="images/98caad0594d774cb54a50874bda42011.png "98caad0594d774cb54a50874bda42011"" />
+<img src="images/98caad0594d774cb54a50874bda42011.png" />
 
 &nbsp;
 

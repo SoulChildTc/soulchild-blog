@@ -39,7 +39,7 @@ python manage.py runserver
 
 查看redis
 
-<img src="images/a2c4817f124bb306b99b289f8d73a2ba.png "a2c4817f124bb306b99b289f8d73a2ba"" />
+<img src="images/a2c4817f124bb306b99b289f8d73a2ba.png" />
 
 &nbsp;
 

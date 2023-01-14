@@ -25,7 +25,7 @@ virsh edit centos7
 
 将磁盘文件路径修改为新路径
 
-<img src="images/61ee51edb8b72fc295d04bcf2decc150.png "61ee51edb8b72fc295d04bcf2decc150"" />
+<img src="images/61ee51edb8b72fc295d04bcf2decc150.png" />
 
 &nbsp;
 

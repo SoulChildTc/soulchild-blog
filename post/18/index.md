@@ -3,19 +3,19 @@
 <!--more-->
 第一步、我们下面这个界面按下Shift+F10，会出现第二步中的命令提示符界面
 
-<img class="alignnone size-full wp-image-61" src="images/1.png "1"" alt="" width="802" height="602" />
+<img class="alignnone size-full wp-image-61" src="images/1.png" alt="" width="802" height="602" />
 
 第二步、输入diskpart命令回车运行工具，然后输入list disk查看磁盘，如下图
 
-<img class="alignnone size-full wp-image-65" src="images/2-1.png "2-1"" alt="" width="801" height="600" />
+<img class="alignnone size-full wp-image-65" src="images/2-1.png" alt="" width="801" height="600" />
 
 第三步、输入seclect disk 0，选中磁盘（注意磁盘编号，不要写错）
 
-<img class="alignnone size-full wp-image-66" src="images/3.png "3"" alt="" width="800" height="601" />
+<img class="alignnone size-full wp-image-66" src="images/3.png" alt="" width="800" height="601" />
 
 第四步、选中磁盘后依次输入下面的命令
 
-<img class="alignnone size-full wp-image-67" src="images/4.png "4"" alt="" width="800" height="602" />
+<img class="alignnone size-full wp-image-67" src="images/4.png" alt="" width="800" height="602" />
 
 1、clean                  //输入此命令前请务必确定硬盘无重要数据，该命令会清除磁盘
 
@@ -29,7 +29,7 @@ convert mbr      //将磁盘转换为MBR格式
 
 第五步、创建分区
 
-<img class="alignnone size-full wp-image-68" src="images/5.png "5"" alt="" width="794" height="601" />
+<img class="alignnone size-full wp-image-68" src="images/5.png" alt="" width="794" height="601" />
 
 1、create partition efi size=100     //创建EFI分区，大小为100M
 

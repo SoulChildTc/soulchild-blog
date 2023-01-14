@@ -43,13 +43,13 @@ tps[sda]
 <h3><span style="font-size: 12pt; color: #ff0000;">web配置</span></h3>
 &nbsp;
 
-<img src="images/a8b3e635fcf7dea7cb3aa16e9a76a0ea.png "a8b3e635fcf7dea7cb3aa16e9a76a0ea"" />
+<img src="images/a8b3e635fcf7dea7cb3aa16e9a76a0ea.png" />
 
 &nbsp;
 
 &nbsp;
 
-<img src="images/661e947f64994d50c3d3358a78106026.png "661e947f64994d50c3d3358a78106026"" />
+<img src="images/661e947f64994d50c3d3358a78106026.png" />
 
 
 ---
