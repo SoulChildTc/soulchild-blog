@@ -14,7 +14,7 @@ iptables中文文档: https://www.frozentux.net/iptables-tutorial/cn/iptables-tu
 
 
 下图引自: https://www.cnblogs.com/kevingrace/p/6265113.html
-![50965-s09k6z8ubo.png](images/4270877079.png)
+![50965-s09k6z8ubo.png](images/4270877079.png "4270877079")
 
 
 ### 二、iptables的COMMAND（https://soulchild.cn/iptables/#COMMANDS）

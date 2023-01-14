@@ -3,7 +3,7 @@
 <!--more-->
 ### 1、创建Pod流程
 
-![51776-nrhsb54bti.png](images/4216047982.png)
+![51776-nrhsb54bti.png](images/4216047982.png "4216047982")
 
 图片来源: heptio.com
 
@@ -18,7 +18,7 @@
 
 ### 2、创建Deployment流程
 
-![26432-2orcxruqs6c.png](images/697731502.png)
+![26432-2orcxruqs6c.png](images/697731502.png "697731502")
 
 图片来源书籍: kubernetes in action
 

@@ -67,7 +67,7 @@ spec:
                   - test-k8s-node3
 ```
 
-<img src="images/619f169b3bd0f561fd01cfaa9b316b83.png" />
+<img src="images/619f169b3bd0f561fd01cfaa9b316b83.png "619f169b3bd0f561fd01cfaa9b316b83"" />
 > operator可选操作：`In`,`NotIn`,`Exists`,`DoesNotExist`,`Gt`,`Lt`
 
 ### 2.pod亲和性
@@ -118,7 +118,7 @@ spec:
 
 均处于pending状态，
 
-<img src="images/6e4b12bed414292602970e6da1b1843a.png" />
+<img src="images/6e4b12bed414292602970e6da1b1843a.png "6e4b12bed414292602970e6da1b1843a"" />
 
 创建一个标签为app=nginx的pod
 ```yaml
@@ -136,11 +136,11 @@ spec:
     - name: http
       containerPort: 80
 ```
-<img src="images/9a10c7d11ed9bdb3f1b564ef2a6eb9b8.png" />
+<img src="images/9a10c7d11ed9bdb3f1b564ef2a6eb9b8.png "9a10c7d11ed9bdb3f1b564ef2a6eb9b8"" />
 
 可以看到这个pod调度到了test-k8s-node1节点上，node1节点的zone值为1，所以刚才的pod会调度到zone=1的节点上
 
-<img src="images/df383dcf28313d6cc23101ba881057c1.png" />
+<img src="images/df383dcf28313d6cc23101ba881057c1.png "df383dcf28313d6cc23101ba881057c1"" />
 
 
 
@@ -148,7 +148,7 @@ spec:
 
 当前app=nginx的pod被调度在node4节点上
 
-<img src="images/9dcf03f24a05ef57c8a1108074f766b8.png" />
+<img src="images/9dcf03f24a05ef57c8a1108074f766b8.png "9dcf03f24a05ef57c8a1108074f766b8"" />
 
 创建反亲和性的pod
 ```yaml
@@ -187,7 +187,7 @@ spec:
 ```
 可以看到所有pod都不会被调度到node4节点上了
 
-<img src="images/27c64623bcb0e0342dc7d3a4760eacb0.png" />
+<img src="images/27c64623bcb0e0342dc7d3a4760eacb0.png "27c64623bcb0e0342dc7d3a4760eacb0"" />
 
 
 

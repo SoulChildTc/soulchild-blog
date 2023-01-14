@@ -96,7 +96,7 @@ receivers:
 ```
 
 ## 三、告警效果
-![75746-9y5p8vha7hr.png](images/3849408843.png)
+![75746-9y5p8vha7hr.png](images/3849408843.png "3849408843")
 
 
 

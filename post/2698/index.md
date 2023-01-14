@@ -83,7 +83,7 @@ ReactDOM.render(
 ```
 
 ### React生命周期
-![93784-ecbxjjqy50i.png](images/167953444.png)
+![93784-ecbxjjqy50i.png](images/167953444.png "167953444")
 
 - Initialization-组件初始化阶段
 - Mounting-组件加载阶段

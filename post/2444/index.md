@@ -167,23 +167,23 @@ java -Dspring.profiles.active=eureka3 -jar target/eureka-server-0.0.1-SNAPSHOT.j
 
 
 ### 6.运行结果
-![53633-57774y6sww3.png](images/3059158344.png)
+![53633-57774y6sww3.png](images/3059158344.png "3059158344")
 
 
-![29273-juglpz4gzn8.png](images/2311249763.png)
+![29273-juglpz4gzn8.png](images/2311249763.png "2311249763")
 
 
-![12890-hna531w53h8.png](images/1138255269.png)
+![12890-hna531w53h8.png](images/1138255269.png "1138255269")
 
 
 
 ### 7.注册服务测试
-![34361-bvz6ldxtlz.png](images/4074591896.png)
+![34361-bvz6ldxtlz.png](images/4074591896.png "4074591896")
 
-![47197-1747uo6o48k.png](images/1892687392.png)
+![47197-1747uo6o48k.png](images/1892687392.png "1892687392")
 
 ### 8.服务发现测试
-![66421-t9dvlrcayzc.png](images/2888324487.png)
+![66421-t9dvlrcayzc.png](images/2888324487.png "2888324487")
 
 
 ---

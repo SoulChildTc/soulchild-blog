@@ -19,7 +19,7 @@ traffic.sidecar.istio.io/includeInboundPorts: ""   # 将指定端口的流量重
 traffic.sidecar.istio.io/excludeInboundPorts: "80,443"   # 将指定端口的流量不重定向到envoy sidecar
 traffic.sidecar.istio.io/excludeOutboundIPRanges: "10.1.0.1/32"   # 将指定ip范围的流出流量不重定向到envoy sidecar。`k get svc kubernetes -o jsonpath='{.spec.clusterIP}'`
 ```
-![96565-rkn931fu8s.png](images/3922728315.png)
+![96565-rkn931fu8s.png](images/3922728315.png "3922728315")
 
 ### 二、将envoy注入nginx-controller
 ```bash
@@ -75,7 +75,7 @@ spec:
 ```
 ### 五、测试流量
 通过访问nginx-controller查看virtualservice规则是否生效
-![99556-eecbsqu7vec.png](images/159987004.png)
+![99556-eecbsqu7vec.png](images/159987004.png "159987004")
 
 
 

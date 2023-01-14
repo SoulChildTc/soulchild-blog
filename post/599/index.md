@@ -29,7 +29,7 @@ DEVICE=eth0
 net.ifnames=0 biosdevname=0</code></pre>
 &nbsp;
 
-<img src="images/6d110be13a8ba3e2efce934cfecedbb7.png" />
+<img src="images/6d110be13a8ba3e2efce934cfecedbb7.png "6d110be13a8ba3e2efce934cfecedbb7"" />
 
 &nbsp;
 

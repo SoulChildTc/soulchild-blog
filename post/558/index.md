@@ -12,7 +12,7 @@ virsh destroy web01</pre>
 
 3.修改配置文件的磁盘类型和磁盘路径
 <pre>virsh edit web01</pre>
-<img src="images/f04dd3d1ac7339fb34e26bd4ed33b5b8.png" />
+<img src="images/f04dd3d1ac7339fb34e26bd4ed33b5b8.png "f04dd3d1ac7339fb34e26bd4ed33b5b8"" />
 
 &nbsp;
 

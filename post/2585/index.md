@@ -35,7 +35,7 @@ cfssl gencert -ca /etc/kubernetes/pki/ca/ca.pem -ca-key /etc/kubernetes/pki/ca/c
 ```bash
 curl -k https://master:6443/api/v1/namespaces/kube-system/pods --cert ./soulchild.pem  --key  ./soulchild-key.pem
 ```
-![17545-95zajvjudnd.png](images/3807431905.png)
+![17545-95zajvjudnd.png](images/3807431905.png "3807431905")
 
 可以看到提示soulchild用户不能在kube-system命名空间列出核心api组中的pods资源,因为我们没有配置权限,但是他已经可以识别到soulchild用户了,这是我们预期的结果。下面我们去配置权限
 
@@ -88,7 +88,7 @@ roleRef:
 # 获取kube-system命名空间下的所有pod名称
 curl -k -s https://172.17.20.200:6443/api/v1/namespaces/kube-system/pods/ --cert ./soulchild.pem --key ./soulchild-key.pem | jq -c '.items[]?.metadata.name'
 ```
-![28590-xbayz0qsj8q.png](images/3445015195.png)
+![28590-xbayz0qsj8q.png](images/3445015195.png "3445015195")
 
 ### 五、使用kubeconfig访问
 ```bash
@@ -103,7 +103,7 @@ k get pod --context soulchild
 ```
 > 这里留个备忘: 使用serviceaccount创建用户时，可以使用k config set-credentials soulchild --token=xxxxx添加用户
 
-![84825-3a5h4w52x66.png](images/557017454.png)
+![84825-3a5h4w52x66.png](images/557017454.png "557017454")
 
 
 

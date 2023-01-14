@@ -11,7 +11,7 @@ ops-elk-es03	|172.17.10.163	|redis+sentinel、logstash、es| n|
 
 
 ## 架构图:
-![46788-unuyv5rlvg.png](images/3773033025.png)
+![46788-unuyv5rlvg.png](images/3773033025.png "3773033025")
 
 
 ## 一、安装配置ES集群

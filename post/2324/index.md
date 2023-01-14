@@ -17,7 +17,7 @@ iptables的基本概念
 
 ### 二、表: 
 优先级raw>mangle>nat>filter
-![31190-9qlptu8yskf.png](images/812870840.png)
+![31190-9qlptu8yskf.png](images/812870840.png "812870840")
 - filter: iptables工具的默认表,用于过滤数据包。
   - 包含INPUT、FORWARD、OUTPUT链
 - nat: 可以修改sip、dip、sport、dport。
@@ -34,7 +34,7 @@ iptables的基本概念
 
 
 ### 四、数据包处理流程
-![48851-gwmc7hqmx8f.png](images/1792231896.png)
+![48851-gwmc7hqmx8f.png](images/1792231896.png "1792231896")
 > 注意如果数据包先和某个表中的链的规则匹配成功，则不会和其他表匹配了。
 
 

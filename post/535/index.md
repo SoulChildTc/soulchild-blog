@@ -7,13 +7,13 @@ virsh edit centos7
 
 添加红框中的内容
 
-<img src="images/40c003b8a54a8fb5897b3901a493baed.png" />
+<img src="images/40c003b8a54a8fb5897b3901a493baed.png "40c003b8a54a8fb5897b3901a493baed"" />
 
 &nbsp;
 
 2.设置镜像文件路径
 
-<img src="images/3b1789961b16afc4ef8e940845180780.png" />
+<img src="images/3b1789961b16afc4ef8e940845180780.png "3b1789961b16afc4ef8e940845180780"" />
 
 3.重启测试
 

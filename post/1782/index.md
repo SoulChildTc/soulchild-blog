@@ -14,7 +14,7 @@ wget https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-instal
 sh openvpn-install.sh
 ```
 没有特殊需求默认即可
-![56995-n3gc40qsaf.png](images/1820984079.png)
+![56995-n3gc40qsaf.png](images/1820984079.png "1820984079")
 
 soul用户的客户端配置文件路径：/root/soul.ovpn
 
@@ -93,7 +93,7 @@ auth-user-pass
 ```
 
 客户端填写用户名密码
-![20302-ekztnpyyhjj.png](images/3249462211.png)
+![20302-ekztnpyyhjj.png](images/3249462211.png "3249462211")
 
 
 

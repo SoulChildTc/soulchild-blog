@@ -13,7 +13,7 @@ kubectl exec -it POD_NAME -- 'cat /sys/class/net/eth0/iflink'
 # 如果容器没有命令可以使用其他镜像进行查看
 docker run -it --rm --network container:bba31a6eabfd busybox:1.23 'cat /sys/class/net/eth0/iflink'
 ```
-![34826-mngkhxwzq6m.png](images/3247532968.png)
+![34826-mngkhxwzq6m.png](images/3247532968.png "3247532968")
 > 链接到索引是42的网卡上
 
 
@@ -21,7 +21,7 @@ docker run -it --rm --network container:bba31a6eabfd busybox:1.23 'cat /sys/clas
 ```bash
 ip link |grep ^42
 ```
-![76251-iyk6ufvobqo.png](images/1134687318.png)
+![76251-iyk6ufvobqo.png](images/1134687318.png "1134687318")
 
 
 
@@ -29,7 +29,7 @@ ip link |grep ^42
 ```bash
 tcpdump -i vetha6b03cb1 port 80 -nn 
 ```
-![68833-kcxiuiu3xym.png](images/82409397.png)
+![68833-kcxiuiu3xym.png](images/82409397.png "82409397")
 
 
 ---

@@ -28,7 +28,7 @@ helm install --namespace=traefik-v2 traefik traefik/traefik
 
 > 以上安装方式仅为学习使用.
 
-![58456-zpguelkyx.png](images/4043256750.png)
+![58456-zpguelkyx.png](images/4043256750.png "4043256750")
 
 
 ## 二、traefik IngressRoute资源配置
@@ -93,7 +93,7 @@ spec:
 ```
 可以看到我门刚才配置的规则已经生效了。
 
-![88637-g703qcu4v6.png](images/407132451.png)
+![88637-g703qcu4v6.png](images/407132451.png "407132451")
 
 
 现在将入口点web暴露出来，通过9001端口。
@@ -103,7 +103,7 @@ spec:
 `x.x.x.x    test.com`
 
 现在我们打开test.com:9001可以看到nginx已经正常访问
-![40593-17h09vnq5qx.png](images/743072421.png)
+![40593-17h09vnq5qx.png](images/743072421.png "743072421")
 
 
 ## 三、路由匹配规则
@@ -159,7 +159,7 @@ spec:
     secretName: nginx-test
 ```
 因为不是正常的证书,所以访问过不去
-![54073-f0d04jeun5l.png](images/4030331602.png)
+![54073-f0d04jeun5l.png](images/4030331602.png "4030331602")
 
 
 

@@ -1,7 +1,7 @@
 # 使用LVM挂载分区
 
 <!--more-->
-![94105-dsc4huyofum.png](images/2632752546.png)
+![94105-dsc4huyofum.png](images/2632752546.png "2632752546")
 
 PV：物理卷
 PE：LVM的最小资源单位，每个PE的大小可以更改，默认4M
@@ -11,7 +11,7 @@ LV：逻辑卷，在VG的基础上建立，理解为分区，可以改动大小
 ## 创建使用pv、vg、lv
 ### 1.创建普通分区，我这里已经有一个sdb2分区了
 
-![80785-qnldp7k6hd.png](images/3051639168.png)
+![80785-qnldp7k6hd.png](images/3051639168.png "3051639168")
 
 
 ### 2.创建pv

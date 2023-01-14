@@ -3,7 +3,7 @@
 <!--more-->
 ## 一、准备工作
 1. 这里使用的alidns，创建AccessKey
-![29603-16eeja057wk.png](images/4041263185.png)
+![29603-16eeja057wk.png](images/4041263185.png "4041263185")
 
 2. 创建secret
 `kubectl create secret generic traefik-alidns-secret --from-literal=ALICLOUD_ACCESS_KEY=<AK> --from-literal=ALICLOUD_SECRET_KEY=<SK> --from-literal=ALICLOUD_REGION_ID=cn-shanghai -n traefik-v2`
@@ -120,7 +120,7 @@ spec:
 
 由于域名没有备案，不能访问，我这里直接解析到traefik pod ip，访问测试
 
-![96068-0h8126hyenof.png](images/1399640050.png)
+![96068-0h8126hyenof.png](images/1399640050.png "1399640050")
 
 
 

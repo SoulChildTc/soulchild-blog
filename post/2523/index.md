@@ -233,7 +233,7 @@ kubectl run svc-test --image=busybox -it --rm --command -- sh
 
 wget -O - -o /dev/null my-pod1
 ```
-![95421-1tuh8msyjrg.png](images/2306878688.png)
+![95421-1tuh8msyjrg.png](images/2306878688.png "2306878688")
 
 
 

@@ -68,7 +68,7 @@ output {
 
 可以手动模拟生成日志：
 <pre>echo "手动echo测试" &gt;&gt; /var/log/messages</pre>
-<img src="images/83f81917c06bb350c01218aa6b363462.png" />
+<img src="images/83f81917c06bb350c01218aa6b363462.png "83f81917c06bb350c01218aa6b363462"" />
 
 &nbsp;
 

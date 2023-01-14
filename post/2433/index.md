@@ -3,7 +3,7 @@
 <!--more-->
 ### 1.部署架构
 官方文档: https://nacos.io/zh-cn/docs/cluster-mode-quick-start.html
-![95808-t746ty1vd6m.png](images/580233370.png)
+![95808-t746ty1vd6m.png](images/580233370.png "580233370")
 
 ### 2.主机规划
 nacos01: 172.17.10.240

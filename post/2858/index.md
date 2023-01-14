@@ -154,7 +154,7 @@ sh es_ilm_watch.sh test-log-2022.07.07
 ```
 
 最终效果
-![93929-dwce4zz01ur.png](images/232585211.png)
+![93929-dwce4zz01ur.png](images/232585211.png "232585211")
 
 ### PS: 
 可能你测试下来会发现并不符合预期,因为我也碰到了。

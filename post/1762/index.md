@@ -69,7 +69,7 @@ ndex_name fluentd.${tag}.%Y%m%d
 
 发送日志测试：`curl localhost:8888/test1 -d 'json={"aaa":"bbb"}'`
 等待10秒后，索引已经被创建了
-![71568-kvzlvbpuwh.png](images/3625094780.png)
+![71568-kvzlvbpuwh.png](images/3625094780.png "3625094780")
 
 
 

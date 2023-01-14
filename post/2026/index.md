@@ -26,7 +26,7 @@ admin.site.register(HeroInfo, HeroInfoAdmin)
 ```
 
 2.将 xxx object显示为自定义内容
-![43487-af42efuk2m9.png](images/1697143832.png)
+![43487-af42efuk2m9.png](images/1697143832.png "1697143832")
 ```python
 在models.py中修改个模型类添加__str__方法
 

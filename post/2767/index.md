@@ -17,12 +17,12 @@ log.cleanup.policy=delete
 
 ### 方法三
 使用kafka-manager
-![51303-tqyz0z8jibb.png](images/388355782.png)
+![51303-tqyz0z8jibb.png](images/388355782.png "388355782")
 
 
-![38008-tno15juopb.png](images/2485527795.png)
+![38008-tno15juopb.png](images/2485527795.png "2485527795")
 
-![28708-hz6lb4dfj7n.png](images/3837621242.png)
+![28708-hz6lb4dfj7n.png](images/3837621242.png "3837621242")
 
 
 ---

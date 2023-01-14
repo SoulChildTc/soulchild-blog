@@ -47,7 +47,7 @@ done</code></pre>
 
 脚本执行完后可以发现harbor仓库中镜像已经传输完成了。
 
-<img src="images/de6b5916d56bb5088582ea20e8e6a8ca.png" />
+<img src="images/de6b5916d56bb5088582ea20e8e6a8ca.png "de6b5916d56bb5088582ea20e8e6a8ca"" />
 
 &nbsp;
 

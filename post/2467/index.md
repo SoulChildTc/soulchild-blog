@@ -215,7 +215,7 @@ ETCDCTL_API=3 etcdctl \
 --key=/etc/kubernetes/pki/etcd/etcd-key.pem endpoint health \
 ;done
 ```
-![67653-c2qvr56o7ha.png](images/1673714355.png)
+![67653-c2qvr56o7ha.png](images/1673714355.png "1673714355")
 
 ### 六、查看集群状态
 ```bash
@@ -225,7 +225,7 @@ ETCDCTL_API=3 etcdctl \
 --cacert=/etc/kubernetes/pki/ca/ca.pem --cert=/etc/kubernetes/pki/etcd/etcd.pem \
 --key=/etc/kubernetes/pki/etcd/etcd-key.pem endpoint status
 ```
-![23477-u5g7bmvnx7.png](images/526972229.png)
+![23477-u5g7bmvnx7.png](images/526972229.png "526972229")
 
 
 ---

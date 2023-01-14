@@ -57,16 +57,16 @@ wget http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.54/bin/extras/catalina-
 
 ## 五、配置zabbix-web(不用自带模板可跳过3和4步)
 1.选择要监控的主机
-![26400-q0kwtfcx3e8.png](images/3806080335.png)
+![26400-q0kwtfcx3e8.png](images/3806080335.png "3806080335")
 
 2.添加jmx的地址配置
-![36719-aeepest8k1c.png](images/4215392753.png)
+![36719-aeepest8k1c.png](images/4215392753.png "4215392753")
 
 3.添加模板
-![94645-gmllznmrf1c.png](images/4099118307.png)
+![94645-gmllznmrf1c.png](images/4099118307.png "4099118307")
 
 4.检查结果
-![58728-bozgpc2sn2r.png](images/4026595846.png)
+![58728-bozgpc2sn2r.png](images/4026595846.png "4026595846")
 
 
 ## 六、推荐模板
@@ -74,16 +74,16 @@ https://github.com/rodrigoluissilva/Zabbix-JMX-Tomcat-Extended-Template/tree/mas
 
 根据自己的需要选择模板导入即可,下面演示一个
 1.导入模板
-![83878-q1wrlyf6hya.png](images/3725432944.png)
+![83878-q1wrlyf6hya.png](images/3725432944.png "3725432944")
 
 2.给主机链接模板
-![25563-my7ap5gwyor.png](images/433637775.png)
+![25563-my7ap5gwyor.png](images/433637775.png "433637775")
 
 3.修改宏,我的端口是8081。`{$HTTP_PORT}`,`{$JMX_PASSWORD}`,`{$JMX_USERNAME}`
-![14524-prrpedd28bi.png](images/3775878664.png)
+![14524-prrpedd28bi.png](images/3775878664.png "3775878664")
 
 4.给模板添加宏变量,在主机中单独设置也可以。我这里是tomcat8,默认连接器是nio模式
-![72420-eariq5aq21n.png](images/1556750154.png)
+![72420-eariq5aq21n.png](images/1556750154.png "1556750154")
 
 
 

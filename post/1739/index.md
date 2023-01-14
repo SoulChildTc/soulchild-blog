@@ -69,7 +69,7 @@ buffer区块使用@type 参数来指定缓冲区插件的类型，如果省略@t
 &lt;/match&gt;</code></pre>
 可以看到被分为两个缓冲文件了
 
-<img src="images/c612db3efe75bb0d08da551651d4398a.png" />
+<img src="images/c612db3efe75bb0d08da551651d4398a.png "c612db3efe75bb0d08da551651d4398a"" />
 
 &nbsp;
 
@@ -109,7 +109,7 @@ buffer区块使用@type 参数来指定缓冲区插件的类型，如果省略@t
 &lt;/match&gt;</code></pre>
 根据不同时间输出到新的日志文件中
 
-<img src="images/9ad915089f910dd1f26cba468dfc67f8.png" />
+<img src="images/9ad915089f910dd1f26cba468dfc67f8.png "9ad915089f910dd1f26cba468dfc67f8"" />
 
 &nbsp;
 
@@ -163,7 +163,7 @@ buffer区块使用@type 参数来指定缓冲区插件的类型，如果省略@t
 
 文件名称中的${host}，被替换为日志记录中的host字段
 
-<img src="images/b1307b977468287d10ad8d8b816e8363.png" />
+<img src="images/b1307b977468287d10ad8d8b816e8363.png "b1307b977468287d10ad8d8b816e8363"" />
 
 &nbsp;
 

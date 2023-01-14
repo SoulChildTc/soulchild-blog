@@ -49,7 +49,7 @@ openssl req -new -x509 -key /etc/pki/CA/private/cakey.pem -out /etc/pki/CA/cacer
 > -days: 申请的有效期
 > 更多信息可以通过`man req`查询
 
-![20624-3ey3z04cspn.png](images/688550654.png)
+![20624-3ey3z04cspn.png](images/688550654.png "688550654")
 
 **非交互式**
 ```bash
@@ -93,7 +93,7 @@ openssl ca -in soulchild.com.csr -out /etc/pki/CA/certs/soulchild.com.crt -days 
 ```
 > 默认会使用配置文件: /etc/pki/tls/openssl.cnf里设置的默认CA路径，我们上面创建的CA相关文件和配置文件是对应的，所以可以不用指定，否则需要指定CA的私钥和证书，需要使用`-cert`和`-keyfile`这两个参数
 检查无误后同意签名
-![92786-sskypumaey.png](images/1322646044.png)
+![92786-sskypumaey.png](images/1322646044.png "1322646044")
 
 ### 六、吊销证书
 ```bash
@@ -144,11 +144,11 @@ openssl ca -in ~/soulchild.com.csr -out certs/soulchild.com.crt -days 30 -extfil
 ```bash
 openssl x509 -in certs/soulchild.com.crt -text -noout | grep -A 2 extensions
 ```
-![38869-s4hghwk79om.png](images/2910598423.png)
+![38869-s4hghwk79om.png](images/2910598423.png "2910598423")
 
 
 浏览器证书查看
-![59676-h9i5v25dfr.png](images/1227790424.png)
+![59676-h9i5v25dfr.png](images/1227790424.png "1227790424")
 
 
 ---

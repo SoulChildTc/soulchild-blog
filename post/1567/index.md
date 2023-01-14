@@ -3,7 +3,7 @@
 <!--more-->
 集群版本：
 
-<img src="images/835fa4bac9d12acf6b01e5f19935ee64.png" />
+<img src="images/835fa4bac9d12acf6b01e5f19935ee64.png "835fa4bac9d12acf6b01e5f19935ee64"" />
 
 1.下载metrics-server
 <pre class="pure-highlightjs"><code class="bash">直接下载yaml文件：
@@ -21,7 +21,7 @@ metrics-server-xxx/deploy/</code></pre>
 <pre class="pure-highlightjs"><code class="bash">kubectl apply -f components.yaml</code></pre>
 报错1：
 
-<img src="images/aec1f6b47807d0999dc88714edbe5958.png" />
+<img src="images/aec1f6b47807d0999dc88714edbe5958.png "aec1f6b47807d0999dc88714edbe5958"" />
 
 默认通过dns解析主机名，解析失败，可以通过修改coredns配置解决
 
@@ -29,7 +29,7 @@ metrics-server-xxx/deploy/</code></pre>
 
 --kubelet-preferred-address-types=InternalIP
 
-<img src="images/d44be1b3af01674abe8b5d6e070ba0d6.png" />
+<img src="images/d44be1b3af01674abe8b5d6e070ba0d6.png "d44be1b3af01674abe8b5d6e070ba0d6"" />
 
 安装：
 <pre class="pure-highlightjs"><code class="bash">kubectl apply -f components.yaml</code></pre>
@@ -37,7 +37,7 @@ metrics-server-xxx/deploy/</code></pre>
 
 报错2：
 
-<img src="images/9e522a1bd48968663fe57e023b8a10ae.png" />
+<img src="images/9e522a1bd48968663fe57e023b8a10ae.png "9e522a1bd48968663fe57e023b8a10ae"" />
 
 证书问题，添加跳过认证的参数--kubelet-insecure-tls
 
@@ -45,7 +45,7 @@ metrics-server-xxx/deploy/</code></pre>
 
 4.验证
 <pre class="pure-highlightjs"><code class="bash">kubectl top ndoe</code></pre>
-<img src="images/5914eedcda114db1e358dadc723ca526.png" />
+<img src="images/5914eedcda114db1e358dadc723ca526.png "5914eedcda114db1e358dadc723ca526"" />
 
 &nbsp;
 
@@ -78,23 +78,23 @@ spec:
 
 6.创建hpa资源
 <pre class="pure-highlightjs"><code class="bash">kubectl autoscale --max=10 --min=1 --cpu-percent=5 deployment hpa-test</code></pre>
-<img src="images/1cc8be7fce0adff30faa42a312bbeb4f.png" />
+<img src="images/1cc8be7fce0adff30faa42a312bbeb4f.png "1cc8be7fce0adff30faa42a312bbeb4f"" />
 
 &nbsp;
 
 7.压测
 
-<img src="images/42df87f29e2578f235f118f19305d1bb.png" />
+<img src="images/42df87f29e2578f235f118f19305d1bb.png "42df87f29e2578f235f118f19305d1bb"" />
 
 开始测试：
 <pre class="pure-highlightjs"><code class="bash">while true;do curl -I 10.244.1.90;done</code></pre>
 可以看到配置已经生效
 
-<img src="images/6af865c76f6ae20532363d68b679e9e6.png" />
+<img src="images/6af865c76f6ae20532363d68b679e9e6.png "6af865c76f6ae20532363d68b679e9e6"" />
 
 &nbsp;
 
-<img src="images/bfa09ec578ac8f185da2a782686928e4.png" />
+<img src="images/bfa09ec578ac8f185da2a782686928e4.png "bfa09ec578ac8f185da2a782686928e4"" />
 
 &nbsp;
 

@@ -17,7 +17,7 @@ To learn more about the release, try:
 ```
 
 安装后提示如下信息：
-![99305-m4pda07k1po.png](images/374347594.png)
+![99305-m4pda07k1po.png](images/374347594.png "374347594")
 
 
 ## 子chart

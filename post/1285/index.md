@@ -114,7 +114,7 @@ rs.initiate(conf)
 
 #查询复制集状态
 rs.status()</code></pre>
-<img src="images/53438ace3549b7e6d3f83a658373cc5f.png" />
+<img src="images/53438ace3549b7e6d3f83a658373cc5f.png "53438ace3549b7e6d3f83a658373cc5f"" />
 
 &nbsp;
 
@@ -127,7 +127,7 @@ rs.addArb("10.0.0.40:27019")
 
 #启动服务
 mongod -f /application/mongodb/27019/conf/mongo.conf</code></pre>
-<img src="images/ebadb11282dc21da64a84eba68149b87.png" />
+<img src="images/ebadb11282dc21da64a84eba68149b87.png "ebadb11282dc21da64a84eba68149b87"" />
 
 &nbsp;
 

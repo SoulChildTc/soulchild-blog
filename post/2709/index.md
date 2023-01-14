@@ -122,7 +122,7 @@ spec:
 ```
 
 访问测试:
-![77024-rhlfdm1gsi.png](images/2959396062.png)
+![77024-rhlfdm1gsi.png](images/2959396062.png "2959396062")
 
 
 ### 二、修改为https访问
@@ -165,7 +165,7 @@ spec:
 
 第四步: 验证
 由于是自签名证书所以是不受信任的
-![02399-p8i08e0sjzg.png](images/784102118.png)
+![02399-p8i08e0sjzg.png](images/784102118.png "784102118")
 
 
 ---

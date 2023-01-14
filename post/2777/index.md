@@ -54,7 +54,7 @@ spec:
 ```
 
 ### 2.查看web-show服务
-![00805-wt8lrefrvuc.png](images/779256225.png)
+![00805-wt8lrefrvuc.png](images/779256225.png "779256225")
 
 ### 3. 准备故障注入清单文件
 给web-show pod注入1分钟的30ms网络延迟
@@ -87,7 +87,7 @@ spec:
 > random-max-percent（表示选出占符合条件的 Pod 中不超过指定百分比的 Pod）
 
 ### 4.最终效果
-![86448-cnm9oar8tju.png](images/3160615710.png)
+![86448-cnm9oar8tju.png](images/3160615710.png "3160615710")
 
 
 ---

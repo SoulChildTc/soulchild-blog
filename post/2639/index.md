@@ -2,7 +2,7 @@
 
 <!--more-->
 效果
-![16136-rtytmf4ycw.png](images/2286465899.png)
+![16136-rtytmf4ycw.png](images/2286465899.png "2286465899")
 
 1. 下载配色
 ```bash

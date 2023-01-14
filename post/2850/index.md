@@ -10,7 +10,7 @@ tar xf nvidia_gpu_exporter_0.3.0_linux_x86_64.tar.gz
 nohup ./nvidia_gpu_exporter &
 ```
 
-![52854-g5jcf6ww2zs.png](images/201519901.png)
+![52854-g5jcf6ww2zs.png](images/201519901.png "201519901")
 grafana相对于原作的增加了Instance维度
 ```json
 {

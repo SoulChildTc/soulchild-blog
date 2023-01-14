@@ -71,7 +71,7 @@ docker restart docker-apisix_apisix-dashboard_1
 ```
 
 效果:
-![54733-jb4zvaxvwl.png](images/4171133756.png)
+![54733-jb4zvaxvwl.png](images/4171133756.png "4171133756")
 
 
 ---

@@ -42,7 +42,7 @@ acme.sh --issue --dns dns_ali -d soulchild.site -d *.soulchild.site
 ```
 > 也可以更换CA颁发机构: https://github.com/acmesh-official/acme.sh/wiki/Server
 
-![74192-sxdlyp31s.png](images/2615520664.png)
+![74192-sxdlyp31s.png](images/2615520664.png "2615520664")
 
 
 ### 3.修改nginx配置文件

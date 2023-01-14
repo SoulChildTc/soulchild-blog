@@ -41,7 +41,7 @@ nohup ./filebeat -e -c filebeat.yml &amp;
 
 新建一个终端生成日志，然后观察kafka
 
-<img src="images/b7809c14a34cf387c608af4c32e27ebb.png" />
+<img src="images/b7809c14a34cf387c608af4c32e27ebb.png "b7809c14a34cf387c608af4c32e27ebb"" />
 
 
 ---

@@ -8,7 +8,7 @@ Providers: 提供与不同云厂商的交互
 ## 初体验
 目录结构如下
 
-![03887-ldcedko4p3.png](images/3222639376.png)
+![03887-ldcedko4p3.png](images/3222639376.png "3222639376")
 
 ### 一、声明Provider
 这里以阿里云为例
@@ -93,7 +93,7 @@ terraform plan
 ```
 可以看到提示我们有两个新增
 
-![31336-y4hqq014v2.png](images/728585251.png)
+![31336-y4hqq014v2.png](images/728585251.png "728585251")
 
 ### 六、创建资源
 ```bash
@@ -101,7 +101,7 @@ terraform apply
 ```
 可以看到vpc和交换机都成功创建了
 
-![17300-s0bdlth6xec.png](images/75708921.png)
+![17300-s0bdlth6xec.png](images/75708921.png "75708921")
 
 
 ---

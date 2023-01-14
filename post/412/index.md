@@ -59,17 +59,17 @@ zabbix_get -s 172.16.1.7 -k sda_tps
 <h4><span style="color: #ff0000;">web配置</span></h4>
 1.添加监控项
 
-<img src="images/6f7194d608289a517cc84048effbd9e4.png" />
+<img src="images/6f7194d608289a517cc84048effbd9e4.png "6f7194d608289a517cc84048effbd9e4"" />
 
-<img src="images/2425187de003a678f12d680c16092ed2.png" />
+<img src="images/2425187de003a678f12d680c16092ed2.png "2425187de003a678f12d680c16092ed2"" />
 
 名称可以随便写，键值就是配置文件中的key值
 
-<img src="images/bf889ed3d2c9eea244c4e6579e06dfd4.png" />
+<img src="images/bf889ed3d2c9eea244c4e6579e06dfd4.png "bf889ed3d2c9eea244c4e6579e06dfd4"" />
 
 添加完成后，查看最新数据
 
-<img src="images/2bc12864c3ef33eee8feab99fb4429bf.png" />
+<img src="images/2bc12864c3ef33eee8feab99fb4429bf.png "2bc12864c3ef33eee8feab99fb4429bf"" />
 
 
 ---

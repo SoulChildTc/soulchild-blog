@@ -222,7 +222,7 @@ spec:
 for i in {1..100};do curl -s http://nginx-istio.ops.cn:32629 ;done | sort | uniq -c
 ```
 
-![20480-xcs0fp8hwua.png](images/763027501.png)
+![20480-xcs0fp8hwua.png](images/763027501.png "763027501")
 
 
 ---

@@ -39,7 +39,7 @@ reboot
 
 
 中间遇到grub rescue问题，通过如下方式进入系统
-![83619-kuch92x9te.png](images/2305322176.png)
+![83619-kuch92x9te.png](images/2305322176.png "2305322176")
 
 
 ---

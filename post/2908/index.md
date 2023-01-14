@@ -2,7 +2,7 @@
 
 <!--more-->
 环境信息
-![99837-ha7zzk0habt.png](images/1990147879.png)
+![99837-ha7zzk0habt.png](images/1990147879.png "1990147879")
 
 目标：要访问目标IP为10.244.4.51的POD
 1. 首先经过路由表匹配规则`10.244.4.0/23 via 10.244.4.0 dev flannel.1 onlink`

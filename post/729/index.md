@@ -88,7 +88,7 @@ patch -d /opt/gitlab/embedded/service/gitlab-rails -p1 &lt; ${gitlab_version}-zh
 gitlab-ctl restart</pre>
 &nbsp;
 
-<img src="images/143ed035cf4cfe48c1642a93a792126c.png" />
+<img src="images/143ed035cf4cfe48c1642a93a792126c.png "143ed035cf4cfe48c1642a93a792126c"" />
 
 
 ---

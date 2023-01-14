@@ -108,7 +108,7 @@ systemctl enable kube-proxy
 ```bash
 for i in 201 202 203 210 211 212;do echo -e "172.17.20.$i:" ;ssh 172.17.20.$i 'systemctl status kube-proxy|grep Active' ;done
 ```
-![08048-t8btv6tuquh.png](images/291040891.png)
+![08048-t8btv6tuquh.png](images/291040891.png "291040891")
 
 
 ---

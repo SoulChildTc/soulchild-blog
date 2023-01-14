@@ -10,7 +10,7 @@ export LANG=zh_CN.utf-8
 ```
 命令行输入`man 命令`,查看帮助
 `man ls`
-![09290-go66pces8p7.png](images/1087966495.png)
+![09290-go66pces8p7.png](images/1087966495.png "1087966495")
 
 
 ---

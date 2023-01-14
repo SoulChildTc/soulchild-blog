@@ -4,7 +4,7 @@
 1.部署ingress-nginx-controller
 <pre class="pure-highlightjs"><code class="null">kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/baremetal/deploy.yaml</code></pre>
 <div class="admonition tip">查看nodeport：</div>
-<div><img src="images/7ffc0ec90f448733a13853b84693eb32.png" /></div>
+<div><img src="images/7ffc0ec90f448733a13853b84693eb32.png "7ffc0ec90f448733a13853b84693eb32"" /></div>
 <div>添加域名解析：</div>
 <div>192.168.0.3 soulchild.cn  test.soulchild.cn</div>
 <div></div>
@@ -111,7 +111,7 @@ spec:
 访问：soulchild.cn:30960
 
 </div>
-<img src="images/196380b0a34bfb5ca778080fb5a00345.png" />
+<img src="images/196380b0a34bfb5ca778080fb5a00345.png "196380b0a34bfb5ca778080fb5a00345"" />
 
 &nbsp;
 
@@ -139,7 +139,7 @@ spec:
           servicePort: nginx-http</code></pre>
 &nbsp;
 
-<img src="images/564db0495aa90d028cbe1bc1830d1ff9.png" />
+<img src="images/564db0495aa90d028cbe1bc1830d1ff9.png "564db0495aa90d028cbe1bc1830d1ff9"" />
 
 &nbsp;
 
@@ -164,7 +164,7 @@ spec:
           servicePort: nginx-http</code></pre>
 &nbsp;
 
-<img src="images/12af409ca9994ddda7ef7f616456c2a9.png" />
+<img src="images/12af409ca9994ddda7ef7f616456c2a9.png "12af409ca9994ddda7ef7f616456c2a9"" />
 
 &nbsp;
 

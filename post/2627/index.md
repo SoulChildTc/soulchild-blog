@@ -105,7 +105,7 @@ spec:
 > 在这里提供了workspace是一个pvc模板,也支持其他的类型,如: persistentVolumeClaim、emptyDir、configMap、secret、
 
 上面的例子中的执行结果,可以看到两个step的/wp-test/a/b/c是同一个目录,需要注意的是使用volumeClaimTemplate每次都会重新创建pvc,pv也会相应的被重新创建。
-![80770-r414xrzn63s.png](images/2754694827.png)
+![80770-r414xrzn63s.png](images/2754694827.png "2754694827")
 
 ### 3.2 stepTemplate
 ```yaml
@@ -198,7 +198,7 @@ spec:
 运行后通过如下命令查看结果
 `k get taskrun build-id-m9q4t  -o jsonpath={.status.taskResults} | jq .`
 
-![92353-e6wemti92tt.png](images/3819385080.png)
+![92353-e6wemti92tt.png](images/3819385080.png "3819385080")
 
 ## 四、示例
 https://hub.tekton.dev 这里可以看到很多可以复用的tekton资源

@@ -29,18 +29,18 @@ k apply -f .
 
 ### 四、解决报错
 
-![61451-s1tklrm78h9.png](images/3821475588.png)
+![61451-s1tklrm78h9.png](images/3821475588.png "3821475588")
 
 kube-state-metrics镜像拉取错误，`k describe pod -n monitoring kube-state-metrics-76f6cb7996-2nqpf`查看详细信息
 
-![31439-4w9umx1953p.png](images/2989832906.png)
+![31439-4w9umx1953p.png](images/2989832906.png "2989832906")
 
 需要访问google，em。。。我从本地拉了一个传到阿里云镜像仓库了,镜像地址: registry.cn-shanghai.aliyuncs.com/soulchild/kube-state-metrics:v2.0.0
 
 修改镜像: `k set image -n monitoring deployment kube-state-metrics kube-state-metrics=registry.cn-shanghai.aliyuncs.com/soulchild/kube-state-metrics:v2.0.0`
 
 部署完成
-![01998-qj8e0wb6xer.png](images/3419863006.png)
+![01998-qj8e0wb6xer.png](images/3419863006.png "3419863006")
 
 
 ### 五、配置ingress提供外部访问
@@ -162,13 +162,13 @@ kube-prometheus同样通过service查找coredns的ep作为target,kube-prometheus
 
 
 可以看到刚才的几个组件都可以正常显示了
-![91045-yhbt1po8vz.png](images/1943267257.png)
+![91045-yhbt1po8vz.png](images/1943267257.png "1943267257")
 
 
 ### 八、访问测试
 grafana的默认账号密码是admin
 
-![79123-1epig03h6vr.png](images/3037803101.png)
+![79123-1epig03h6vr.png](images/3037803101.png "3037803101")
 
 
 
