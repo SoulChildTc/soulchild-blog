@@ -2,7 +2,8 @@
 
 <!--more-->
 # 官方文档
-https://docs.docker.com/compose/compose-file
+编排语法: https://docs.docker.com/compose/compose-file
+命令行工具: https://docs.docker.com/compose/reference/
 
 
 ## 编排文件版本和docker引擎版本对应关系
