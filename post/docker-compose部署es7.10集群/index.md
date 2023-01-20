@@ -7,6 +7,8 @@
 
 https://www.elastic.co/guide/en/elasticsearch/reference/7.10/docker.html
 
+https://www.elastic.co/guide/en/kibana/7.10/docker.html
+
 
 
 ## 一、安装前准备
@@ -55,7 +57,7 @@ cluster.initial_master_nodes:
   - es02
   - es03
 
-action.auto_create_index: *
+action.auto_create_index: "*"
 
 xpack.security.enabled: true
 xpack.security.transport.ssl.enabled: true
@@ -74,7 +76,7 @@ chown 1000:0 -R /data/*
 
 ### 4. 生成节点间通信的证书
 ```bash
-docker run -it --rm -v es-cluster/conf/:/certs docker.elastic.co/elasticsearch/elasticsearch:7.10.2 bash
+docker run -it --rm -v /root/es-cluster/conf/:/certs docker.elastic.co/elasticsearch/elasticsearch:7.10.2 bash
 elasticsearch-certutil ca --out /certs/elastic-stack-ca.p12
 elasticsearch-certutil cert --ca /certs/elastic-stack-ca.p12 --out /certs/elastic-certificates.p12
 
@@ -109,7 +111,7 @@ services:
       - "ELASTIC_PASSWORD=elastic"
     volumes:
       - ./conf/es01.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-      - ./conf/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
+      - ./conf/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12:ro
       - /data/es01/data/:/usr/share/elasticsearch/data/
       - /data/es01/logs/:/var/log/elasticsearch/
       - /data/es01/plugins/:/usr/share/elasticsearch/plugins/
@@ -124,7 +126,7 @@ services:
       - "ELASTIC_PASSWORD=elastic"
     volumes:
       - ./conf/es02.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-      - ./conf/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
+      - ./conf/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12:ro
       - /data/es02/data/:/usr/share/elasticsearch/data/
       - /data/es02/logs/:/var/log/elasticsearch/
       - /data/es02/plugins/:/usr/share/elasticsearch/plugins/
@@ -139,13 +141,24 @@ services:
       - "ELASTIC_PASSWORD=elastic"
     volumes:
       - ./conf/es03.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-      - ./conf/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12
+      - ./conf/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12:ro
       - /data/es03/data/:/usr/share/elasticsearch/data/
       - /data/es03/logs/:/var/log/elasticsearch/
       - /data/es03/plugins/:/usr/share/elasticsearch/plugins/
     ports:
       - 9203:9200
       - 9303:9300
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.10.2
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://es01:9200","http://es02:9200","http://es03:9200"]'
+      ELASTICSEARCH_USERNAME: elastic
+      ELASTICSEARCH_PASSWORD: elastic
+    ports:
+      - 5601:5601
+    networks:
+      - elastic
   cerebro:
     container_name: cerebro
     image: lmenezes/cerebro:0.8.3
