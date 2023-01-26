@@ -1,3 +1,4 @@
+https://www.soulchild.cn/post/k8s%E9%83%A8%E7%BD%B2jenkins/
 https://www.soulchild.cn/post/docker-compose%E9%83%A8%E7%BD%B2es7.10%E9%9B%86%E7%BE%A4/
 https://www.soulchild.cn/post/parted%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/
 https://www.soulchild.cn/post/pwa%E5%9C%A8%E7%BA%BF%E5%B7%A5%E5%85%B7%E7%BD%91%E7%AB%99/
