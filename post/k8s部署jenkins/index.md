@@ -146,7 +146,7 @@ metadata:
   namespace: devops-tools
   annotations:
       prometheus.io/scrape: 'true'
-      prometheus.io/path:   /
+      prometheus.io/path:   /metrics
       prometheus.io/port:   '8080'
 spec:
   selector:
