@@ -1,0 +1,368 @@
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>Openldap2.44安装和配置详解(一) - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路,记录点滴成长"><meta name=keywords content="openldap"><meta itemprop=name content="Openldap2.44安装和配置详解(一)"><meta itemprop=description content><meta itemprop=datePublished content="2023-01-31T00:38:39+08:00"><meta itemprop=dateModified content="2023-01-31T17:38:39+08:00"><meta itemprop=wordCount content="787"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content="openldap,"><meta property="og:title" content="Openldap2.44安装和配置详解(一)"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-01-31T00:38:39+08:00"><meta property="article:modified_time" content="2023-01-31T17:38:39+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="Openldap2.44安装和配置详解(一)"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/><link rel=prev href=https://www.soulchild.cn/post/%E4%BD%BF%E7%94%A8kibana%E5%88%9B%E5%BB%BAes%E5%8F%AA%E8%AF%BB%E7%94%A8%E6%88%B7/><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Openldap2.44安装和配置详解(一)","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80\/"},"genre":"posts","keywords":"openldap","wordcount":787,"url":"https:\/\/www.soulchild.cn\/post\/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80\/","datePublished":"2023-01-31T00:38:39+08:00","dateModified":"2023-01-31T17:38:39+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden=true></i></h2><div class="toc-content always-active" id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>Openldap2.44安装和配置详解(一)</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/%E5%9F%BA%E7%A1%80%E5%86%85%E5%AE%B9/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> 基础内容</a></span></div><div class=post-meta-line><span title="2023-01-31 00:38:39"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2023-01-31 00:38">2023-01-31 00:38</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 787 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 4 分钟</span>&nbsp;<span id=busuanzi_container_page_pv class="busuanzi_visitors comment-visitors" data-flag-title=Openldap2.44安装和配置详解(一)>
+<i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_page_pv>-</span>&nbsp;次阅读
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#参考>参考</a></li><li><a href=#常见术语>常见术语</a></li><li><a href=#一安装openldap>一、安装openldap</a></li><li><a href=#二基本配置>二、基本配置</a><ul><li><a href=#1-修改默认配置>1. 修改默认配置</a></li><li><a href=#2-设置管理员密码>2. 设置管理员密码</a></li><li><a href=#3-允许管理员访问>3. 允许管理员访问</a></li><li><a href=#4-加载默认schema>4. 加载默认schema</a></li><li><a href=#5-禁止匿名搜索>5. 禁止匿名搜索</a></li><li><a href=#6-开启日志>6. 开启日志</a></li></ul></li><li><a href=#三创建根目录-dc>三、创建根目录 DC</a></li><li><a href=#四创建组织单元-ou>四、创建组织单元 OU</a></li><li><a href=#五创建用户>五、创建用户</a></li><li><a href=#六创建组>六、创建组</a></li><li><a href=#七删除条目或对象>七、删除条目或对象</a></li></ul></nav></div></div><div class=content id=content data-end-flag=---><h2 id=参考>参考</h2><p><a href=https://www.golinuxcloud.com/ldap-tutorial-for-beginners-configure-linux/ target=_blank rel="external nofollow noopener noreferrer">https://www.golinuxcloud.com/ldap-tutorial-for-beginners-configure-linux/<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p><a href=https://www.golinuxcloud.com/install-and-configure-openldap-centos-7-linux/ target=_blank rel="external nofollow noopener noreferrer">https://www.golinuxcloud.com/install-and-configure-openldap-centos-7-linux/<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p><a href=https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system-level_authentication_guide/openldap target=_blank rel="external nofollow noopener noreferrer">https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system-level_authentication_guide/openldap<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><h2 id=常见术语>常见术语</h2><ul><li><p>Entry or object(条目或对象) - LDAP中的基本单元。每个条目都由专有名称 (DN) 限定。这是一个例子：<code>dn: uid=yyang,ou=sales,dc=example,dc=com</code></p></li><li><p>Attributes - 属性是与条目关联的信息，例如组织有地址属性或员工有电话号码属性。</p></li><li><p>objectClass - 这是一种特殊类型的属性。LDAP 中的所有对象都必须有一个objectClass属性。该objectClass定义指定每个 LDAP 对象需要哪些属性，并指定条目的对象类。此属性的值可以由客户端修改，但objectClass不能删除属性本身。</p><ul><li>objectClass是定义在schema文件中的</li></ul></li><li><p>Schema - 列出了每个对象类型的属性，以及这些属性是必需的还是可选的。下面是一些schema示例,可以在<code>/etc/openldap/schema/</code>中找到。</p><ul><li>core.schema - 定义基本的 LDAPv3 属性和对象。它是 OpenLDAP 实现中必需的核心schema。</li><li>inetorgperson.schema - 定义 inetOrgPerson 对象类及其相关属性。该对象通常用于存储人们的联系信息。</li></ul></li><li><p>LDIF - 它是 LDAP 数据交换格式。用于向 LDAP 服务器导入或导出数据的文件应采用这种格式。用于在 LDAP 服务器之间进行复制的数据也是这种格式。</p></li><li><p>服务器端由两个主要守护进程组成：</p><ul><li>slapd：这是一个独立的 LDAP 守护进程，它侦听来自客户端的 LDAP 连接并响应它通过这些连接接收到的 LDAP 操作。</li><li>slurpd：这是一个独立的 LDAP replication 守护进程，用于将更改从一个 slapd 数据库传播到另一个数据库。只有在使用多个 LDAP 服务器时才需要它。</li></ul></li></ul><h2 id=一安装openldap>一、安装openldap</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest<span class=o>]</span><span class=c1># yum install -y openldap openldap-servers openldap-clients openldap-devel compat-openldap</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>openldap-devel compat-openldap可选</p></blockquote><h2 id=二基本配置>二、基本配置</h2><p>老版本中 <code>/etc/openldap/slapd.d/slapd.conf</code> 保存了 OpenLDAP 服务器的配置。但现在配置保存在 LDAP 数据库本身中。所以后续使用ldif的方式来操作数据</p><h3 id=1-修改默认配置>1. 修改默认配置</h3><p>默认配置在<code>/etc/openldap/slapd.d/cn\=config/olcDatabase\=\{2\}hdb.ldif</code>文件中查看。
+也可以使用命令<code>ldapsearch -Y EXTERNAL -H ldapi:/// -b cn=config olcDatabase=\*</code>。</p><p>我们新建一个ldif文件配合<code>ldapmodify</code>命令完成对他的修改</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># cat &gt;&gt; my_config.ldif &lt;&lt;EOF</span>
+</span></span><span class=line><span class=cl>dn: <span class=nv>olcDatabase</span><span class=o>={</span>2<span class=o>}</span>hdb,cn<span class=o>=</span>config
+</span></span><span class=line><span class=cl>changetype: modify
+</span></span><span class=line><span class=cl>replace: olcSuffix
+</span></span><span class=line><span class=cl>olcSuffix: <span class=nv>dc</span><span class=o>=</span>soulchild,dc<span class=o>=</span>cn
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>dn: <span class=nv>olcDatabase</span><span class=o>={</span>2<span class=o>}</span>hdb,cn<span class=o>=</span>config
+</span></span><span class=line><span class=cl>changetype: modify
+</span></span><span class=line><span class=cl>replace: olcRootDN
+</span></span><span class=line><span class=cl>olcRootDN: <span class=nv>cn</span><span class=o>=</span>admin,dc<span class=o>=</span>soulchild,dc<span class=o>=</span>cn
+</span></span><span class=line><span class=cl>EOF
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>dn代表唯一标识，我们用它来确定修改哪个数据库</p><p>changetype代表修改操作</p><p>replace代表替换某个条目</p><p>olcSuffix: xxx 是修改后的值</p></blockquote><p>执行ldapmodify修改</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapmodify -Y EXTERNAL -H ldapi:/// -f my_config.ldif</span>
+</span></span><span class=line><span class=cl>SASL/EXTERNAL authentication started
+</span></span><span class=line><span class=cl>SASL username: <span class=nv>gidNumber</span><span class=o>=</span>0+uidNumber<span class=o>=</span>0,cn<span class=o>=</span>peercred,cn<span class=o>=</span>external,cn<span class=o>=</span>auth
+</span></span><span class=line><span class=cl>SASL SSF: <span class=m>0</span>
+</span></span><span class=line><span class=cl>modifying entry <span class=s2>&#34;olcDatabase={2}hdb,cn=config&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>modifying entry <span class=s2>&#34;olcDatabase={2}hdb,cn=config&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=2-设置管理员密码>2. 设置管理员密码</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># slappasswd</span>
+</span></span><span class=line><span class=cl>New password:
+</span></span><span class=line><span class=cl>Re-enter new password:
+</span></span><span class=line><span class=cl><span class=o>{</span>SSHA<span class=o>}</span>sBE7mBD5dfzk/wpQVBjUQMHOD74BegDd
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># cat &gt;&gt; adminPass.ldif &lt;&lt;EOF</span>
+</span></span><span class=line><span class=cl>dn: <span class=nv>olcDatabase</span><span class=o>={</span>2<span class=o>}</span>hdb,cn<span class=o>=</span>config
+</span></span><span class=line><span class=cl>changeType: modify
+</span></span><span class=line><span class=cl>add: olcRootPW
+</span></span><span class=line><span class=cl>olcRootPW: <span class=o>{</span>SSHA<span class=o>}</span>sBE7mBD5dfzk/wpQVBjUQMHOD74BegDd
+</span></span><span class=line><span class=cl>EOF
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapmodify -Y EXTERNAL -H ldapi:/// -f adminPass.ldif</span>
+</span></span><span class=line><span class=cl>SASL/EXTERNAL authentication started
+</span></span><span class=line><span class=cl>SASL username: <span class=nv>gidNumber</span><span class=o>=</span>0+uidNumber<span class=o>=</span>0,cn<span class=o>=</span>peercred,cn<span class=o>=</span>external,cn<span class=o>=</span>auth
+</span></span><span class=line><span class=cl>SASL SSF: <span class=m>0</span>
+</span></span><span class=line><span class=cl>modifying entry <span class=s2>&#34;olcDatabase={2}hdb,cn=config&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=3-允许管理员访问>3. 允许管理员访问</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># cat &gt;&gt; adminAccess.ldif &lt;&lt;EOF</span>
+</span></span><span class=line><span class=cl>dn: <span class=nv>olcDatabase</span><span class=o>={</span>1<span class=o>}</span>monitor,cn<span class=o>=</span>config
+</span></span><span class=line><span class=cl>changetype: modify
+</span></span><span class=line><span class=cl>replace: olcAccess
+</span></span><span class=line><span class=cl>olcAccess: <span class=o>{</span>0<span class=o>}</span>to * by dn.base<span class=o>=</span><span class=s2>&#34;gidNumber=0+uidNumber=0,cn=peercred,cn=external, cn=auth&#34;</span> <span class=nb>read</span> by dn.base<span class=o>=</span><span class=s2>&#34;cn=admin,dc=soulchild,dc=cn&#34;</span> <span class=nb>read</span> by * none
+</span></span><span class=line><span class=cl>EOF
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapmodify -Y EXTERNAL -H ldapi:/// -f adminAccess.ldif</span>
+</span></span><span class=line><span class=cl>SASL/EXTERNAL authentication started
+</span></span><span class=line><span class=cl>SASL username: <span class=nv>gidNumber</span><span class=o>=</span>0+uidNumber<span class=o>=</span>0,cn<span class=o>=</span>peercred,cn<span class=o>=</span>external,cn<span class=o>=</span>auth
+</span></span><span class=line><span class=cl>SASL SSF: <span class=m>0</span>
+</span></span><span class=line><span class=cl>modifying entry <span class=s2>&#34;olcDatabase={1}monitor,cn=config&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=4-加载默认schema>4. 加载默认schema</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 配置</span>
+</span></span><span class=line><span class=cl>cat &gt; schema.ldif <span class=s>&lt;&lt;EOF
+</span></span></span><span class=line><span class=cl><span class=s>dn: cn=schema,cn=config
+</span></span></span><span class=line><span class=cl><span class=s>objectClass: olcSchemaConfig
+</span></span></span><span class=line><span class=cl><span class=s>cn: schema
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>include: file:///etc/openldap/schema/collective.ldif
+</span></span></span><span class=line><span class=cl><span class=s>include: file:///etc/openldap/schema/corba.ldif
+</span></span></span><span class=line><span class=cl><span class=s>include: file:///etc/openldap/schema/cosine.ldif
+</span></span></span><span class=line><span class=cl><span class=s>include: file:///etc/openldap/schema/duaconf.ldif
+</span></span></span><span class=line><span class=cl><span class=s>include: file:///etc/openldap/schema/dyngroup.ldif
+</span></span></span><span class=line><span class=cl><span class=s>include: file:///etc/openldap/schema/inetorgperson.ldif
+</span></span></span><span class=line><span class=cl><span class=s>include: file:///etc/openldap/schema/java.ldif
+</span></span></span><span class=line><span class=cl><span class=s>include: file:///etc/openldap/schema/misc.ldif
+</span></span></span><span class=line><span class=cl><span class=s>include: file:///etc/openldap/schema/nis.ldif
+</span></span></span><span class=line><span class=cl><span class=s>include: file:///etc/openldap/schema/openldap.ldif
+</span></span></span><span class=line><span class=cl><span class=s>include: file:///etc/openldap/schema/pmi.ldif
+</span></span></span><span class=line><span class=cl><span class=s>include: file:///etc/openldap/schema/ppolicy.ldif
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 添加</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapadd -Y EXTERNAL -H ldapi:/// -f schema.ldif </span>
+</span></span><span class=line><span class=cl>SASL/EXTERNAL authentication started
+</span></span><span class=line><span class=cl>SASL username: <span class=nv>gidNumber</span><span class=o>=</span>0+uidNumber<span class=o>=</span>0,cn<span class=o>=</span>peercred,cn<span class=o>=</span>external,cn<span class=o>=</span>auth
+</span></span><span class=line><span class=cl>SASL SSF: <span class=m>0</span>
+</span></span><span class=line><span class=cl>adding new entry <span class=s2>&#34;cn=schema,cn=config&#34;</span>
+</span></span><span class=line><span class=cl>adding new entry <span class=s2>&#34;cn=collective,cn=schema,cn=config&#34;</span>
+</span></span><span class=line><span class=cl>......
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查询</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapsearch -Y EXTERNAL -H ldapi:/// -b cn=schema,cn=config dn</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=5-禁止匿名搜索>5. 禁止匿名搜索</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># cat &gt; disableAnon.ldif &lt;&lt; EOF</span>
+</span></span><span class=line><span class=cl>dn: <span class=nv>cn</span><span class=o>=</span>config
+</span></span><span class=line><span class=cl>changetype: modify
+</span></span><span class=line><span class=cl>add: olcDisallows
+</span></span><span class=line><span class=cl>olcDisallows: bind_anon
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>dn: <span class=nv>cn</span><span class=o>=</span>config
+</span></span><span class=line><span class=cl>changetype: modify
+</span></span><span class=line><span class=cl>add: olcRequires
+</span></span><span class=line><span class=cl>olcRequires: authc
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>dn: <span class=nv>olcDatabase</span><span class=o>={</span>-1<span class=o>}</span>frontend,cn<span class=o>=</span>config
+</span></span><span class=line><span class=cl>changetype: modify
+</span></span><span class=line><span class=cl>add: olcRequires
+</span></span><span class=line><span class=cl>olcRequires: authc
+</span></span><span class=line><span class=cl>EOF
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapmodify -Y EXTERNAL -H ldapi:/// -f disableAnon.ldif</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=6-开启日志>6. 开启日志</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 日志级别请参考https://www.openldap.org/doc/admin24/slapdconf2.html中5.2.1.2部分介绍</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># cat &gt; setLogLevel.ldif &lt;&lt; EOF</span>
+</span></span><span class=line><span class=cl>dn: <span class=nv>cn</span><span class=o>=</span>config
+</span></span><span class=line><span class=cl>changetype: modify
+</span></span><span class=line><span class=cl>replace: olcLogLevel
+</span></span><span class=line><span class=cl>olcLogLevel: stats
+</span></span><span class=line><span class=cl>EOF
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapmodify -Y EXTERNAL -H ldapi:/// -f setLogLevel.ldif</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># openldap将日志输出到syslog的local4中, 还需要修改一个rsyslog的配置</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;local4.* /var/log/slapd.log&#39;</span> &gt;&gt; /etc/rsyslog.d/slapd.conf
+</span></span></code></pre></td></tr></table></div></div><h2 id=三创建根目录-dc>三、创建根目录 DC</h2><p>在创建之前在理解一下dc、ou、cn</p><p><figure><a class=lightgallery href=/post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/images/20230131144923.png data-thumbnail=/post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/images/20230131144923.png data-sub-html="<h2>20230131144923.png</h2><p>20230131144923</p>"><img class=lazyload src=/svg/loading.min.svg data-src=/post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/images/20230131144923.png data-srcset="/post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/images/20230131144923.png, /post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/images/20230131144923.png 1.5x, /post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/images/20230131144923.png 2x" data-sizes=auto alt=20230131144923.png title=20230131144923 width=1346 height=714></a><figcaption class=image-caption>20230131144923.png</figcaption></figure></p><p>准备ldif</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># cat &gt; rootObj.ldif &lt;&lt;EOF</span>
+</span></span><span class=line><span class=cl>dn: <span class=nv>dc</span><span class=o>=</span>soulchild,dc<span class=o>=</span>cn
+</span></span><span class=line><span class=cl>objectClass: dcObject
+</span></span><span class=line><span class=cl>objectClass: organization
+</span></span><span class=line><span class=cl>dc: soulchild
+</span></span><span class=line><span class=cl>o: soulchild随笔记
+</span></span><span class=line><span class=cl>EOF
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>dcObject 和 organization 表示该目录是一个域目录（dcObject）和一个组织（organization）。</p><p>dcObject包含必填属性dc。organization包含必填属性o。</p><p>dc 表示目录的名称。
+o 表示组织全称。
+例如: dc是alibaba，o是阿里巴巴集团控股有限公司</p></blockquote><p>创建</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ldapadd -f rootObj.ldif -D <span class=nv>cn</span><span class=o>=</span>admin,dc<span class=o>=</span>soulchild,dc<span class=o>=</span>cn -W  <span class=c1># -w 指定密码 -W 交互式输入密码</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 也可以使用本地套接字的方式，可以免密码</span>
+</span></span><span class=line><span class=cl><span class=c1># ldapadd -Y EXTERNAL -H ldapi:/// -f rootObj.ldif</span>
+</span></span></code></pre></td></tr></table></div></div><p>查看</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ldapsearch -x -b <span class=nv>dc</span><span class=o>=</span>soulchild,dc<span class=o>=</span>cn
+</span></span></code></pre></td></tr></table></div></div><p><figure><a class=lightgallery href=/post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/images/20230131144700.png data-thumbnail=/post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/images/20230131144700.png data-sub-html="<h2>20230131144700.png</h2><p>20230131144700</p>"><img class=lazyload src=/svg/loading.min.svg data-src=/post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/images/20230131144700.png data-srcset="/post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/images/20230131144700.png, /post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/images/20230131144700.png 1.5x, /post/openldap2.44%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3%E4%B8%80/images/20230131144700.png 2x" data-sizes=auto alt=20230131144700.png title=20230131144700 width=854 height=423></a><figcaption class=image-caption>20230131144700.png</figcaption></figure></p><h2 id=四创建组织单元-ou>四、创建组织单元 OU</h2><p>创建研发中心</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># cat &gt; 研发中心.ldif &lt;&lt;EOF</span>
+</span></span><span class=line><span class=cl>dn: <span class=nv>ou</span><span class=o>=</span>研发中心,dc<span class=o>=</span>soulchild,dc<span class=o>=</span>cn
+</span></span><span class=line><span class=cl>objectClass: organizationalUnit
+</span></span><span class=line><span class=cl>ou: 研发中心
+</span></span><span class=line><span class=cl>EOF
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapadd -f 研发中心.ldif -D cn=admin,dc=soulchild,dc=cn -W</span>
+</span></span></code></pre></td></tr></table></div></div><p>创建基础架构组</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># cat &gt; 研发中心.基础架构组.ldif &lt;&lt;EOF</span>
+</span></span><span class=line><span class=cl>dn: <span class=nv>ou</span><span class=o>=</span>基础架构组,ou<span class=o>=</span>研发中心,dc<span class=o>=</span>soulchild,dc<span class=o>=</span>cn
+</span></span><span class=line><span class=cl>objectClass: organizationalUnit
+</span></span><span class=line><span class=cl>ou: 基础架构组
+</span></span><span class=line><span class=cl>EOF
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapadd -f 研发中心.基础架构组.ldif -D cn=admin,dc=soulchild,dc=cn -W</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=五创建用户>五、创建用户</h2><p>CTO用户</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># cn表示名，sn表示姓，uid一般是登录用的, 这里使用的cn作为rdn(rdn是dn最前面那一个cn=cto)</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># cat &gt; 研发中心.cto.ldif &lt;&lt;EOF</span>
+</span></span><span class=line><span class=cl>dn: <span class=nv>cn</span><span class=o>=</span>cto,ou<span class=o>=</span>研发中心,dc<span class=o>=</span>soulchild,dc<span class=o>=</span>cn
+</span></span><span class=line><span class=cl>cn: cto
+</span></span><span class=line><span class=cl>sn: cto
+</span></span><span class=line><span class=cl>objectClass: inetOrgPerson
+</span></span><span class=line><span class=cl>userPassword: <span class=m>123456</span>
+</span></span><span class=line><span class=cl>uid: cto
+</span></span><span class=line><span class=cl>EOF
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapadd -f 研发中心.cto.ldif -x -D cn=admin,dc=soulchild,dc=cn -W</span>
+</span></span></code></pre></td></tr></table></div></div><p>基础架构组用户</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># cn表示名, sn表示姓, 这里使用的cn作为rdn(rdn是dn最前面那一个cn=cto)</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># cat &gt; 研发中心.基础架构组.张三.ldif &lt;&lt;EOF</span>
+</span></span><span class=line><span class=cl>dn: <span class=nv>cn</span><span class=o>=</span>张三,ou<span class=o>=</span>基础架构组,ou<span class=o>=</span>研发中心,dc<span class=o>=</span>soulchild,dc<span class=o>=</span>cn
+</span></span><span class=line><span class=cl>cn: 张三
+</span></span><span class=line><span class=cl>sn: zhangsan
+</span></span><span class=line><span class=cl>objectClass: inetOrgPerson
+</span></span><span class=line><span class=cl>userPassword: <span class=m>123</span>
+</span></span><span class=line><span class=cl>EOF
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapadd -f 研发中心.基础架构组.张三.ldif -x -D cn=admin,dc=soulchild,dc=cn -W</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=六创建组>六、创建组</h2><p>创建一个jenkins组, 添加多个成员到这个组</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># cat &gt; 研发中心.jenkins.ldif &lt;&lt;EOF</span>
+</span></span><span class=line><span class=cl>dn: <span class=nv>cn</span><span class=o>=</span>jenkins,ou<span class=o>=</span>研发中心,dc<span class=o>=</span>soulchild,dc<span class=o>=</span>cn
+</span></span><span class=line><span class=cl>cn: jenkins
+</span></span><span class=line><span class=cl>objectClass: groupOfNames
+</span></span><span class=line><span class=cl>member: <span class=nv>cn</span><span class=o>=</span>cto,ou<span class=o>=</span>研发中心,dc<span class=o>=</span>soulchild,dc<span class=o>=</span>cn
+</span></span><span class=line><span class=cl>member: <span class=nv>cn</span><span class=o>=</span>张三,ou<span class=o>=</span>基础架构组,ou<span class=o>=</span>研发中心,dc<span class=o>=</span>soulchild,dc<span class=o>=</span>cn
+</span></span><span class=line><span class=cl>EOF
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapadd -f 研发中心.jenkins.ldif -x -D cn=admin,dc=soulchild,dc=cn -W</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>这个组无法配合jenkins实现组下用户登录，没研究出来</p></blockquote><h2 id=七删除条目或对象>七、删除条目或对象</h2><p>删除操作比较简单，直接指定dn就可以了</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest myldif<span class=o>]</span><span class=c1># ldapdelete &#34;cn=jenkins,ou=研发中心,dc=soulchild,dc=cn&#34; -D cn=admin,dc=soulchild,dc=cn -W</span>
+</span></span></code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2023-01-31 17:38:39">更新于 2023-01-31 17:38&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/openldap/ class=post-tag>openldap</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/%E4%BD%BF%E7%94%A8kibana%E5%88%9B%E5%BB%BAes%E5%8F%AA%E8%AF%BB%E7%94%A8%E6%88%B7/ class=post-nav-item rel=prev title=使用kibana创建es只读用户><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>使用kibana创建es只读用户</a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wx.png alt="SoulChild 微信号">
+<span data-animation>微信号</span></div><div><img src=/images/wechatpay.png alt="SoulChild 微信打赏">
+<span data-animation>微信打赏</span></div></div></div><div id=comments><div id=giscus><script src=https://giscus.app/client.js data-repo=SoulChildTc/soulchild-blog data-repo-id=R_kgDOIwJKxg data-category=General data-category-id=DIC_kwDOIwJKxs4CTwRk data-mapping=title data-theme=preferred_color_scheme data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-lang=zh-CN data-loading=lazy crossorigin=anonymous async defer></script></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://giscus.app/ rel="external nofollow noopener noreferrer">giscus</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright fa-fw" aria-hidden=true></i>
+<span itemprop=copyrightYear>2017 - 2023</span><span class=author itemprop=copyrightHolder>
+<a href=https://www.soulchild.cn target=_blank rel="external nofollow noopener noreferrer">SoulChild</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class=site-time title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden=true></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor"><span id=busuanzi_container_site_uv title=总访客数><i class="fa-regular fa-user fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_uv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span><span id=busuanzi_container_site_pv class=footer-divider title=总访问量><i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_pv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span></div><div class="footer-line beian"><span class="icp footer-divider">特别感谢
+<a href=https://gohugo.io target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.109.0">Hugo</a> |
+<a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v0.2.17-RC">FixIt</a> |
+<a href=https://github.com target=_blank rel="noopener noreffer">GitHub</a> |
+<a href=https://vercel.com target=_blank rel="noopener noreffer">Vercel</a></span></div></div></footer></div><div class=widgets><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role=button aria-label=回到顶部><i class="fa-solid fa-arrow-up fa-fw" aria-hidden=true></i><span class=variant-numeric>0%</span></div><div class="fixed-button view-comments d-none" role=button aria-label=查看评论><i class="fa-solid fa-comment fa-fw" aria-hidden=true></i></div></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0;--bg-progress:#438a55;--bg-progress-dark:#438a55></div><noscript><div class=noscript-warning>FixIt 主题在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/lightgallery/css/lightgallery-bundle.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/pace/themes/green/pace-theme-bounce.css><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/algoliasearch-lite.umd.min.js defer></script><script src=/lib/lazysizes/lazysizes.min.js async defer></script><script src=/lib/lightgallery/lightgallery.min.js defer></script><script src=/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js defer></script><script src=/lib/lightgallery/plugins/zoom/lg-zoom.min.js defer></script><script src=/lib/typeit/index.umd.js defer></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/lib/pangu/pangu.min.js defer></script><script src=/lib/cell-watermark/watermark.min.js defer></script><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async defer></script><script src=/lib/pace/pace.min.js async defer></script><script>window.config={autoBookmark:!0,code:{copyTitle:"复制到剪贴板",editLockTitle:"锁定可编辑代码块",editUnLockTitle:"解锁可编辑代码块",editable:!0,maxShownLines:50},comment:{enable:!0,expired:!1,giscus:{darkTheme:"dark",lightTheme:"light"}},data:{"typeit-header-subtitle-desktop":"rm -fr /*","typeit-header-subtitle-mobile":"rm -fr /*"},enablePWA:!0,lightgallery:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},pangu:{enable:!0,selector:"article"},search:{algoliaAppID:"CE9G7Q4H6N",algoliaIndex:"soulchild-blog",algoliaSearchKey:"0f69a431d92a03c2cf4143d8dbc6af0a",highlightTag:"em",maxResultLength:20,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},siteTime:"2017-06-08T21:38:36+08:00",typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},duration:-1,speed:100},watermark:{appendto:".wrapper\u003emain",colspacing:300,content:"SoulChild随笔记",enable:!0,fontfamily:"inherit",fontsize:.85,height:300,opacity:.1,rotate:15,rowspacing:100,width:300}}</script><script src=/js/theme.min.js defer></script></body></html>
