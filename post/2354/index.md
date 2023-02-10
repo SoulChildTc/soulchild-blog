@@ -3,7 +3,9 @@
 <!--more-->
 ### 参考地址: 
 https://www.tcpdump.org/manpages/tcpdump.1.html
+
 https://danielmiessler.com/study/tcpdump/
+
 https://www.tcpdump.org/manpages/pcap-filter.7.html
 
 
@@ -29,39 +31,65 @@ tcpdump可以捕获系统中的网络数据包。
 参数较多，解释一部分
 
 `-A`: 以ASCII格式打印每个数据包(减去其链路级报头)。便于抓取http请求。
+
 `-B (--buffer-size=buffer_size)`: 设置捕获缓冲区大小，单位为KiB(1024 bytes).
+
 `-c`: 收到指定数据包后退出。
+
 `-e`: 显示mac地址
+
 `-w`: 将捕获到的数据包输出到文件中。文件名支持使用strftime格式(例如: -w test-%H%M%S.pcap)
+
 `-r`: 从文件中读取数据包（使用-w选项保存的pcap文件）。如果文件为`-`，则使用标准输入。
+
 `-G`: 每隔多长时间输出一个文件(文件名不能一样，否则会覆盖)，单位秒(s)
+
 `-C`: 当使用`-w`将数据包保存到文件时,单个文件保存的最大大小。1代表将近1M(1000000 bytes)
 
 `-D`: 显示操作系统中可以使用的网络接口
+
 `-E`: 通过提供加密密钥来解密IPSEC通信。
+
 `-F`: 指定一个文件，过滤器表达式将从这个文件中获取。
+
 `-i (--interface=interface)`: 指定捕获哪个网络接口的数据包,默认是`tcpdump -D`显示的第一个接口。
-`-l`: 使stdout按照行缓冲。比如将结果重定向输出到文件的同时，可以看到接近实时的行输出.`tcpdump -l | tee dat` or `tcpdump -l > dat & tail -f dat`
+
+`-l`: 在捕获到数据包时立即将输出写入标准输出，而不是等待填满缓冲区再写入标准输出。这样可以让输出实时地显示在屏幕上，而不是等到缓冲区满了再一次性显示在屏幕上。`tcpdump -l | tee dat` or `tcpdump -l > dat & tail -f dat`
+
 `-n`: 不将ip解析成名称
+
 `-nn`: 不将ip解析成域名，不将端口解析成名称
+
 `-#`: 打印数据包编号
+
 `--print`: 当使用`-w`时，stdout不会有数据包信息输出，加此参数可以同时输出.老版本不支持此参数
+
 `-Q`: 数据包方向(`in`,`out`,`inout`),不是在所有平台都可以用
+
 `-q`: 打印更少的协议信息
+
 `-S`: 显示绝对的seq编号。默认单方向第一个条目显示绝对seq编号，后面的数据包显示的是相对的seq编号。(不知这么解释对不对)看下图吧
+
 ![50576-2l4oigizl9u.png](images/4142553882.png "4142553882")
 
 `-s`: 指定从每个数据包中获取数据的字节数，而不是默认的262144字节。`-s0`和默认值一样
+
 `-t`: 不显示时间
+
 `-tt`: 显示时间戳
+
 `-ttt`: 与上一条的时间增量,详细请看man手册
+
 `-tttt`: 可读性强的时间
 
 `-v`: 打印IP数据包中的ttl，flags，总长度和选项等信息
+
 `-vv`: 更详细的输出。
+
 `-vvv`: 更详细的输出。
 
 `-X`: 数据包内容以16进制和ascii格式显示
+
 `-XX`: 同上，信息可能更多
 
 
@@ -84,19 +112,33 @@ tcpdump可以捕获系统中的网络数据包。
 tcpdump捕获的数据包和表达式匹配结果为true，才是我们也要的结果，表达式中可以使用`and(&&)`,`or(||)`,`not(!)`,
 
 `dst`: 目标主机。`dst host 1.1.1.1`也可以写成`dst 1.1.1.1`.因为默认是host，host可以被省略
+
 `src`: 源主机。
+
 `ether dst`: ether的目标地址(mac地址)
+
 `ether src`: ether的源地址(mac地址)
+
 `net`: 网络(网段)
+
 `dst net`: 目标网络
+
 `src net`: 源网络
+
 `port`: 端口
+
 `dst port`: 目标端口 
+
 `src port`: 源端口
+
 `portrange`: 端口范围
+
 `dst portrange`: 目标端口范围
+
 `src portrange`: 源端口范围
+
 `less`: 数据包的长度小于或等于指定长度。`less 32`等同于`len <= 32`
+
 `greater`: 数据包的长度大于或等于指定长度。`less 32`等同于`len >= 32`
 
 
