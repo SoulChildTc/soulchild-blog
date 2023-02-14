@@ -339,7 +339,7 @@ echo '[{"name": "a"},{"name": "b"},{"name": "c"}]' | jq .[].name
 echo '{"name1": "a"}{"name2": "b"}' | jq '.name1 // .name2'
 ```
 
-### 输出多个字段
+#### 输出多个字段
 ```bash
 echo '{"foo": 42, "bar": "something else", "baz": true}' | jq '.foo, .bar'
 ```
