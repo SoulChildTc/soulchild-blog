@@ -5,6 +5,8 @@
 
 jq命令一般用来读取json数据,日常用法比较简单,有时候会有些特殊需求,每次都是用的时候查文档,过一段时间再用又忘了,效率太低,决定写个文章记录下来,方便以后自查。
 
+官方文档: https://stedolan.github.io/jq/manual/v1.6/#Basicfilters
+
 在线测试工具: 
 
 https://sandbox.bio/playgrounds?id=jq
@@ -14,6 +16,7 @@ https://jqkungfu.com/
 https://jiehong.gitlab.io/jq_offline/
 
 https://jqplay.org/
+
 
 ### 参数介绍
 
@@ -226,9 +229,120 @@ parse error: Unfinished JSON term at EOF at line 2, column 0
 
 `--run-tests [filename]`: 执行测试用例
 
+### 内置函数
+内容较多，官方文档:
+https://stedolan.github.io/jq/manual/v1.6/#Builtinoperatorsandfunctions
+
+#### 运算符`+`,`-`,`*`,`/`,`%`,`>`,`<`,`==`
+```bash
+[root@mytest ~]# echo '{"age": 10}' | jq '.age + 2'
+12
+[root@mytest ~]# echo '{"age": 10}' | jq '.age > 2'
+true
+[root@mytest ~]# jq -n '"x" * 10'
+"xxxxxxxxxx"
+
+....
+```
+#### length计算长度
+```bash
+[root@mytest ~]# jq -n '"x" * 10 | length'
+10
+[root@mytest ~]# echo '[1,2,3,4,5]' | jq 'length'
+5
+
+```
+
+#### keys、keys_unsorted获取对象的key
+```bash
+# 默认会对key按照Unicode码点排序
+[root@mytest ~]# echo '{"abc": 1, "abcd": 2, "Foo": 3}' | jq 'keys'
+[
+  "Foo",
+  "abc",
+  "abcd"
+]
+# 不排序
+[root@mytest ~]# echo '{"abc": 1, "abcd": 2, "Foo": 3}' | jq 'keys_unsorted'
+[
+  "abc",
+  "abcd",
+  "Foo"
+]
+```
+#### map(x), map_values(x)
+map(x) 遍历每个元素，拿到value，并对value执行x操作, 返回一个数组。操作数组一般用这个
+
+map_values(x) 遍历map对象元素，拿到value，并对value执行x操作, 返回一个对象,保持原来的key不变。操作对象一般用这个
+
+```bash
+[root@mytest ~]# echo '[1,2,3]' | jq 'map(. + 1)'
+[
+  2,
+  3,
+  4
+]
+[root@mytest ~]# echo '{"a": 1, "b": 2, "c": 3}' | jq 'map_values(. + 1)'
+{
+  "a": 2,
+  "b": 3,
+  "c": 4
+}
+```
+
+#### has(key)
+key或者指定位置的元素是否存在
+```bash
+# 先用map遍历列表中的元素,对每个元素使用has("foo"), 判断foo这个key是否存在
+[root@mytest ~]# echo '[{"foo": 42}, {}]' | jq 'map(has("foo"))'
+[
+  true,
+  false
+]
+# 先用map遍历列表中的元素,对每个元素使用has(2), 判断下标为2的位置有没有元素
+[root@mytest ~]# echo '[[0,1], ["a","b","c"]]' | jq 'map(has(2))'
+[
+  false,
+  true
+]
+```
+
+#### tostring
+转换为字符串
+
+
 
 ### 例子
-未完待续。。。
+
+#### 列表操作
+```bash
+# 通过下标获取元素
+echo '[1,2,3,4,5]' | jq .[0]
+
+# 切片
+echo '[1,2,3,4,5]' | jq .[0:-1]
+
+# 获取列表所有元素
+echo '[1,2,3,4,5]' | jq .[]
+
+# 忽略错误
+echo '1' | jq '.[]?'
+
+# 获取所有元素的某个属性
+echo '[{"name": "a"},{"name": "b"},{"name": "c"}]' | jq .[].name
+
+```
+
+#### 或操作
+```bash
+# 输出name1或者name2字段
+echo '{"name1": "a"}{"name2": "b"}' | jq '.name1 // .name2'
+```
+
+### 输出多个字段
+```bash
+echo '{"foo": 42, "bar": "something else", "baz": true}' | jq '.foo, .bar'
+```
 
 ---
 
