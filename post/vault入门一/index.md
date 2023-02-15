@@ -268,6 +268,12 @@ vault kv destroy -versions=8 kv2/myapp/config
 vault kv destroy -versions=3,4 kv2/myapp/config
 ```
 
+#### 回滚 - rollback
+```bash
+# 回滚到指定版本,这将会创建一个新版本,他的内容和指定的版本一致
+vault kv rollback -version 7 kv2/myapp/config
+```
+
 #### 元数据 - metadata
 每个secret key都拥有一个对应的metadata, 用来设置这个secret key的属性(最大version、必须使用cas等)
 
