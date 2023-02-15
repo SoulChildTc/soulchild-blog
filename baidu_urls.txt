@@ -1,3 +1,5 @@
+https://www.soulchild.cn/post/hugo%E6%8A%A5%E9%94%99pipe-failed/
+https://www.soulchild.cn/post/vault%E5%85%A5%E9%97%A8%E4%B8%80/
 https://www.soulchild.cn/post/jq%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/
 https://www.soulchild.cn/post/jenkins%E6%96%87%E6%9C%AC%E5%8F%82%E6%95%B0%E6%97%A0%E6%B3%95%E8%8E%B7%E5%8F%96%E6%8D%A2%E8%A1%8C%E9%97%AE%E9%A2%98/
 https://www.soulchild.cn/post/%E5%BF%AB%E9%80%9F%E9%83%A8%E7%BD%B2openldap%E6%B5%8B%E8%AF%95/

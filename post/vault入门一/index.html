@@ -1,0 +1,379 @@
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>Vault入门(一) - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路,记录点滴成长"><meta name=keywords content="vault"><meta itemprop=name content="Vault入门(一)"><meta itemprop=description content><meta itemprop=datePublished content="2023-02-14T22:26:54+08:00"><meta itemprop=dateModified content="2023-02-14T22:26:54+08:00"><meta itemprop=wordCount content="966"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content="vault,"><meta property="og:title" content="Vault入门(一)"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/vault%E5%85%A5%E9%97%A8%E4%B8%80/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-02-14T22:26:54+08:00"><meta property="article:modified_time" content="2023-02-14T22:26:54+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="Vault入门(一)"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/vault%E5%85%A5%E9%97%A8%E4%B8%80/><link rel=prev href=https://www.soulchild.cn/post/jq%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/><link rel=next href=https://www.soulchild.cn/post/hugo%E6%8A%A5%E9%94%99pipe-failed/><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Vault入门(一)","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/vault%E5%85%A5%E9%97%A8%E4%B8%80\/"},"genre":"posts","keywords":"vault","wordcount":966,"url":"https:\/\/www.soulchild.cn\/post\/vault%E5%85%A5%E9%97%A8%E4%B8%80\/","datePublished":"2023-02-14T22:26:54+08:00","dateModified":"2023-02-14T22:26:54+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden=true></i></h2><div class="toc-content always-active" id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>Vault入门(一)</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/%E5%85%B6%E4%BB%96/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> 其他</a></span></div><div class=post-meta-line><span title="2023-02-14 22:26:54"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2023-02-14 22:26">2023-02-14 22:26</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 966 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 5 分钟</span>&nbsp;<span id=busuanzi_container_page_pv class="busuanzi_visitors comment-visitors" data-flag-title=Vault入门(一)>
+<i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_page_pv>-</span>&nbsp;次阅读
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#基本概念>基本概念</a></li><li><a href=#一安装>一、安装</a></li><li><a href=#二开发模式启动server>二、开发模式启动Server</a><ul><li><a href=#启动>启动</a></li><li><a href=#设置环境变量>设置环境变量</a></li><li><a href=#查询运行状态>查询运行状态</a></li></ul></li><li><a href=#三基本用法>三、基本用法</a><ul><li><a href=#kv-version-1>KV Version 1</a><ul><li><a href=#实例化v1版本>实例化v1版本</a></li><li><a href=#增删查>增删查</a></li></ul></li><li><a href=#kv-version-2>KV Version 2</a><ul><li><a href=#实例化v2版本>实例化v2版本</a></li><li><a href=#v1升级到v2---enable-versioning>v1升级到v2 - enable-versioning</a></li><li><a href=#写入---put>写入 - put</a></li><li><a href=#列表---list>列表 - list</a></li><li><a href=#读取---get>读取 - get</a></li><li><a href=#补丁---patch>补丁 - patch</a></li><li><a href=#软删除---delete>软删除 - delete</a></li><li><a href=#取消删除---undelete>取消删除 - undelete</a></li><li><a href=#销毁数据---destroy>销毁数据 - destroy</a></li><li><a href=#元数据---metadata>元数据 - metadata</a><ul><li><a href=#查看---get>查看 - get</a></li><li><a href=#设置属性>设置属性</a></li><li><a href=#补丁---patch-1>补丁 - patch</a></li></ul></li></ul></li></ul></li></ul></nav></div></div><div class=content id=content data-end-flag=---><h2 id=基本概念>基本概念</h2><ul><li><p>Vault的核心是一个服务器，它负责存储和加密数据，以及处理用户的请求。可以单机模式或集群模式运行</p></li><li><p>Vault的数据是存储在一个持久化的后端中，它可以是本地文件系统、数据库、云存储等。</p></li><li><p>Vault的用户可以通过命令行、api、或web ui 来与Vault交互。</p></li><li><p>Vault的数据是以密文的形式存储在后端中，需要密钥才能解密。但是密钥本身又被一个主密钥（master key）加密，称为密封（seal）机制，解密密钥的过程称为解封（unseal）。Vault支持自动解封（auto-unseal）和手动解封（Shamir&rsquo;s Secret Sharing）。在Vault启动后，需要先执行解封操作，才能进行后续的使用。</p></li><li><p>Vault的数据可以分为静态的（Static）或动态的（Dynamic）。静态的数据是由用户提供的，比如密码、证书等。动态的数据是由Vault根据用户的请求和配置来生成的，比如数据库凭证、云访问令牌等。动态的数据通常有一个有效期（TTL），过期后会被Vault自动收回（Revoke）。</p></li><li><p>Vault的数据是通过不同的机密引擎（Secrets Engine）来存储和访问的，它们可以是通用的（KV）或专用的（AWS, MySQL, PKI等）。<a href=https://developer.hashicorp.com/vault/docs/secrets target=_blank rel="external nofollow noopener noreferrer">其他存储引擎<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p></li><li><p>Vault的用户需要通过身份验证（Auth）来获取访问Vault的凭证（Token），以及通过授权（Policy）来获取访问Vault的权限（Capability）。身份验证可以是本地的（Token, Userpass）或外部的（LDAP, Okta, Kubernetes等）</p></li></ul><h2 id=一安装>一、安装</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo yum install -y yum-utils
+</span></span><span class=line><span class=cl>sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+</span></span><span class=line><span class=cl>sudo yum -y install vault
+</span></span></code></pre></td></tr></table></div></div><h2 id=二开发模式启动server>二、开发模式启动Server</h2><h3 id=启动>启动</h3><p>在开发模式下，Vault在内存中运行并启动。不要在生产环境中运行dev模式</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest ~<span class=o>]</span><span class=c1># vault server -dev</span>
+</span></span><span class=line><span class=cl><span class=o>==</span>&gt; Vault server configuration:
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>             Api Address: http://127.0.0.1:8200
+</span></span><span class=line><span class=cl>                     Cgo: disabled
+</span></span><span class=line><span class=cl>         Cluster Address: https://127.0.0.1:8201
+</span></span><span class=line><span class=cl>   Environment Variables: GODEBUG, HISTCONTROL, HISTSIZE, HOME, HOSTNAME, LANG, LESSOPEN, LOGNAME, LS_COLORS, MAIL, PATH, PWD, SHELL, SHLVL, SSH_CLIENT, SSH_CONNECTION, SSH_TTY, TERM, USER, XDG_DATA_DIRS, XDG_RUNTIME_DIR, XDG_SESSION_ID, _
+</span></span><span class=line><span class=cl>              Go Version: go1.19.4
+</span></span><span class=line><span class=cl>              Listener 1: tcp <span class=o>(</span>addr: <span class=s2>&#34;127.0.0.1:8200&#34;</span>, cluster address: <span class=s2>&#34;127.0.0.1:8201&#34;</span>, max_request_duration: <span class=s2>&#34;1m30s&#34;</span>, max_request_size: <span class=s2>&#34;33554432&#34;</span>, tls: <span class=s2>&#34;disabled&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>               Log Level: info
+</span></span><span class=line><span class=cl>                   Mlock: supported: true, enabled: <span class=nb>false</span>
+</span></span><span class=line><span class=cl>           Recovery Mode: <span class=nb>false</span>
+</span></span><span class=line><span class=cl>                 Storage: inmem
+</span></span><span class=line><span class=cl>                 Version: Vault v1.12.3, built 2023-02-02T09:07:27Z
+</span></span><span class=line><span class=cl>             Version Sha: <span class=nv>209b3dd99fe8ca320340d08c70cff5f620261f9b</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>==</span>&gt; Vault server started! Log data will stream in below:
+</span></span><span class=line><span class=cl><span class=c1># ...snip...</span>
+</span></span><span class=line><span class=cl>WARNING! dev mode is enabled! In this mode, Vault runs entirely in-memory
+</span></span><span class=line><span class=cl>and starts unsealed with a single unseal key. The root token is already
+</span></span><span class=line><span class=cl>authenticated to the CLI, so you can immediately begin using Vault.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>You may need to <span class=nb>set</span> the following environment variables:
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    $ <span class=nb>export</span> <span class=nv>VAULT_ADDR</span><span class=o>=</span><span class=s1>&#39;http://127.0.0.1:8200&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>The unseal key and root token are displayed below in <span class=k>case</span> you want to
+</span></span><span class=line><span class=cl>seal/unseal the Vault or re-authenticate.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Unseal Key: 8Ewx5xPvtY4cVrVOteAvp6ktfDVocHN6+yPAEXy1XFE<span class=o>=</span>
+</span></span><span class=line><span class=cl>Root Token: hvs.6oYAvQH1OczlvBwfjund3teu
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Development mode should NOT be used in production installations!
+</span></span></code></pre></td></tr></table></div></div><h3 id=设置环境变量>设置环境变量</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>export</span> <span class=nv>VAULT_ADDR</span><span class=o>=</span><span class=s1>&#39;http://127.0.0.1:8200&#39;</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>VAULT_TOKEN</span><span class=o>=</span><span class=s2>&#34;hvs.6oYAvQH1OczlvBwfjund3teu&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>Unseal Key: 解封密钥,生产模式下很重要,开发模式暂时用不到</p><p>Root Token: 登录token</p><p>vault login &lt;token_value> 也可以进行登录</p></blockquote><h3 id=查询运行状态>查询运行状态</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest ~<span class=o>]</span><span class=c1># vault status</span>
+</span></span><span class=line><span class=cl>Key             Value
+</span></span><span class=line><span class=cl>---             -----
+</span></span><span class=line><span class=cl>Seal Type       shamir  <span class=c1># 密封类型，指定 Vault 的密封机制，例如使用 shamir、awskms、transit 等</span>
+</span></span><span class=line><span class=cl>Initialized     <span class=nb>true</span>    <span class=c1># 是否已经初始化，指示 Vault 是否已经初始化并配置好存储等参数。</span>
+</span></span><span class=line><span class=cl>Sealed          <span class=nb>false</span>   <span class=c1># 密封状态，false=已解封</span>
+</span></span><span class=line><span class=cl>Total Shares    <span class=m>1</span>       <span class=c1># 用于解封密钥的分片数量</span>
+</span></span><span class=line><span class=cl>Threshold       <span class=m>1</span>       <span class=c1># 使用多少个密钥可以解封</span>
+</span></span><span class=line><span class=cl>Version         1.12.3
+</span></span><span class=line><span class=cl>Build Date      2023-02-02T09:07:27Z
+</span></span><span class=line><span class=cl>Storage Type    inmem                                   <span class=c1># 后端存储为内存</span>
+</span></span><span class=line><span class=cl>Cluster Name    vault-cluster-da3febf4
+</span></span><span class=line><span class=cl>Cluster ID      6c5611e2-2f6b-995e-f81d-fd5c60ba274c
+</span></span><span class=line><span class=cl>HA Enabled      <span class=nb>false</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=三基本用法>三、基本用法</h2><p>KV存储引擎是一种通用的静态密码管理引擎，它可以让用户轻松地存储和访问敏感数据，如API Secret、证书、密码等。KV引擎使用版本控制机制，可以记录和跟踪历史上每个密码的变更和版本，同时还支持各种数据格式和多种访问控制策略。
+kv存储引擎分为v1和v2两个版本，开发模式下默认是v2版本</p><h3 id=kv-version-1>KV Version 1</h3><p>Vault早期版本中默认的Key-Value Secrets Engine。它不支持数据版本管理，并且无法在现有数据上执行CAS操作。因此，对于需要版本管理或更高级别的数据访问控制的场景，KV Version 1可能不是最佳选择。但是，对于简单的数据存储和检索需求，KV Version 1仍然是一个很好的选择。</p><blockquote><p>CAS操作用于防止多个用户同时修改数据时,数据不一致的问题。假设你想要修改一个名为creds的secret key，它的当前版本是2。你可以使用-cas=2来指定你期望的版本号</p><p>如果最新的secret key的版本是2，写入操作就会成功，secret key的版本就会变成3。但是，如果secret key的版本已经被别人改成了3或者更高，写入操作就会失败，你就会收到一个错误信息，告诉你密钥的版本不匹配。</p></blockquote><p>可用功能: delete get list put</p><h4 id=实例化v1版本>实例化v1版本</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 启用并挂载到kv1路径</span>
+</span></span><span class=line><span class=cl>vault secrets <span class=nb>enable</span> -version<span class=o>=</span><span class=m>1</span> -description<span class=o>=</span><span class=s2>&#34;KV Version 1&#34;</span> -path<span class=o>=</span><span class=s2>&#34;kv1&#34;</span> kv
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看</span>
+</span></span><span class=line><span class=cl>vault secrets list
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看详细信息</span>
+</span></span><span class=line><span class=cl>vault secrets list --format<span class=o>=</span>json <span class=p>|</span> jq <span class=s1>&#39;.[&#34;kv1/&#34;]&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 禁用引擎,会删除这个引擎路径下的所有数据,慎重！！！</span>
+</span></span><span class=line><span class=cl>vault secrets disable <span class=s2>&#34;kv1/&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>kv1/更像是由kv引擎实例化出来的实例,他不代表引擎本身。</p></blockquote><h4 id=增删查>增删查</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 写入,可以使用ttl=30参数表示过期时间,但vault不会自行删除数据,只能起到提示作用</span>
+</span></span><span class=line><span class=cl><span class=c1># 注意put是覆盖,不是追加和修改</span>
+</span></span><span class=line><span class=cl>vault kv put kv1/myapp/config <span class=nv>username</span><span class=o>=</span>admin <span class=nv>password</span><span class=o>=</span>secretpassword
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 列表</span>
+</span></span><span class=line><span class=cl>vault kv list kv1/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 读取</span>
+</span></span><span class=line><span class=cl>vault kv get kv1/myapp/config
+</span></span><span class=line><span class=cl>vault kv get -format<span class=o>=</span>json kv1/myapp/config
+</span></span><span class=line><span class=cl>vault kv get -format<span class=o>=</span>json -field<span class=o>=</span>data kv1/myapp/config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 删除</span>
+</span></span><span class=line><span class=cl>vault kv delete kv1/myapp/config
+</span></span></code></pre></td></tr></table></div></div><h3 id=kv-version-2>KV Version 2</h3><p>KV Version 2是Vault 0.10版本中引入的新版本Key-Value Secrets Engine。相比于KV Version 1, 它支持多个版本的数据, 允许CAS操作, 可以设置存储限制和数据过期时间, 并且支持复杂的访问策略。此外，KV Version 2还支持将数据版本存储在多个版本存储后端（Versioned Backend）中，以提高数据的可用性和可靠性。</p><blockquote><p>CAS操作用于防止多个用户同时修改数据时,数据不一致的问题。假设你想要修改一个名为creds的secret key，它的当前版本是2。你可以使用-cas=2来指定你期望的版本号</p><p>如果最新的secret key的版本是2，写入操作就会成功，secret key的版本就会变成3。但是，如果secret key的版本已经被别人改成了3或者更高，写入操作就会失败，你就会收到一个错误信息，告诉你secret key的版本不匹配。</p></blockquote><p>可用功能:</p><ul><li>delete</li><li>destroy</li><li>enable-versioning</li><li>get</li><li>list</li><li>metadata</li><li>patch</li><li>put</li><li>rollback</li><li>undelete</li></ul><h4 id=实例化v2版本>实例化v2版本</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 启用并挂载到kv2路径</span>
+</span></span><span class=line><span class=cl>vault secrets <span class=nb>enable</span> -version<span class=o>=</span><span class=m>2</span> -description<span class=o>=</span><span class=s2>&#34;KV Version 2&#34;</span> -path<span class=o>=</span><span class=s2>&#34;kv2&#34;</span> kv
+</span></span><span class=line><span class=cl><span class=c1># 或者vault secrets enable -description=&#34;KV Version 2&#34; -path=&#34;kv2&#34; kv-v2 </span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看</span>
+</span></span><span class=line><span class=cl>vault secrets list
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看详细信息</span>
+</span></span><span class=line><span class=cl>vault secrets list --format<span class=o>=</span>json <span class=p>|</span> jq <span class=s1>&#39;.[&#34;kv2/&#34;]&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 禁用引擎,会删除这个引擎路径下的所有数据,慎重！！！</span>
+</span></span><span class=line><span class=cl>vault secrets disable <span class=s2>&#34;kv2&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>kv2/更像是由kv引擎实例化出来的实例,他不代表引擎本身。</p></blockquote><h4 id=v1升级到v2---enable-versioning>v1升级到v2 - enable-versioning</h4><p>vault支持将v1升级到v2,如果有需求可以使用下面的方式</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>vault kv enable-versioning kv1
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>注意: 如果你的v1配置了访问控制列表(ACL Rules),还需要修改他的api path, v1和v2使用了不同的api路径</p></blockquote><blockquote><p><a href=https://developer.hashicorp.com/vault/docs/secrets/kv/kv-v2#acl-rules target=_blank rel="external nofollow noopener noreferrer">https://developer.hashicorp.com/vault/docs/secrets/kv/kv-v2#acl-rules<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p></blockquote><h4 id=写入---put>写入 - put</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 写入,官方建议第一种, 使用-mount指定根路径</span>
+</span></span><span class=line><span class=cl>vault kv put -mount<span class=o>=</span>kv2 myapp/config <span class=nv>username</span><span class=o>=</span>admin <span class=nv>password</span><span class=o>=</span>secretpassword
+</span></span><span class=line><span class=cl>or
+</span></span><span class=line><span class=cl><span class=c1># 我更喜欢第二种,不过需要注意kv2/myapp/config对应的api路径为kv2/data/myapp/config</span>
+</span></span><span class=line><span class=cl>vault kv put kv2/myapp/config <span class=nv>username</span><span class=o>=</span>admin <span class=nv>password</span><span class=o>=</span>secretpassword
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># cas操作</span>
+</span></span><span class=line><span class=cl><span class=c1># 我们期望写入版本为1的secret, 如果最新版本不是1，那么就不会修改成功。</span>
+</span></span><span class=line><span class=cl>vault kv put -cas<span class=o>=</span><span class=m>1</span> kv2/myapp/config <span class=nv>foo</span><span class=o>=</span>aa <span class=nv>bar</span><span class=o>=</span>bb
+</span></span><span class=line><span class=cl><span class=c1># -cas=0只有secret不存在时才会写入，可以防止覆盖已存在的secret</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=列表---list>列表 - list</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>vault kv list kv2/
+</span></span></code></pre></td></tr></table></div></div><h4 id=读取---get>读取 - get</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>vault kv get kv2/myapp/config
+</span></span><span class=line><span class=cl>vault kv get -format<span class=o>=</span>json kv2/myapp/config
+</span></span><span class=line><span class=cl>vault kv get -format<span class=o>=</span>json -field<span class=o>=</span>data kv2/myapp/config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看指定的版本</span>
+</span></span><span class=line><span class=cl>vault kv get -version<span class=o>=</span><span class=m>1</span> kv2/myapp/config
+</span></span></code></pre></td></tr></table></div></div><h4 id=补丁---patch>补丁 - patch</h4><p>通过patch可以完成部分修改</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>vault kv patch -cas<span class=o>=</span><span class=m>2</span> kv2/myapp/config <span class=nv>bar</span><span class=o>=</span>bbb
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># -method=rw 代表先读取最新版的内容，然后在本地执行合并，最后执行覆写。这种方法不支持-cas,因为他会从服务器读取最新的版本号</span>
+</span></span><span class=line><span class=cl>vault kv patch -method<span class=o>=</span>rw kv2/myapp/config <span class=nv>bar</span><span class=o>=</span>bbbb
+</span></span></code></pre></td></tr></table></div></div><h4 id=软删除---delete>软删除 - delete</h4><p>删除某个版本的数据,可以恢复。这里只是软删除某个版本,如果要彻底删除secret key, 需要使用<code>vault kv metadata delete</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 删除最新版本, 版本号依然是存在的,只不过secret数据看不到了</span>
+</span></span><span class=line><span class=cl><span class=c1># 后面再创建的话版本号还是会递增的, 不会使用这个被删除的</span>
+</span></span><span class=line><span class=cl>vault kv delete kv2/myapp/config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 删除多个指定版本</span>
+</span></span><span class=line><span class=cl>vault kv delete -versions<span class=o>=</span>1,2 kv2/myapp/config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>vault kv get kv2/myapp/config
+</span></span><span class=line><span class=cl><span class=o>====</span> Secret <span class=nv>Path</span> <span class=o>====</span>
+</span></span><span class=line><span class=cl>kv2/data/myapp/config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>=======</span> <span class=nv>Metadata</span> <span class=o>=======</span>
+</span></span><span class=line><span class=cl>Key                Value
+</span></span><span class=line><span class=cl>---                -----
+</span></span><span class=line><span class=cl>created_time       2023-02-15T14:30:24.221500782Z
+</span></span><span class=line><span class=cl>custom_metadata    &lt;nil&gt;
+</span></span><span class=line><span class=cl>deletion_time      2023-02-15T14:55:18.541629579Z
+</span></span><span class=line><span class=cl>destroyed          <span class=nb>false</span>
+</span></span><span class=line><span class=cl>version            <span class=m>8</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=取消删除---undelete>取消删除 - undelete</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 恢复软删除的版本</span>
+</span></span><span class=line><span class=cl>vault kv undelete -versions <span class=m>8</span> kv2/myapp/config
+</span></span></code></pre></td></tr></table></div></div><h4 id=销毁数据---destroy>销毁数据 - destroy</h4><p>销毁某个版本的数据,无法恢复。这里只是销毁某个版本, 如果要彻底删除secret key, 需要使用<code>vault kv metadata delete</code>.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 删除最新版本, 版本号依然是存在的, 只不过secret数据看不到了, 并且destroyed的状态为true</span>
+</span></span><span class=line><span class=cl><span class=c1># 后面再创建的话版本号还是会递增的, 不会使用这个被删除的</span>
+</span></span><span class=line><span class=cl>vault kv destroy -versions<span class=o>=</span><span class=m>8</span> kv2/myapp/config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 删除多个指定版本</span>
+</span></span><span class=line><span class=cl>vault kv destroy -versions<span class=o>=</span>3,4 kv2/myapp/config
+</span></span></code></pre></td></tr></table></div></div><h4 id=元数据---metadata>元数据 - metadata</h4><p>每个secret key都拥有一个对应的metadata, 用来设置这个secret key的属性(最大version、必须使用cas等)</p><h5 id=查看---get>查看 - get</h5><p>查看某个secret key的metadata的信息，这包含了他所有的版本信息和元数据</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@mytest ~<span class=o>]</span><span class=c1># vault kv metadata get kv2/myapp/config</span>
+</span></span><span class=line><span class=cl><span class=o>=====</span> Metadata <span class=nv>Path</span> <span class=o>=====</span>
+</span></span><span class=line><span class=cl>kv2/metadata/myapp/config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>==========</span> <span class=nv>Metadata</span> <span class=o>==========</span>
+</span></span><span class=line><span class=cl>Key                     Value
+</span></span><span class=line><span class=cl>---                     -----
+</span></span><span class=line><span class=cl>cas_required            <span class=nb>false</span>
+</span></span><span class=line><span class=cl>created_time            2023-02-15T13:55:14.471446254Z
+</span></span><span class=line><span class=cl>current_version         <span class=m>9</span>
+</span></span><span class=line><span class=cl>custom_metadata         &lt;nil&gt;
+</span></span><span class=line><span class=cl>delete_version_after    0s
+</span></span><span class=line><span class=cl>max_versions            <span class=m>0</span>
+</span></span><span class=line><span class=cl>oldest_version          <span class=m>0</span>
+</span></span><span class=line><span class=cl>updated_time            2023-02-15T15:05:28.648657534Z
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>======</span> Version <span class=nv>1</span> <span class=o>======</span>
+</span></span><span class=line><span class=cl><span class=c1># ...snip...</span>
+</span></span></code></pre></td></tr></table></div></div><h5 id=设置属性>设置属性</h5><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 设置secret key最大历史版本数</span>
+</span></span><span class=line><span class=cl><span class=c1># 修改完后还可以查询,如果重新put数据后, 再查最近2个之外的历史版本会提示 No value found at kv2/data/myapp/config</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest ~<span class=o>]</span><span class=c1># vault kv metadata put -max-versions 2 kv2/myapp/config</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 删除指定时间之前的版本, 也可以结合上面的命令一起使用</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest ~<span class=o>]</span><span class=c1># vault kv metadata put -delete-version-after=&#34;3h25m19s&#34; kv2/myapp/config</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 其他的一些属性</span>
+</span></span><span class=line><span class=cl><span class=c1># -cas-required=true 写入secret key时必须指定-cas参数</span>
+</span></span><span class=line><span class=cl><span class=c1># -custom-metadata=&#34;creator=soulchild&#34; 设置一些自定义的元数据信息</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 创建metadata, put也可以用来修改属性</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@mytest ~<span class=o>]</span><span class=c1># vault kv metadata put -custom-metadata=owner=soulchild -custom-metadata=biz=arch kv2/myapp/config</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 删除整个secret key</span>
+</span></span><span class=line><span class=cl>vault kv metadata delete kv2/myapp/config
+</span></span></code></pre></td></tr></table></div></div><h5 id=补丁---patch-1>补丁 - patch</h5><p>虽然put能完成大部分的修改任务, 但是如果你想在custom_metadata中添加数据时,必须要将原来的数据也一同写进去,如果只写一个新增的数据将会把老数据覆盖, 这种情况使用patch就可以解决了。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 添加一个blog=soulchild.cn</span>
+</span></span><span class=line><span class=cl>vault kv metadata patch -custom-metadata<span class=o>=</span><span class=nv>blog</span><span class=o>=</span>soulchild.cn kv2/myapp/config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看结果</span>
+</span></span><span class=line><span class=cl>vault kv metadata get -format<span class=o>=</span>json kv2/myapp/config
+</span></span></code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2023-02-14 22:26:54">更新于 2023-02-14 22:26&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/vault/ class=post-tag>vault</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/jq%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/ class=post-nav-item rel=prev title=Jq命令使用详解><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>Jq命令使用详解</a>
+<a href=/post/hugo%E6%8A%A5%E9%94%99pipe-failed/ class=post-nav-item rel=next title="Hugo报错pipe Failed">Hugo报错pipe Failed<i class="fa-solid fa-angle-right fa-fw" aria-hidden=true></i></a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wx.png alt="SoulChild 微信号">
+<span data-animation>微信号</span></div><div><img src=/images/wechatpay.png alt="SoulChild 微信打赏">
+<span data-animation>微信打赏</span></div></div></div><div id=comments><div id=giscus><script src=https://giscus.app/client.js data-repo=SoulChildTc/soulchild-blog data-repo-id=R_kgDOIwJKxg data-category=General data-category-id=DIC_kwDOIwJKxs4CTwRk data-mapping=title data-theme=preferred_color_scheme data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-lang=zh-CN data-loading=lazy crossorigin=anonymous async defer></script></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://giscus.app/ rel="external nofollow noopener noreferrer">giscus</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright fa-fw" aria-hidden=true></i>
+<span itemprop=copyrightYear>2017 - 2023</span><span class=author itemprop=copyrightHolder>
+<a href=https://www.soulchild.cn target=_blank rel="external nofollow noopener noreferrer">SoulChild</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class=site-time title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden=true></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor"><span id=busuanzi_container_site_uv title=总访客数><i class="fa-regular fa-user fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_uv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span><span id=busuanzi_container_site_pv class=footer-divider title=总访问量><i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_pv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span></div><div class="footer-line beian"><span class="icp footer-divider">特别感谢
+<a href=https://gohugo.io target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.109.0">Hugo</a> |
+<a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v0.2.17-RC">FixIt</a> |
+<a href=https://github.com target=_blank rel="noopener noreffer">GitHub</a> |
+<a href=https://vercel.com target=_blank rel="noopener noreffer">Vercel</a></span></div></div></footer></div><div class=widgets><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role=button aria-label=回到顶部><i class="fa-solid fa-arrow-up fa-fw" aria-hidden=true></i><span class=variant-numeric>0%</span></div><div class="fixed-button view-comments d-none" role=button aria-label=查看评论><i class="fa-solid fa-comment fa-fw" aria-hidden=true></i></div></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0;--bg-progress:#438a55;--bg-progress-dark:#438a55></div><noscript><div class=noscript-warning>FixIt 主题在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/lightgallery/css/lightgallery-bundle.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/pace/themes/green/pace-theme-bounce.css><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/algoliasearch-lite.umd.min.js defer></script><script src=/lib/lazysizes/lazysizes.min.js async defer></script><script src=/lib/lightgallery/lightgallery.min.js defer></script><script src=/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js defer></script><script src=/lib/lightgallery/plugins/zoom/lg-zoom.min.js defer></script><script src=/lib/typeit/index.umd.js defer></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/lib/pangu/pangu.min.js defer></script><script src=/lib/cell-watermark/watermark.min.js defer></script><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async defer></script><script src=/lib/pace/pace.min.js async defer></script><script>window.config={autoBookmark:!0,code:{copyTitle:"复制到剪贴板",editLockTitle:"锁定可编辑代码块",editUnLockTitle:"解锁可编辑代码块",editable:!0,maxShownLines:50},comment:{enable:!0,expired:!1,giscus:{darkTheme:"dark",lightTheme:"light"}},data:{"typeit-header-subtitle-desktop":"/usr/bin/sleep infinity","typeit-header-subtitle-mobile":"/usr/bin/sleep infinity"},enablePWA:!0,lightgallery:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},pangu:{enable:!0,selector:"article"},search:{algoliaAppID:"CE9G7Q4H6N",algoliaIndex:"soulchild-blog",algoliaSearchKey:"0f69a431d92a03c2cf4143d8dbc6af0a",highlightTag:"em",maxResultLength:20,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},siteTime:"2017-06-08T21:38:36+08:00",typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},duration:-1,speed:100},watermark:{appendto:".wrapper\u003emain",colspacing:300,content:"SoulChild随笔记",enable:!0,fontfamily:"inherit",fontsize:.85,height:300,opacity:.1,rotate:15,rowspacing:100,width:300}}</script><script src=/js/theme.min.js defer></script></body></html>
