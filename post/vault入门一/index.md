@@ -214,6 +214,9 @@ vault kv get kv2/myapp/config
 vault kv get -format=json kv2/myapp/config
 vault kv get -format=json -field=data kv2/myapp/config
 
+# 获取指定的属性
+vault kv get -field=foo kv2/myapp/config  ## aa
+
 # 查看指定的版本
 vault kv get -version=1 kv2/myapp/config
 ```
