@@ -1,4 +1,4 @@
-# Vault部署和配置(三)
+# Vault集群部署和配置(三)
 
 
 <!--more-->
@@ -358,5 +358,5 @@ node3    192.168.124.60:8201    follower    true
 ---
 
 > 作者: [SoulChild](https://www.soulchild.cn)  
-> URL: https://www.soulchild.cn/post/vault%E9%83%A8%E7%BD%B2%E5%92%8C%E9%85%8D%E7%BD%AE%E4%B8%89/  
+> URL: https://www.soulchild.cn/post/vault%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2%E5%92%8C%E9%85%8D%E7%BD%AE%E4%B8%89/  
 
