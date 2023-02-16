@@ -108,7 +108,9 @@ listener "tcp" {
 >> 
 >> NoNewPrivileges=yes
 > 
-> listener "tcp" 配置监听, 需要保证每个节点的证书和key都一致
+> listener "tcp" 配置监听, 这里每个节点的服务端证书和key都一致(懒)
+>
+> 如果tls_require_and_verify_client_cert参数为true，开启集群通信双向tls
 > 
 > 支持的后端存储: https://developer.hashicorp.com/vault/docs/configuration/storage
 
