@@ -1,129 +1,291 @@
-<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>mysql5.5.32配置多实例 - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路,记录点滴成长"><meta name=keywords content="mysql"><meta itemprop=name content="mysql5.5.32配置多实例"><meta itemprop=description content><meta itemprop=datePublished content="2019-06-01T19:32:37+08:00"><meta itemprop=dateModified content="2020-05-30T17:09:39+08:00"><meta itemprop=wordCount content="330"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content="mysql,"><meta property="og:title" content="mysql5.5.32配置多实例"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/293/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-06-01T19:32:37+08:00"><meta property="article:modified_time" content="2020-05-30T17:09:39+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="mysql5.5.32配置多实例"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/293/><link rel=prev href=https://www.soulchild.cn/post/286/><link rel=next href=https://www.soulchild.cn/post/296/><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"mysql5.5.32配置多实例","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/293\/"},"genre":"posts","keywords":"mysql","wordcount":330,"url":"https:\/\/www.soulchild.cn\/post\/293\/","datePublished":"2019-06-01T19:32:37+08:00","dateModified":"2020-05-30T17:09:39+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>mysql5.5.32配置多实例 - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路,记录点滴成长"><meta name=keywords content="mysql"><meta itemprop=name content="mysql5.5.32配置多实例"><meta itemprop=description content><meta itemprop=datePublished content="2019-06-01T19:32:37+08:00"><meta itemprop=dateModified content="2020-05-30T17:09:39+08:00"><meta itemprop=wordCount content="466"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content="mysql,"><meta property="og:title" content="mysql5.5.32配置多实例"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/293/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-06-01T19:32:37+08:00"><meta property="article:modified_time" content="2020-05-30T17:09:39+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="mysql5.5.32配置多实例"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/293/><link rel=prev href=https://www.soulchild.cn/post/286/><link rel=next href=https://www.soulchild.cn/post/296/><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"mysql5.5.32配置多实例","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/293\/"},"genre":"posts","keywords":"mysql","wordcount":466,"url":"https:\/\/www.soulchild.cn\/post\/293\/","datePublished":"2019-06-01T19:32:37+08:00","dateModified":"2020-05-30T17:09:39+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
 <a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
 <span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
 <a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
 <span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
-<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>mysql5.5.32配置多实例</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
-<span class=post-category>收录于 <a href=/categories/%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> 系统服务</a>&ensp;<a href=/categories/databases/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> databases</a></span></div><div class=post-meta-line><span title="2019-06-01 19:32:37"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2019-06-01 19:32">2019-06-01 19:32</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 330 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 2 分钟</span>&nbsp;<span id=busuanzi_container_page_pv class="busuanzi_visitors comment-visitors" data-flag-title=mysql5.5.32配置多实例>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden=true></i></h2><div class="toc-content always-active" id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>mysql5.5.32配置多实例</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> 系统服务</a>&ensp;<a href=/categories/databases/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> databases</a></span></div><div class=post-meta-line><span title="2019-06-01 19:32:37"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2019-06-01 19:32">2019-06-01 19:32</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 466 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 3 分钟</span>&nbsp;<span id=busuanzi_container_page_pv class="busuanzi_visitors comment-visitors" data-flag-title=mysql5.5.32配置多实例>
 <i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_page_pv>-</span>&nbsp;次阅读
-</span>&nbsp;</div></div><div class=content id=content data-end-flag=---><div class="details admonition warning open"><div class="details-summary admonition-title"><i class="icon fa-solid fa-exclamation-triangle fa-fw" aria-hidden=true></i>警告<i class="details-icon fa-solid fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>本文最后更新于 2020-05-30 17:09，文中内容可能已过时。</div></div></div><p><span style=color:red><strong>停止单实例进程</strong></span></p><p>pkill mysqld</p><p><span style=color:red><strong>创建目录结构</strong></span></p><p>[root@db01 ~]# tree /data/
-/data/
-├── 3306
-│   ├── data
-│   ├── my.cnf
-│   └── mysql
-└── 3307
-├── data
-├── my.cnf
-└── mysql</p><div><hr></div><span style=color:red><strong>my.cnf配置文件内容</strong></span><p>[client]
-port = 3306
-socket = /data/3306/mysql.sock</p><p>[mysql]
-no-auto-rehash</p><p>[mysqld]
-user = mysql
-port = 3306
-socket = /data/3306/mysql.sock
-basedir = /application/mysql
-datadir = /data/3306/data
-open_files_limit = 1024
-back_log =600
-max_connections = 800
-max_connect_errors = 3000
-table_cache = 614
-external-locking = FALSE
-max_allowed_packet = 8M
-sort_buffer_size = 1M
-join_buffer_size = 1M
-thread_cache_size = 100
-thread_concurrency = 2
-query_cache_size = 2M
-query_cache_limit = 1M
-query_cache_min_res_unit = 2K
-#default_table_type = InnoDB
-thread_stack = 192K
-#transaction_isolation = READ-COMMITTED
-tmp_table_size = 2M
-max_heap_table_size = 2M
-long_query_time = 1
-pid-file = /data/3306/mysql.pid
-relay-log = /data/3306/relay-bin
-relay-log-info-file = /data/3306/relay-log.info
-binlog_cache_size = 1M
-max_binlog_cache_size = 1M
-max_binlog_size = 2M
-key_buffer_size = 16M
-read_buffer_size = 1M
-read_rnd_buffer_size = 1M
-bulk_insert_buffer_size = 1M
-lower_case_table_names = 1
-skip-name-resolve
-slave-skip-errors = 1032,1062
-replicate-ignore-db = mysql
-server-id = 1
-innodb_additional_mem_pool_size = 4M
-innodb_buffer_pool_size = 32M
-innodb_data_file_path = ibdata1:128M:autoextend
-innodb_file_io_threads = 4
-innodb_thread_concurrency = 8
-innodb_flush_log_at_trx_commit = 2
-innodb_log_buffer_size = 2M
-innodb_log_file_size = 4M
-innodb_log_files_in_group = 3
-innodb_max_dirty_pages_pct = 90
-innodb_lock_wait_timeout = 120
-innodb_file_per_table = 0
-[mysqldump]
-quick
-max_allowed_packet = 2M</p><p>[mysqld_safe]
-log-error = /data/3306/mysql_3306.err
-pid-file = /data/3306/mysqld.pid</p><hr><p><span style=color:red><strong>mysql启动脚本</strong></span></p><p>#!/bin/sh
-#init
-port=3306
-mysql_user=&ldquo;root&rdquo;
-mysql_pwd=&ldquo;wenmeng&rdquo;
-CmdPath="/application/mysql/bin"
-mysql_sock="/data/${port}/mysql.sock"
-#startup function
-function_start_mysql()
-{
-if [ ! -e &ldquo;$mysql_sock&rdquo; ];then
-printf &ldquo;Starting MySQL&mldr;\n&rdquo;
-/bin/sh ${CmdPath}/mysqld_safe &ndash;defaults-file=/data/${port}/my.cnf 2>&1 > /dev/null &
-else
-printf &ldquo;MySQL is running&mldr;\n&rdquo;
-exit
-fi
-}</p><p>#stop function
-function_stop_mysql()
-{
-if [ ! -e &ldquo;$mysql_sock&rdquo; ];then
-printf &ldquo;MySQL is stopped&mldr;\n&rdquo;
-exit
-else
-printf &ldquo;Stoping MySQL&mldr;\n&rdquo;
-${CmdPath}/mysqladmin -u ${mysql_user} -p${mysql_pwd} -S /data/${port}/mysql.sock shutdown
-fi
-}</p><p>#restart function
-function_restart_mysql()
-{
-printf &ldquo;Restarting MySQL&mldr;\n&rdquo;
-function_stop_mysql
-sleep 2
-function_start_mysql
-}</p><p>case $1 in
-start)
-function_start_mysql
-;;
-stop)
-function_stop_mysql
-;;
-restart)
-function_restart_mysql
-;;
-*)
-printf &ldquo;Usage: /data/${port}/mysql {start|stop|restart}\n&rdquo;
-esac</p><hr><p><span style=color:#e53333>配置文件：<span style=color:#e53333;white-space:normal>需要修改文件中的端口号和</span><span style=color:#e53333;white-space:normal>server-id</span></span></p><p><span style=color:#e53333>启动脚本：需要修改文件中的端口号，管理用户和密码</span></p><p><span style=color:red><strong>修改目录管理权限</strong></span></p><p>chown -R mysql.mysql /data</p><p><span style=color:red><strong>添加启动脚本执行权限</strong></span></p><p>find /data/ -type f -name mysql | xargs chmod +x</p><p><span style=color:red><strong>初始化数据库</strong></span></p><p>/application/mysql/scripts/mysql_install_db &ndash;basedir=/application/mysql &ndash;datadir=/data/3306/data &ndash;user=mysql</p><p>/application/mysql/scripts/mysql_install_db &ndash;basedir=/application/mysql &ndash;datadir=/data/3307/data &ndash;user=mysql</p><p><span style=color:red><strong>启动数据库</strong></span></p><p>/data/3306/mysql start</p><p>/data/3307/mysql start</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2020-05-30 17:09:39">更新于 2020-05-30 17:09&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/mysql/ class=post-tag>mysql</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/286/ class=post-nav-item rel=prev title=mysql5.5.32源代码安装><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>mysql5.5.32源代码安装</a>
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#停止单实例进程>停止单实例进程</a></li><li><a href=#创建目录结构>创建目录结构</a></li><li><a href=#mycnf配置文件内容>my.cnf配置文件内容</a></li><li><a href=#修改目录管理权限>修改目录管理权限</a></li><li><a href=#添加启动脚本执行权限>添加启动脚本执行权限</a></li><li><a href=#初始化数据库>初始化数据库</a></li><li><a href=#启动数据库>启动数据库</a></li></ul></li></ul></nav></div></div><div class=content id=content data-end-flag=---><div class="details admonition warning open"><div class="details-summary admonition-title"><i class="icon fa-solid fa-exclamation-triangle fa-fw" aria-hidden=true></i>警告<i class="details-icon fa-solid fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>本文最后更新于 2020-05-30 17:09，文中内容可能已过时。</div></div></div><h3 id=停止单实例进程>停止单实例进程</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>pkill mysqld
+</span></span></code></pre></td></tr></table></div></div><h3 id=创建目录结构>创建目录结构</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@db01 ~<span class=o>]</span><span class=c1># tree /data/</span>
+</span></span><span class=line><span class=cl>/data/
+</span></span><span class=line><span class=cl>├── <span class=m>3306</span>
+</span></span><span class=line><span class=cl>│   ├── data
+</span></span><span class=line><span class=cl>│   ├── my.cnf
+</span></span><span class=line><span class=cl>│   └── mysql
+</span></span><span class=line><span class=cl>└── <span class=m>3307</span>
+</span></span><span class=line><span class=cl>    ├── data
+</span></span><span class=line><span class=cl>    ├── my.cnf
+</span></span><span class=line><span class=cl>    └── mysql
+</span></span></code></pre></td></tr></table></div></div><h3 id=mycnf配置文件内容>my.cnf配置文件内容</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>client<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=nv>port</span> <span class=o>=</span> <span class=m>3306</span>
+</span></span><span class=line><span class=cl><span class=nv>socket</span> <span class=o>=</span> /data/3306/mysql.sock
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>mysql<span class=o>]</span>
+</span></span><span class=line><span class=cl>no-auto-rehash
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>mysqld<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=nv>user</span> <span class=o>=</span> mysql
+</span></span><span class=line><span class=cl><span class=nv>port</span> <span class=o>=</span> <span class=m>3306</span>
+</span></span><span class=line><span class=cl><span class=nv>socket</span> <span class=o>=</span> /data/3306/mysql.sock
+</span></span><span class=line><span class=cl><span class=nv>basedir</span> <span class=o>=</span> /application/mysql
+</span></span><span class=line><span class=cl><span class=nv>datadir</span> <span class=o>=</span> /data/3306/data
+</span></span><span class=line><span class=cl><span class=nv>open_files_limit</span> <span class=o>=</span> <span class=m>1024</span>
+</span></span><span class=line><span class=cl><span class=nv>back_log</span> <span class=o>=</span><span class=m>600</span>
+</span></span><span class=line><span class=cl><span class=nv>max_connections</span> <span class=o>=</span> <span class=m>800</span>
+</span></span><span class=line><span class=cl><span class=nv>max_connect_errors</span> <span class=o>=</span> <span class=m>3000</span>
+</span></span><span class=line><span class=cl><span class=nv>table_cache</span> <span class=o>=</span> <span class=m>614</span>
+</span></span><span class=line><span class=cl>external-locking <span class=o>=</span> FALSE
+</span></span><span class=line><span class=cl><span class=nv>max_allowed_packet</span> <span class=o>=</span> 8M
+</span></span><span class=line><span class=cl><span class=nv>sort_buffer_size</span> <span class=o>=</span> 1M
+</span></span><span class=line><span class=cl><span class=nv>join_buffer_size</span> <span class=o>=</span> 1M
+</span></span><span class=line><span class=cl><span class=nv>thread_cache_size</span> <span class=o>=</span> <span class=m>100</span>
+</span></span><span class=line><span class=cl><span class=nv>thread_concurrency</span> <span class=o>=</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=nv>query_cache_size</span> <span class=o>=</span> 2M
+</span></span><span class=line><span class=cl><span class=nv>query_cache_limit</span> <span class=o>=</span> 1M
+</span></span><span class=line><span class=cl><span class=nv>query_cache_min_res_unit</span> <span class=o>=</span> 2K
+</span></span><span class=line><span class=cl><span class=c1>#default_table_type = InnoDB</span>
+</span></span><span class=line><span class=cl><span class=nv>thread_stack</span> <span class=o>=</span> 192K
+</span></span><span class=line><span class=cl><span class=c1>#transaction_isolation = READ-COMMITTED</span>
+</span></span><span class=line><span class=cl><span class=nv>tmp_table_size</span> <span class=o>=</span> 2M
+</span></span><span class=line><span class=cl><span class=nv>max_heap_table_size</span> <span class=o>=</span> 2M
+</span></span><span class=line><span class=cl><span class=nv>long_query_time</span> <span class=o>=</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>pid-file <span class=o>=</span> /data/3306/mysql.pid
+</span></span><span class=line><span class=cl>relay-log <span class=o>=</span> /data/3306/relay-bin
+</span></span><span class=line><span class=cl>relay-log-info-file <span class=o>=</span> /data/3306/relay-log.info
+</span></span><span class=line><span class=cl><span class=nv>binlog_cache_size</span> <span class=o>=</span> 1M
+</span></span><span class=line><span class=cl><span class=nv>max_binlog_cache_size</span> <span class=o>=</span> 1M
+</span></span><span class=line><span class=cl><span class=nv>max_binlog_size</span> <span class=o>=</span> 2M
+</span></span><span class=line><span class=cl><span class=nv>key_buffer_size</span> <span class=o>=</span> 16M
+</span></span><span class=line><span class=cl><span class=nv>read_buffer_size</span> <span class=o>=</span> 1M
+</span></span><span class=line><span class=cl><span class=nv>read_rnd_buffer_size</span> <span class=o>=</span> 1M
+</span></span><span class=line><span class=cl><span class=nv>bulk_insert_buffer_size</span> <span class=o>=</span> 1M
+</span></span><span class=line><span class=cl><span class=nv>lower_case_table_names</span> <span class=o>=</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>skip-name-resolve
+</span></span><span class=line><span class=cl>slave-skip-errors <span class=o>=</span> 1032,1062
+</span></span><span class=line><span class=cl>replicate-ignore-db <span class=o>=</span> mysql
+</span></span><span class=line><span class=cl>server-id <span class=o>=</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=nv>innodb_additional_mem_pool_size</span> <span class=o>=</span> 4M
+</span></span><span class=line><span class=cl><span class=nv>innodb_buffer_pool_size</span> <span class=o>=</span> 32M
+</span></span><span class=line><span class=cl><span class=nv>innodb_data_file_path</span> <span class=o>=</span> ibdata1:128M:autoextend
+</span></span><span class=line><span class=cl><span class=nv>innodb_file_io_threads</span> <span class=o>=</span> <span class=m>4</span>
+</span></span><span class=line><span class=cl><span class=nv>innodb_thread_concurrency</span> <span class=o>=</span> <span class=m>8</span>
+</span></span><span class=line><span class=cl><span class=nv>innodb_flush_log_at_trx_commit</span> <span class=o>=</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=nv>innodb_log_buffer_size</span> <span class=o>=</span> 2M
+</span></span><span class=line><span class=cl><span class=nv>innodb_log_file_size</span> <span class=o>=</span> 4M
+</span></span><span class=line><span class=cl><span class=nv>innodb_log_files_in_group</span> <span class=o>=</span> <span class=m>3</span>
+</span></span><span class=line><span class=cl><span class=nv>innodb_max_dirty_pages_pct</span> <span class=o>=</span> <span class=m>90</span>
+</span></span><span class=line><span class=cl><span class=nv>innodb_lock_wait_timeout</span> <span class=o>=</span> <span class=m>120</span>
+</span></span><span class=line><span class=cl><span class=nv>innodb_file_per_table</span> <span class=o>=</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>mysqldump<span class=o>]</span>
+</span></span><span class=line><span class=cl>quick
+</span></span><span class=line><span class=cl><span class=nv>max_allowed_packet</span> <span class=o>=</span> 2M
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>mysqld_safe<span class=o>]</span>
+</span></span><span class=line><span class=cl>log-error <span class=o>=</span> /data/3306/mysql_3306.err
+</span></span><span class=line><span class=cl>pid-file <span class=o>=</span> /data/3306/mysqld.pid
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>需要修改文件中的端口号和server-id</p></blockquote><p>mysql启动脚本</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/bin/sh
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=c1>#init</span>
+</span></span><span class=line><span class=cl><span class=nv>port</span><span class=o>=</span><span class=m>3306</span>
+</span></span><span class=line><span class=cl><span class=nv>mysql_user</span><span class=o>=</span><span class=s2>&#34;root&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>mysql_pwd</span><span class=o>=</span><span class=s2>&#34;root&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>CmdPath</span><span class=o>=</span><span class=s2>&#34;/application/mysql/bin&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>mysql_sock</span><span class=o>=</span><span class=s2>&#34;/data/</span><span class=si>${</span><span class=nv>port</span><span class=si>}</span><span class=s2>/mysql.sock&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#startup function</span>
+</span></span><span class=line><span class=cl>function_start_mysql<span class=o>()</span>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[</span> ! -e <span class=s2>&#34;</span><span class=nv>$mysql_sock</span><span class=s2>&#34;</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+</span></span><span class=line><span class=cl><span class=nb>printf</span> <span class=s2>&#34;Starting MySQL...\n&#34;</span>
+</span></span><span class=line><span class=cl>/bin/sh <span class=si>${</span><span class=nv>CmdPath</span><span class=si>}</span>/mysqld_safe --defaults-file<span class=o>=</span>/data/<span class=si>${</span><span class=nv>port</span><span class=si>}</span>/my.cnf 2<span class=p>&amp;</span>gt<span class=p>;&amp;</span>amp<span class=p>;</span><span class=m>1</span> <span class=p>&amp;</span>gt<span class=p>;</span> /dev/null <span class=p>&amp;</span>amp<span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl><span class=nb>printf</span> <span class=s2>&#34;MySQL is running...\n&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>exit</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#stop function</span>
+</span></span><span class=line><span class=cl>function_stop_mysql<span class=o>(){</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>[</span> ! -e <span class=s2>&#34;</span><span class=nv>$mysql_sock</span><span class=s2>&#34;</span> <span class=o>]</span><span class=p>;</span><span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>printf</span> <span class=s2>&#34;MySQL is stopped...\n&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span>
+</span></span><span class=line><span class=cl>  <span class=k>else</span>
+</span></span><span class=line><span class=cl>  <span class=nb>printf</span> <span class=s2>&#34;Stoping MySQL...\n&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=si>${</span><span class=nv>CmdPath</span><span class=si>}</span>/mysqladmin -u <span class=si>${</span><span class=nv>mysql_user</span><span class=si>}</span> -p<span class=si>${</span><span class=nv>mysql_pwd</span><span class=si>}</span> -S /data/<span class=si>${</span><span class=nv>port</span><span class=si>}</span>/mysql.sock shutdown
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#restart function</span>
+</span></span><span class=line><span class=cl>function_restart_mysql<span class=o>(){</span>
+</span></span><span class=line><span class=cl>  <span class=nb>printf</span> <span class=s2>&#34;Restarting MySQL...\n&#34;</span>
+</span></span><span class=line><span class=cl>  function_stop_mysql
+</span></span><span class=line><span class=cl>  sleep <span class=m>2</span>
+</span></span><span class=line><span class=cl>  function_start_mysql
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>case</span> <span class=nv>$1</span> in
+</span></span><span class=line><span class=cl>  start<span class=o>)</span>
+</span></span><span class=line><span class=cl>    function_start_mysql
+</span></span><span class=line><span class=cl>  <span class=p>;;</span>
+</span></span><span class=line><span class=cl>  stop<span class=o>)</span>
+</span></span><span class=line><span class=cl>    function_stop_mysql
+</span></span><span class=line><span class=cl>  <span class=p>;;</span>
+</span></span><span class=line><span class=cl>  restart<span class=o>)</span>
+</span></span><span class=line><span class=cl>   function_restart_mysql
+</span></span><span class=line><span class=cl>  <span class=p>;;</span>
+</span></span><span class=line><span class=cl>  *<span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>printf</span> <span class=s2>&#34;Usage: /data/</span><span class=si>${</span><span class=nv>port</span><span class=si>}</span><span class=s2>/mysql {start|stop|restart}\n&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>esac</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>启动脚本需要修改文件中的端口号，管理用户和密码</p></blockquote><h3 id=修改目录管理权限>修改目录管理权限</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>chown -R mysql.mysql /data
+</span></span></code></pre></td></tr></table></div></div><h3 id=添加启动脚本执行权限>添加启动脚本执行权限</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>find /data/ -type f -name mysql <span class=p>|</span> xargs chmod +x
+</span></span></code></pre></td></tr></table></div></div><h3 id=初始化数据库>初始化数据库</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>/application/mysql/scripts/mysql_install_db --basedir<span class=o>=</span>/application/mysql --datadir<span class=o>=</span>/data/3306/data --user<span class=o>=</span>mysql
+</span></span><span class=line><span class=cl>/application/mysql/scripts/mysql_install_db --basedir<span class=o>=</span>/application/mysql --datadir<span class=o>=</span>/data/3307/data --user<span class=o>=</span>mysql
+</span></span></code></pre></td></tr></table></div></div><h3 id=启动数据库>启动数据库</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>/data/3306/mysql start
+</span></span><span class=line><span class=cl>/data/3307/mysql start
+</span></span></code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2020-05-30 17:09:39">更新于 2020-05-30 17:09&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/mysql/ class=post-tag>mysql</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/286/ class=post-nav-item rel=prev title=mysql5.5.32源代码安装><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>mysql5.5.32源代码安装</a>
 <a href=/post/296/ class=post-nav-item rel=next title=mysql基础sql语句(2)>mysql基础sql语句(2)<i class="fa-solid fa-angle-right fa-fw" aria-hidden=true></i></a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
 <label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wx.png alt="SoulChild 微信号">
 <span data-animation>微信号</span></div><div><img src=/images/wechatpay.png alt="SoulChild 微信打赏">

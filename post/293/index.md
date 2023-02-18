@@ -1,12 +1,14 @@
 # mysql5.5.32配置多实例
 
 <!--more-->
-<span style="color: #ff0000;"><strong>停止单实例进程</strong></span>
 
+### 停止单实例进程
+```bash
 pkill mysqld
+```
 
-<span style="color: #ff0000;"><strong>创建目录结构</strong></span>
-
+### 创建目录结构
+```bash
 [root@db01 ~]# tree /data/
 /data/
 ├── 3306
@@ -14,16 +16,13 @@ pkill mysqld
 │   ├── my.cnf
 │   └── mysql
 └── 3307
-├── data
-├── my.cnf
-└── mysql
-<div>
+    ├── data
+    ├── my.cnf
+    └── mysql
+```
 
-<hr />
-
-</div>
-<span style="color: #ff0000;"><strong>my.cnf配置文件内容</strong></span>
-
+### my.cnf配置文件内容
+```bash
 [client]
 port = 3306
 socket = /data/3306/mysql.sock
@@ -84,6 +83,7 @@ innodb_log_files_in_group = 3
 innodb_max_dirty_pages_pct = 90
 innodb_lock_wait_timeout = 120
 innodb_file_per_table = 0
+
 [mysqldump]
 quick
 max_allowed_packet = 2M
@@ -91,18 +91,20 @@ max_allowed_packet = 2M
 [mysqld_safe]
 log-error = /data/3306/mysql_3306.err
 pid-file = /data/3306/mysqld.pid
+```
+> 需要修改文件中的端口号和server-id
 
-<hr />
-
-<span style="color: #ff0000;"><strong>mysql启动脚本</strong></span>
-
+mysql启动脚本
+```bash
 #!/bin/sh
+
 #init
 port=3306
 mysql_user="root"
-mysql_pwd="wenmeng"
+mysql_pwd="root"
 CmdPath="/application/mysql/bin"
 mysql_sock="/data/${port}/mysql.sock"
+
 #startup function
 function_start_mysql()
 {
@@ -116,65 +118,63 @@ fi
 }
 
 #stop function
-function_stop_mysql()
-{
-if [ ! -e "$mysql_sock" ];then
-printf "MySQL is stopped...\n"
-exit
-else
-printf "Stoping MySQL...\n"
-${CmdPath}/mysqladmin -u ${mysql_user} -p${mysql_pwd} -S /data/${port}/mysql.sock shutdown
-fi
+function_stop_mysql(){
+  if [ ! -e "$mysql_sock" ];then
+  printf "MySQL is stopped...\n"
+  exit
+  else
+  printf "Stoping MySQL...\n"
+  ${CmdPath}/mysqladmin -u ${mysql_user} -p${mysql_pwd} -S /data/${port}/mysql.sock shutdown
+  fi
 }
 
 #restart function
-function_restart_mysql()
-{
-printf "Restarting MySQL...\n"
-function_stop_mysql
-sleep 2
-function_start_mysql
+function_restart_mysql(){
+  printf "Restarting MySQL...\n"
+  function_stop_mysql
+  sleep 2
+  function_start_mysql
 }
 
 case $1 in
-start)
-function_start_mysql
-;;
-stop)
-function_stop_mysql
-;;
-restart)
-function_restart_mysql
-;;
-*)
-printf "Usage: /data/${port}/mysql {start|stop|restart}\n"
+  start)
+    function_start_mysql
+  ;;
+  stop)
+    function_stop_mysql
+  ;;
+  restart)
+   function_restart_mysql
+  ;;
+  *)
+    printf "Usage: /data/${port}/mysql {start|stop|restart}\n"
 esac
+```
+> 启动脚本需要修改文件中的端口号，管理用户和密码
 
-<hr />
 
-<span style="color: #e53333;">配置文件：<span style="color: #e53333; white-space: normal;">需要修改文件中的端口号和</span><span style="color: #e53333; white-space: normal;">server-id</span></span>
-
-<span style="color: #e53333;">启动脚本：需要修改文件中的端口号，管理用户和密码</span>
-
-<span style="color: #ff0000;"><strong>修改目录管理权限</strong></span>
-
+### 修改目录管理权限
+```bash
 chown -R mysql.mysql /data
+```
 
-<span style="color: #ff0000;"><strong>添加启动脚本执行权限</strong></span>
 
+### 添加启动脚本执行权限
+```bash
 find /data/ -type f -name mysql | xargs chmod +x
+```
 
-<span style="color: #ff0000;"><strong>初始化数据库</strong></span>
-
+### 初始化数据库
+```bash
 /application/mysql/scripts/mysql_install_db --basedir=/application/mysql --datadir=/data/3306/data --user=mysql
-
 /application/mysql/scripts/mysql_install_db --basedir=/application/mysql --datadir=/data/3307/data --user=mysql
+```
 
-<span style="color: #ff0000;"><strong>启动数据库</strong></span>
-
+### 启动数据库
+```bash
 /data/3306/mysql start
-
 /data/3307/mysql start
+```
 
 
 ---
