@@ -3,7 +3,6 @@
 <!--more-->
 原文：https://www.cnblogs.com/langdashu/p/5889352.html
 
-&nbsp;
 
 参数详解（补充ing...）
 
@@ -331,7 +330,6 @@ interactive-timeout #mysqlhotcopy使用lock tables、flush tables和cp或scp来�
 
 #与mysqldump备份不同,mysqldump属于逻辑备份,备份时是执行的sql语句.使用mysqlhotcopy命令前需要要安装相应的软件依赖包.
 
-&nbsp;
 
 [mysqld_safe]
 

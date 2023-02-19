@@ -104,12 +104,20 @@ mysqld --initialize-insecure --user=mysql --basedir=/server/tools/mysql --datadi
 basedir=/application/mysql
 datadir=/data/mysql
 socket=/tmp/mysql.sock
+pid-file=mysqld.pid
 server_id=1
 port=3306
+log-bin=/data/mysql-bin
+relay-log = /data/mysql-relay-bin
+replicate-wild-ignore-table=mysql.%
+replicate-wild-ignore-table=information_schema.%
+gtid-mode=on
+enforce-gtid-consistency=true
+
 
 [mysql]
 socket=/tmp/mysql.sock
-prompt=master-[\\d]&gt;
+prompt=mysql-[\\d]>
 
 
 [mysqld_safe]
