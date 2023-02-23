@@ -4,6 +4,11 @@
         "source": "/:slug(\\d{1,})\\.html",
         "destination": "/post/:slug",
         "statusCode": 301
+      },
+      {
+        "source": "/links.html",
+        "destination": "/friends/",
+        "statusCode": 301
       }
     ]
 }
