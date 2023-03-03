@@ -1,0 +1,260 @@
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>Logrus日志库的使用 - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路，一个记录运维开发、自动化运维、DevOps、Kubernetes、Docker、编程等技术笔记的博客，与您分享实用技巧和心得"><meta name=keywords content><meta itemprop=name content="Logrus日志库的使用"><meta itemprop=description content><meta itemprop=datePublished content="2023-03-03T22:33:19+08:00"><meta itemprop=dateModified content="2023-03-03T22:33:19+08:00"><meta itemprop=wordCount content="555"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content=","><meta property="og:title" content="Logrus日志库的使用"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/logrus%E6%97%A5%E5%BF%97%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-03-03T22:33:19+08:00"><meta property="article:modified_time" content="2023-03-03T22:33:19+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="Logrus日志库的使用"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/logrus%E6%97%A5%E5%BF%97%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/><link rel=prev href=https://www.soulchild.cn/post/gin%E6%A1%86%E6%9E%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E9%AA%8C%E8%AF%81%E5%99%A8/><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Logrus日志库的使用","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/logrus%E6%97%A5%E5%BF%97%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8\/"},"genre":"posts","keywords":"","wordcount":555,"url":"https:\/\/www.soulchild.cn\/post\/logrus%E6%97%A5%E5%BF%97%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8\/","datePublished":"2023-03-03T22:33:19+08:00","dateModified":"2023-03-03T22:33:19+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden=true></i></h2><div class="toc-content always-active" id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>Logrus日志库的使用</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/golang/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> golang</a></span></div><div class=post-meta-line><span title="2023-03-03 22:33:19"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2023-03-03 22:33">2023-03-03 22:33</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 555 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 3 分钟</span>&nbsp;<span id=busuanzi_container_page_pv class="busuanzi_visitors comment-visitors" data-flag-title=Logrus日志库的使用>
+<i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_page_pv>-</span>&nbsp;次阅读
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#设置日志级别>设置日志级别</a></li><li><a href=#设置显示代码行数和文件名>设置显示代码行数和文件名</a></li><li><a href=#设置日志格式json--text>设置日志格式(json & text)</a></li><li><a href=#第三方日志格式>第三方日志格式</a></li><li><a href=#添加自定义字段>添加自定义字段</a></li><li><a href=#将日志输出到多个地方>将日志输出到多个地方</a></li><li><a href=#自己创建log实例>自己创建log实例</a></li><li><a href=#自定义格式>自定义格式</a></li></ul></li></ul></li></ul></nav></div></div><div class=content id=content data-end-flag=---><h4 id=设置日志级别>设置日志级别</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=s>&#34;github.com/sirupsen/logrus&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>logrus</span><span class=p>.</span><span class=nf>SetLevel</span><span class=p>(</span><span class=nx>logrus</span><span class=p>.</span><span class=nx>TraceLevel</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>logrus</span><span class=p>.</span><span class=nf>Trace</span><span class=p>(</span><span class=s>&#34;trace msg&#34;</span><span class=p>)</span> <span class=c1>// Trace级别显示所有的日志
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>logrus</span><span class=p>.</span><span class=nf>Debug</span><span class=p>(</span><span class=s>&#34;debug msg&#34;</span><span class=p>)</span> <span class=c1>// Debug显示debug、info、warn、error、fatal、panic
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>logrus</span><span class=p>.</span><span class=nf>Info</span><span class=p>(</span><span class=s>&#34;info msg&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=nx>logrus</span><span class=p>.</span><span class=nf>Warn</span><span class=p>(</span><span class=s>&#34;warn msg&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=nx>logrus</span><span class=p>.</span><span class=nf>Error</span><span class=p>(</span><span class=s>&#34;error msg&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=nx>logrus</span><span class=p>.</span><span class=nf>Fatal</span><span class=p>(</span><span class=s>&#34;fatal msg&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=nx>logrus</span><span class=p>.</span><span class=nf>Panic</span><span class=p>(</span><span class=s>&#34;panic msg&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// xx、xxf、xxln的区别
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>logrus</span><span class=p>.</span><span class=nf>Info</span><span class=p>(</span><span class=s>&#34;hello&#34;</span><span class=p>,</span> <span class=s>&#34;world&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=nx>logrus</span><span class=p>.</span><span class=nf>Infof</span><span class=p>(</span><span class=s>&#34;hello %s&#34;</span><span class=p>,</span> <span class=s>&#34;world&#34;</span><span class=p>)</span> <span class=c1>// 支持格式化输出
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nx>logrus</span><span class=p>.</span><span class=nf>Infoln</span><span class=p>(</span><span class=s>&#34;hello&#34;</span><span class=p>,</span> <span class=s>&#34;world&#34;</span><span class=p>)</span>   <span class=c1>// 每个参数用空格分割
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=设置显示代码行数和文件名>设置显示代码行数和文件名</h4><p>方便定位代码位置</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=nx>logrus</span><span class=p>.</span><span class=nf>SetReportCaller</span><span class=p>(</span><span class=kc>true</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=设置日志格式json--text>设置日志格式(json & text)</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl>	<span class=c1>// 设置为json格式
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>logrus</span><span class=p>.</span><span class=nf>SetFormatter</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>logrus</span><span class=p>.</span><span class=nx>JSONFormatter</span><span class=p>{})</span>
+</span></span><span class=line><span class=cl>	<span class=nx>logrus</span><span class=p>.</span><span class=nf>Info</span><span class=p>(</span><span class=s>&#34;hello&#34;</span><span class=p>,</span> <span class=s>&#34;world&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 设置为text格式
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>logrus</span><span class=p>.</span><span class=nf>SetFormatter</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>logrus</span><span class=p>.</span><span class=nx>TextFormatter</span><span class=p>{})</span>
+</span></span><span class=line><span class=cl>	<span class=nx>logrus</span><span class=p>.</span><span class=nf>Info</span><span class=p>(</span><span class=s>&#34;hello&#34;</span><span class=p>,</span> <span class=s>&#34;world&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=第三方日志格式>第三方日志格式</h4><ul><li><a href=https://github.com/joonix/log target=_blank rel="external nofollow noopener noreferrer">FluentdFormatter<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>. Formats entries that can be parsed by Kubernetes and Google Container Engine.</li><li><a href=https://github.com/fabienm/go-logrus-formatters target=_blank rel="external nofollow noopener noreferrer">GELF<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>. Formats entries so they comply to Graylog&rsquo;s <a href=http://docs.graylog.org/en/2.4/pages/gelf.html target=_blank rel="external nofollow noopener noreferrer">GELF 1.1 specification<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>.</li><li><a href=https://github.com/bshuster-repo/logrus-logstash-hook target=_blank rel="external nofollow noopener noreferrer">logstash<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>. Logs fields as <a href=http://logstash.net/ target=_blank rel="external nofollow noopener noreferrer">Logstash<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a> Events.</li><li><a href=https://github.com/x-cray/logrus-prefixed-formatter target=_blank rel="external nofollow noopener noreferrer">prefixed<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>. Displays log entry source along with alternative layout.</li><li><a href=https://github.com/aybabtme/logzalgo target=_blank rel="external nofollow noopener noreferrer">zalgo<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>. Invoking the Power of Zalgo.</li><li><a href=https://github.com/antonfisher/nested-logrus-formatter target=_blank rel="external nofollow noopener noreferrer">nested-logrus-formatter<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>. Converts logrus fields to a nested structure.</li><li><a href=https://github.com/zput/zxcTool target=_blank rel="external nofollow noopener noreferrer">powerful-logrus-formatter<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>. get fileName, log&rsquo;s line number and the latest function&rsquo;s name when print log; Sava log to files.</li><li><a href=https://github.com/nolleh/caption_json_formatter target=_blank rel="external nofollow noopener noreferrer">caption-json-formatter<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>. logrus&rsquo;s message json formatter with human-readable caption added.</li></ul><h4 id=添加自定义字段>添加自定义字段</h4><p>注意使用withField或者withFields后，之前设置的字段就失效了。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl>	<span class=c1>// 在日志中添加指定的字段
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>logrus</span><span class=p>.</span><span class=nf>WithField</span><span class=p>(</span><span class=s>&#34;service&#34;</span><span class=p>,</span> <span class=s>&#34;myproj&#34;</span><span class=p>).</span><span class=nf>Info</span><span class=p>(</span><span class=s>&#34;指定自定义字段的日志&#34;</span><span class=p>)</span> <span class=c1>// 临时使用
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>log</span> <span class=o>:=</span> <span class=nx>logrus</span><span class=p>.</span><span class=nf>WithField</span><span class=p>(</span><span class=s>&#34;service&#34;</span><span class=p>,</span> <span class=s>&#34;myproj&#34;</span><span class=p>)</span>             <span class=c1>// 方便后续使用
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>log</span><span class=p>.</span><span class=nf>Info</span><span class=p>(</span><span class=s>&#34;指定自定义字段的日志&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 在日志中添加指定的多个字段
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>log</span> <span class=p>=</span> <span class=nx>logrus</span><span class=p>.</span><span class=nf>WithFields</span><span class=p>(</span><span class=nx>logrus</span><span class=p>.</span><span class=nx>Fields</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=s>&#34;key1&#34;</span><span class=p>:</span> <span class=s>&#34;v1&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=s>&#34;key2&#34;</span><span class=p>:</span> <span class=s>&#34;v2&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>	<span class=p>})</span> <span class=c1>// 直接.Info(&#34;xxx&#34;)也可以直接调用
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>log</span><span class=p>.</span><span class=nf>Info</span><span class=p>(</span><span class=s>&#34;指定自定义字段的日志&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=将日志输出到多个地方>将日志输出到多个地方</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl>	<span class=c1>// 多个输出目标
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>writer1</span> <span class=o>:=</span> <span class=o>&amp;</span><span class=nx>bytes</span><span class=p>.</span><span class=nx>Buffer</span><span class=p>{}</span>                                            <span class=c1>// 内存
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>writer2</span> <span class=o>:=</span> <span class=nx>os</span><span class=p>.</span><span class=nx>Stdout</span>                                                  <span class=c1>// 标准输出
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>writer3</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>os</span><span class=p>.</span><span class=nf>OpenFile</span><span class=p>(</span><span class=s>&#34;log.txt&#34;</span><span class=p>,</span> <span class=nx>os</span><span class=p>.</span><span class=nx>O_WRONLY</span><span class=p>|</span><span class=nx>os</span><span class=p>.</span><span class=nx>O_CREATE</span><span class=p>,</span> <span class=mo>0755</span><span class=p>)</span> <span class=c1>// 文件
+</span></span></span><span class=line><span class=cl><span class=c1></span>	
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>log</span><span class=p>.</span><span class=nf>Fatalf</span><span class=p>(</span><span class=s>&#34;创建日志文件失败: %v&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>logrus</span><span class=p>.</span><span class=nf>SetOutput</span><span class=p>(</span><span class=nx>io</span><span class=p>.</span><span class=nf>MultiWriter</span><span class=p>(</span><span class=nx>writer1</span><span class=p>,</span> <span class=nx>writer2</span><span class=p>,</span> <span class=nx>writer3</span><span class=p>))</span> <span class=c1>// 设置多个输出目标
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=nx>logrus</span><span class=p>.</span><span class=nf>Info</span><span class=p>(</span><span class=s>&#34;info msg&#34;</span><span class=p>)</span>     <span class=c1>// 写入日志
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>io</span><span class=p>.</span><span class=nf>Copy</span><span class=p>(</span><span class=nx>os</span><span class=p>.</span><span class=nx>Stdout</span><span class=p>,</span> <span class=nx>writer1</span><span class=p>)</span> <span class=c1>// 读取buffer中的日志,不过没啥必要
+</span></span></span></code></pre></td></tr></table></div></div><blockquote><p>只要实现了Writer接口就可以作为输出目标，Writer接口定义如下
+type Writer interface {
+Write(p []byte) (n int, err error)
+}</p></blockquote><h4 id=自己创建log实例>自己创建log实例</h4><p>默认exported.go中又个std对象，是logrus默认创建好的，上面的代码都是用的std实例，下面我们使用和他一样的方法创建一个log实例</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl>	<span class=nx>log</span> <span class=o>:=</span> <span class=nx>logrus</span><span class=p>.</span><span class=nf>New</span><span class=p>()</span> <span class=c1>// 这里拿到的log和直接使用logrus是相同的方法New出来的
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>log</span><span class=p>.</span><span class=nf>SetFormatter</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>myLogFormatter</span><span class=p>{})</span>
+</span></span><span class=line><span class=cl>	<span class=nx>log</span><span class=p>.</span><span class=nf>SetLevel</span><span class=p>(</span><span class=nx>logrus</span><span class=p>.</span><span class=nx>DebugLevel</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>log</span><span class=p>.</span><span class=nf>Info</span><span class=p>(</span><span class=s>&#34;test&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=自定义格式>自定义格式</h4><p>自己实现一个<code>Formatter</code>接口，他的定义如下。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>  Formatter接口需要实现Format方法, 他接收一个Entry类型的参数，这个参数包括日志的所有字段，比如
+</span></span></span><span class=line><span class=cl><span class=cm>entry.Message、entry.Time、entry.Level，通过WithField或WithFields添加的字段包含在entry.Data中。
+</span></span></span><span class=line><span class=cl><span class=cm>  Format方法的返回值是一个byte类型的切片和一个err.
+</span></span></span><span class=line><span class=cl><span class=cm>*/</span>
+</span></span><span class=line><span class=cl><span class=kd>type</span> <span class=nx>Formatter</span> <span class=kd>interface</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nf>Format</span><span class=p>(</span><span class=o>*</span><span class=nx>Entry</span><span class=p>)</span> <span class=p>([]</span><span class=kt>byte</span><span class=p>,</span> <span class=kt>error</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>Entry类型包含如下内容</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kd>type</span> <span class=nx>Entry</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>Logger</span> <span class=o>*</span><span class=nx>Logger</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Contains all the fields set by the user.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>Data</span> <span class=nx>Fields</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Time at which the log entry was created
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>Time</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Time</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Level the log entry was logged at: Trace, Debug, Info, Warn, Error, Fatal or Panic
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// This field will be set on entry firing and the value will be equal to the one in Logger struct field.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>Level</span> <span class=nx>Level</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Calling method, with package name
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>Caller</span> <span class=o>*</span><span class=nx>runtime</span><span class=p>.</span><span class=nx>Frame</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Message passed to Trace, Debug, Info, Warn, Error, Fatal or Panic
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>Message</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// When formatter is called in entry.log(), a Buffer may be set to entry
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>Buffer</span> <span class=o>*</span><span class=nx>bytes</span><span class=p>.</span><span class=nx>Buffer</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// Contains the context set by the user. Useful for hook processing etc.
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>Context</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Context</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// err may contain a field formatting error
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=nx>err</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>Example</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/sirupsen/logrus&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 声明结构体
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>type</span> <span class=nx>myLogFormatter</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 实现Format方法
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>m</span> <span class=o>*</span><span class=nx>myLogFormatter</span><span class=p>)</span> <span class=nf>Format</span><span class=p>(</span><span class=nx>entry</span> <span class=o>*</span><span class=nx>logrus</span><span class=p>.</span><span class=nx>Entry</span><span class=p>)</span> <span class=p>([]</span><span class=kt>byte</span><span class=p>,</span> <span class=kt>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// fmt.Printf(&#34;%+v&#34;, entry)
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>log</span> <span class=o>:=</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Sprintf</span><span class=p>(</span><span class=s>&#34;Level %s | Msg %s | Time %s \n&#34;</span><span class=p>,</span> <span class=nx>entry</span><span class=p>.</span><span class=nx>Level</span><span class=p>,</span> <span class=nx>entry</span><span class=p>.</span><span class=nx>Message</span><span class=p>,</span> <span class=nx>entry</span><span class=p>.</span><span class=nx>Time</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=p>[]</span><span class=nb>byte</span><span class=p>(</span><span class=nx>log</span><span class=p>),</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>log</span> <span class=o>:=</span> <span class=nx>logrus</span><span class=p>.</span><span class=nf>New</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>	<span class=nx>log</span><span class=p>.</span><span class=nf>SetFormatter</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>myLogFormatter</span><span class=p>{})</span>
+</span></span><span class=line><span class=cl>	<span class=nx>log</span><span class=p>.</span><span class=nf>Info</span><span class=p>(</span><span class=s>&#34;test&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2023-03-03 22:33:19">更新于 2023-03-03 22:33&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/ class=post-tag>Tags</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/gin%E6%A1%86%E6%9E%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E9%AA%8C%E8%AF%81%E5%99%A8/ class=post-nav-item rel=prev title=Gin框架自定义验证器><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>Gin框架自定义验证器</a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wx.png alt="SoulChild 微信号">
+<span data-animation>微信号</span></div><div><img src=/images/wechatpay.png alt="SoulChild 微信打赏">
+<span data-animation>微信打赏</span></div></div></div><div id=comments><div id=giscus><script src=https://giscus.app/client.js data-repo=SoulChildTc/soulchild-blog data-repo-id=R_kgDOIwJKxg data-category=General data-category-id=DIC_kwDOIwJKxs4CTwRk data-mapping=title data-theme=preferred_color_scheme data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-lang=zh-CN data-loading=lazy crossorigin=anonymous async defer></script></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://giscus.app/ rel="external nofollow noopener noreferrer">giscus</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?7b986d4ea8e2e50e9c04984b78170660",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})()</script><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright fa-fw" aria-hidden=true></i>
+<span itemprop=copyrightYear>2017 - 2023</span><span class=author itemprop=copyrightHolder>
+<a href=https://www.soulchild.cn target=_blank rel="external nofollow noopener noreferrer">SoulChild</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class=site-time title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden=true></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor"><span id=busuanzi_container_site_uv title=总访客数><i class="fa-regular fa-user fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_uv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span><span id=busuanzi_container_site_pv class=footer-divider title=总访问量><i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_pv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span></div><div class="footer-line beian"><span class="icp footer-divider">特别感谢
+<a href=https://gohugo.io target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.109.0">Hugo</a> |
+<a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v0.2.17-RC">FixIt</a> |
+<a href=https://github.com target=_blank rel="noopener noreffer">GitHub</a> |
+<a href=https://vercel.com target=_blank rel="noopener noreffer">Vercel</a></span></div></div></footer></div><div class=widgets><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role=button aria-label=回到顶部><i class="fa-solid fa-arrow-up fa-fw" aria-hidden=true></i><span class=variant-numeric>0%</span></div><div class="fixed-button view-comments d-none" role=button aria-label=查看评论><i class="fa-solid fa-comment fa-fw" aria-hidden=true></i></div></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0;--bg-progress:#438a55;--bg-progress-dark:#438a55></div><noscript><div class=noscript-warning>FixIt 主题在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/lightgallery/css/lightgallery-bundle.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/pace/themes/green/pace-theme-bounce.css><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/algoliasearch-lite.umd.min.js defer></script><script src=/lib/lazysizes/lazysizes.min.js async defer></script><script src=/lib/lightgallery/lightgallery.min.js defer></script><script src=/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js defer></script><script src=/lib/lightgallery/plugins/zoom/lg-zoom.min.js defer></script><script src=/lib/typeit/index.umd.js defer></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/lib/pangu/pangu.min.js defer></script><script src=/lib/cell-watermark/watermark.min.js defer></script><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async defer></script><script src=/lib/pace/pace.min.js async defer></script><script>window.config={autoBookmark:!0,code:{copyTitle:"复制到剪贴板",editLockTitle:"锁定可编辑代码块",editUnLockTitle:"解锁可编辑代码块",editable:!0,maxShownLines:50},comment:{enable:!0,expired:!1,giscus:{darkTheme:"dark",lightTheme:"light"}},data:{"typeit-header-subtitle-desktop":"/usr/bin/sleep infinity","typeit-header-subtitle-mobile":"/usr/bin/sleep infinity"},enablePWA:!0,lightgallery:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},pangu:{enable:!0,selector:"article"},search:{algoliaAppID:"CE9G7Q4H6N",algoliaIndex:"soulchild-blog",algoliaSearchKey:"0f69a431d92a03c2cf4143d8dbc6af0a",highlightTag:"em",maxResultLength:20,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},siteTime:"2017-06-08T21:38:36+08:00",typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},duration:-1,speed:100},watermark:{appendto:".wrapper\u003emain",colspacing:300,content:"SoulChild随笔记",enable:!0,fontfamily:"inherit",fontsize:.85,height:300,opacity:.1,rotate:15,rowspacing:100,width:300}}</script><script src=/js/theme.min.js defer></script></body></html>
