@@ -3,6 +3,7 @@
 
 <!--more-->
 
+
 #### 设置日志级别
 ```go
 package main
@@ -57,7 +58,7 @@ logrus.SetReportCaller(true)
 - [caption-json-formatter](https://github.com/nolleh/caption_json_formatter). logrus's message json formatter with human-readable caption added.
 
 #### 添加自定义字段
-注意使用withField或者withFields后，之前设置的字段就失效了。
+注意使用withField或者withFields后，之前设置的就失效了。
 ```go
 	// 在日志中添加指定的字段
 	logrus.WithField("service", "myproj").Info("指定自定义字段的日志") // 临时使用
@@ -92,6 +93,7 @@ logrus.SetReportCaller(true)
 > type Writer interface {
 >     Write(p []byte) (n int, err error)
 > }
+
 
 #### 自己创建log实例
 默认exported.go中又个std对象，是logrus默认创建好的，上面的代码都是用的std实例，下面我们使用和他一样的方法创建一个log实例
@@ -174,6 +176,74 @@ func main() {
 }
 
 ```
+
+#### Hook
+添加hook可以再发送日志前执行某些操作，比如遇到Error、panic、fatal时，发送日志到其他地方，添加hook需要实现下面这个接口
+```go
+type Hook interface {
+  Levels() []Level  // 哪些级别会触发Hook
+  Fire(*Entry) error // 日志输出前会先执行Fire
+}
+```
+
+下面是一个例子，将一些错误日志发送到sentry
+```go
+// https://github.com/evalphobia/logrus_sentry
+import (
+  "github.com/sirupsen/logrus"
+  "github.com/evalphobia/logrus_sentry"
+)
+
+func main() {
+  log       := logrus.New()
+  hook, err := logrus_sentry.NewSentryHook(YOUR_DSN, []logrus.Level{
+    logrus.PanicLevel,
+    logrus.FatalLevel,
+    logrus.ErrorLevel,
+  })  // logrus.AllLevels代表所有级别,具体可看源码
+
+  if err == nil {
+    log.Hooks.Add(hook)
+  }
+}
+```
+> 三方Hook: https://github.com/sirupsen/logrus/wiki/Hooks
+
+
+#### 集成第三方日志轮转
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/sirupsen/logrus"
+	"gopkg.in/natefinch/lumberjack.v2"
+)
+
+func main() {
+
+	log := logrus.New()
+	// log.SetFormatter(&myLogFormatter{})
+
+	log.SetOutput(&lumberjack.Logger{
+		Filename:   "./foo.log",
+		MaxSize:    1,     // 单个文件最大大小, 单位M
+		MaxBackups: 3,     // 最多保留多少个文件
+		MaxAge:     28,    // 每个最多保留多少天
+		Compress:   false, // 启用压缩
+		LocalTime:  true,  // 默认使用UTC时间, 改为使用本地时间
+	})
+	for {
+		log.Info("testtesttesttesttesttesttesttesttesttesttesttesttesttesttest")
+		log.Info("testtesttesttesttesttesttesttesttesttesttesttesttesttesttest")
+		time.Sleep(time.Microsecond * 500)
+	}
+
+}
+```
+
 
 
 ---
