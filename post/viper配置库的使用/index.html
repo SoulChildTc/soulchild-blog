@@ -1,0 +1,593 @@
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>Viper配置库的使用 - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路，一个记录运维开发、自动化运维、DevOps、Kubernetes、Docker、编程等技术笔记的博客，与您分享实用技巧和心得"><meta name=keywords content><meta itemprop=name content="Viper配置库的使用"><meta itemprop=description content><meta itemprop=datePublished content="2023-03-04T18:56:11+08:00"><meta itemprop=dateModified content="2023-03-04T18:56:11+08:00"><meta itemprop=wordCount content="902"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content=","><meta property="og:title" content="Viper配置库的使用"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/viper%E9%85%8D%E7%BD%AE%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-03-04T18:56:11+08:00"><meta property="article:modified_time" content="2023-03-04T18:56:11+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="Viper配置库的使用"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/viper%E9%85%8D%E7%BD%AE%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/><link rel=prev href=https://www.soulchild.cn/post/logrus%E6%97%A5%E5%BF%97%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Viper配置库的使用","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/viper%E9%85%8D%E7%BD%AE%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8\/"},"genre":"posts","keywords":"","wordcount":902,"url":"https:\/\/www.soulchild.cn\/post\/viper%E9%85%8D%E7%BD%AE%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8\/","datePublished":"2023-03-04T18:56:11+08:00","dateModified":"2023-03-04T18:56:11+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden=true></i></h2><div class="toc-content always-active" id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>Viper配置库的使用</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/golang/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> golang</a></span></div><div class=post-meta-line><span title="2023-03-04 18:56:11"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2023-03-04 18:56">2023-03-04 18:56</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 902 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 5 分钟</span>&nbsp;<span id=busuanzi_container_page_pv class="busuanzi_visitors comment-visitors" data-flag-title=Viper配置库的使用>
+<i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_page_pv>-</span>&nbsp;次阅读
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#一简介>一、简介</a><ul><li><a href=#viper支持功能>viper支持功能</a></li><li><a href=#优先级>优先级</a></li></ul></li><li><a href=#二安装>二、安装</a></li><li><a href=#三常见用法>三、常见用法</a><ul><li><a href=#1-设置默认值>1. 设置默认值</a></li><li><a href=#2-从文件读取>2. 从文件读取</a></li><li><a href=#3-设置和覆盖参数>3. 设置和覆盖参数</a></li><li><a href=#4-配置合并和将viper的配置持久化到本地>4. 配置合并和将viper的配置持久化到本地</a></li><li><a href=#5-开启自动重新加载配置文件>5. 开启自动重新加载配置文件</a></li><li><a href=#6--参数别名>6. 参数别名</a></li><li><a href=#7-使用环境变量>7. 使用环境变量</a></li><li><a href=#8-使用命令行选项>8. 使用命令行选项</a></li><li><a href=#9-远程配置中心>9. 远程配置中心</a></li><li><a href=#10-将配置反序列化到结构体>10. 将配置反序列化到结构体</a></li><li><a href=#11-读取相关>11. 读取相关</a></li></ul></li></ul></li></ul></nav></div></div><div class=content id=content data-end-flag=---><h3 id=一简介>一、简介</h3><h4 id=viper支持功能>viper支持功能</h4><ul><li>设置默认值</li><li>从 <code>JSON</code>, <code>TOML</code>, <code>YAML</code>, <code>HCL</code>, <code>envfile</code>, <code>Java properties</code>中读取配置</li><li>实时监听和自动重载配置文件（可选功能）</li><li>从环境变量读取配置</li><li>从远程配置系统（etcd 或 Consul）读取，并监听和自动重载</li><li>从命令行flag读取</li><li>从缓冲区读取</li><li>代码中手动Set配置</li><li>参数别名系统</li><li>支持查找多个路径为配置文件目录</li></ul><blockquote><p>注意: viper中的配置项不区分大小写</p></blockquote><h4 id=优先级>优先级</h4><p>获取参数的优先级，从上到下，从高到低</p><ul><li><code>Set()</code> 函数设置的参数，优先级最高</li><li><code>flag</code> 命令行的参数</li><li><code>env</code> 环境变量的参数</li><li><code>config</code> 配置文件的参数</li><li><code>key/value store</code> 远程配置</li><li><code>default</code> 默认值</li></ul><h3 id=二安装>二、安装</h3><p><code>go get github.com/spf13/viper</code></p><h3 id=三常见用法>三、常见用法</h3><h4 id=1-设置默认值>1. 设置默认值</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=nx>viper</span><span class=p>.</span><span class=nf>SetDefault</span><span class=p>(</span><span class=s>&#34;ContentDir&#34;</span><span class=p>,</span> <span class=s>&#34;content&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nx>viper</span><span class=p>.</span><span class=nf>SetDefault</span><span class=p>(</span><span class=s>&#34;LayoutDir&#34;</span><span class=p>,</span> <span class=s>&#34;layouts&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nx>viper</span><span class=p>.</span><span class=nf>SetDefault</span><span class=p>(</span><span class=s>&#34;Taxonomies&#34;</span><span class=p>,</span> <span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kt>string</span><span class=p>{</span><span class=s>&#34;tag&#34;</span><span class=p>:</span> <span class=s>&#34;tags&#34;</span><span class=p>,</span> <span class=s>&#34;category&#34;</span><span class=p>:</span> <span class=s>&#34;categories&#34;</span><span class=p>})</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=2-从文件读取>2. 从文件读取</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=nx>viper</span><span class=p>.</span><span class=nf>SetConfigFile</span><span class=p>(</span><span class=s>&#34;app.yaml&#34;</span><span class=p>)</span> <span class=c1>// 配置文件路径,无扩展名的配置文件用这个读比较好
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>viper</span><span class=p>.</span><span class=nf>SetConfigName</span><span class=p>(</span><span class=s>&#34;config&#34;</span><span class=p>)</span> <span class=c1>// 配置文件的名称, 不要带扩展名
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>viper</span><span class=p>.</span><span class=nf>SetConfigType</span><span class=p>(</span><span class=s>&#34;yaml&#34;</span><span class=p>)</span> <span class=c1>// 如果文件名称中没有扩展名，则需要指定配置文件的格式
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>viper</span><span class=p>.</span><span class=nf>AddConfigPath</span><span class=p>(</span><span class=s>&#34;/etc/appname/&#34;</span><span class=p>)</span>   <span class=c1>// 在/etc/appname/路径中查找配置文件
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>viper</span><span class=p>.</span><span class=nf>AddConfigPath</span><span class=p>(</span><span class=s>&#34;$HOME/.appname&#34;</span><span class=p>)</span>  <span class=c1>// 多次调用，添加多个查找路径
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>viper</span><span class=p>.</span><span class=nf>AddConfigPath</span><span class=p>(</span><span class=s>&#34;.&#34;</span><span class=p>)</span>               <span class=c1>// 多次调用，添加多个查找路径
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>err</span> <span class=o>:=</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>ReadInConfig</span><span class=p>()</span> <span class=c1>// 查找并读取配置文件
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>ReadInConfig</span><span class=p>();</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>_</span><span class=p>,</span> <span class=nx>ok</span> <span class=o>:=</span> <span class=nx>err</span><span class=p>.(</span><span class=nx>viper</span><span class=p>.</span><span class=nx>ConfigFileNotFoundError</span><span class=p>);</span> <span class=nx>ok</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=c1>// 找不到配置文件
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=c1>// 发生了其他的错误
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>var SupportedExts = []string{&ldquo;json&rdquo;, &ldquo;toml&rdquo;, &ldquo;yaml&rdquo;, &ldquo;yml&rdquo;, &ldquo;properties&rdquo;, &ldquo;props&rdquo;, &ldquo;prop&rdquo;, &ldquo;hcl&rdquo;, &ldquo;tfvars&rdquo;, &ldquo;dotenv&rdquo;, &ldquo;env&rdquo;, &ldquo;ini&rdquo;}</p><p>var SupportedRemoteProviders = []string{&ldquo;etcd&rdquo;, &ldquo;etcd3&rdquo;, &ldquo;consul&rdquo;, &ldquo;firestore&rdquo;}</p></blockquote><h4 id=3-设置和覆盖参数>3. 设置和覆盖参数</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=nx>viper</span><span class=p>.</span><span class=nf>Set</span><span class=p>(</span><span class=s>&#34;Key&#34;</span><span class=p>,</span> <span class=s>&#34;Value&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=4-配置合并和将viper的配置持久化到本地>4. 配置合并和将viper的配置持久化到本地</h4><ul><li><code>WriteConfig</code>将当前的 viper 配置写入到(最后一次读取到的配置文件名+ConfiogType为后缀)，覆盖写入。</li><li><code>SafeWriteConfig</code>将当前的 viper 配置写入到(最后一次读取到的配置文件名+ConfiogType为后缀)，如果文件存在，返回error。</li><li><code>WriteConfigAs</code> 将当前的 viper 配置写入指定的文件路径，覆盖写入。(只能指定支持的后缀名)</li><li><code>SafeWriteConfigAs</code>将当前的 viper 配置写入指定的文件路径，如果文件存在，则返回err。(只能指定支持的后缀名)</li><li>获取最后一次读取的配置文件<code>fmt.Println(viper.GetViper().ConfigFileUsed())</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/spf13/viper&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>		1. 设置配置文件目录
+</span></span></span><span class=line><span class=cl><span class=cm>	*/</span>
+</span></span><span class=line><span class=cl>	<span class=nx>viper</span><span class=p>.</span><span class=nf>AddConfigPath</span><span class=p>(</span><span class=s>&#34;./config&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>		2. 读取第一个配置文件app.yaml
+</span></span></span><span class=line><span class=cl><span class=cm>		配置内容为
+</span></span></span><span class=line><span class=cl><span class=cm>		default:
+</span></span></span><span class=line><span class=cl><span class=cm>		  filename: app.yaml
+</span></span></span><span class=line><span class=cl><span class=cm>		  type: yaml
+</span></span></span><span class=line><span class=cl><span class=cm>	*/</span>
+</span></span><span class=line><span class=cl>	<span class=nx>viper</span><span class=p>.</span><span class=nf>SetConfigName</span><span class=p>(</span><span class=s>&#34;app&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>viper</span><span class=p>.</span><span class=nf>SetConfigType</span><span class=p>(</span><span class=s>&#34;yaml&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>ReadInConfig</span><span class=p>();</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Print</span><span class=p>(</span><span class=nx>err</span><span class=p>.</span><span class=nf>Error</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;只读取app.yaml:%+v \n&#34;</span><span class=p>,</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>AllSettings</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// /*
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// 	3. 添加一个默认配置
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// */
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>viper</span><span class=p>.</span><span class=nf>SetDefault</span><span class=p>(</span><span class=s>&#34;default.name&#34;</span><span class=p>,</span> <span class=s>&#34;代码设置的值&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>		4. 读取第二个配置文件.env.ini
+</span></span></span><span class=line><span class=cl><span class=cm>		配置内容为
+</span></span></span><span class=line><span class=cl><span class=cm>		type=ini
+</span></span></span><span class=line><span class=cl><span class=cm>		filename=.env.ini
+</span></span></span><span class=line><span class=cl><span class=cm>	*/</span>
+</span></span><span class=line><span class=cl>	<span class=nx>viper</span><span class=p>.</span><span class=nf>SetConfigName</span><span class=p>(</span><span class=s>&#34;.env&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>viper</span><span class=p>.</span><span class=nf>SetConfigType</span><span class=p>(</span><span class=s>&#34;ini&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// !!!!!合并配置, 后读取到的参数会覆盖之前的
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// 正常是会覆盖的，但是某些特殊情况不会覆盖，比如我测试yaml内容如果为default.type: yaml, ini的内容为type=ini, 这个情况就没有覆盖为ini
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>MergeInConfig</span><span class=p>();</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;合并配置出错&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>.</span><span class=nf>Error</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;读取.env.ini后:%+v \n&#34;</span><span class=p>,</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>AllSettings</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>		5. 持久化配置到本地
+</span></span></span><span class=line><span class=cl><span class=cm>		将 name=&#34;代码设置的值&#34; 保存到本地配置文件中
+</span></span></span><span class=line><span class=cl><span class=cm>	*/</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 获取保存到哪个文件
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;目标保存配置文件路径&#34;</span><span class=p>,</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>GetViper</span><span class=p>().</span><span class=nf>ConfigFileUsed</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// SafeWriteConfig
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>SafeWriteConfig</span><span class=p>();</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;1保存配置失败&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>.</span><span class=nf>Error</span><span class=p>())</span> <span class=c1>// 文件存在就会报错
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// WriteConfigAs
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>WriteConfigAs</span><span class=p>(</span><span class=s>&#34;./config/p.ini&#34;</span><span class=p>);</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;2保存配置失败&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>.</span><span class=nf>Error</span><span class=p>())</span> <span class=c1>// 文件存在就会报错
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=5-开启自动重新加载配置文件>5. 开启自动重新加载配置文件</h4><p>在读取完所有配置文件之后使用<code>viper.WatchConfig()</code>即可</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;time&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/fsnotify/fsnotify&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/spf13/viper&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>		1. 设置配置文件目录
+</span></span></span><span class=line><span class=cl><span class=cm>	*/</span>
+</span></span><span class=line><span class=cl>	<span class=nx>viper</span><span class=p>.</span><span class=nf>AddConfigPath</span><span class=p>(</span><span class=s>&#34;./config&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>		2. 读取第一个配置文件app.yaml
+</span></span></span><span class=line><span class=cl><span class=cm>		配置内容为
+</span></span></span><span class=line><span class=cl><span class=cm>		default:
+</span></span></span><span class=line><span class=cl><span class=cm>		  filename: app.yaml
+</span></span></span><span class=line><span class=cl><span class=cm>		  type: yaml
+</span></span></span><span class=line><span class=cl><span class=cm>	*/</span>
+</span></span><span class=line><span class=cl>	<span class=nx>viper</span><span class=p>.</span><span class=nf>SetConfigName</span><span class=p>(</span><span class=s>&#34;app&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>viper</span><span class=p>.</span><span class=nf>SetConfigType</span><span class=p>(</span><span class=s>&#34;yaml&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>ReadInConfig</span><span class=p>();</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Print</span><span class=p>(</span><span class=nx>err</span><span class=p>.</span><span class=nf>Error</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>        3. 文件监听的回调
+</span></span></span><span class=line><span class=cl><span class=cm>	*/</span>
+</span></span><span class=line><span class=cl>	<span class=nx>viper</span><span class=p>.</span><span class=nf>OnConfigChange</span><span class=p>(</span><span class=kd>func</span><span class=p>(</span><span class=nx>e</span> <span class=nx>fsnotify</span><span class=p>.</span><span class=nx>Event</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;配置文件发生变化:&#34;</span><span class=p>,</span> <span class=nx>e</span><span class=p>.</span><span class=nx>Name</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;操作类型:&#34;</span><span class=p>,</span> <span class=nx>e</span><span class=p>.</span><span class=nx>Op</span><span class=p>.</span><span class=nf>String</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>	<span class=p>})</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 启用文件监听
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>viper</span><span class=p>.</span><span class=nf>WatchConfig</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>for</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;当前所有配置:%+v \n&#34;</span><span class=p>,</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>AllSettings</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>		<span class=nx>time</span><span class=p>.</span><span class=nf>Sleep</span><span class=p>(</span><span class=mi>1</span> <span class=o>*</span> <span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=6--参数别名>6. 参数别名</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/spf13/viper&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>		1. 设置配置文件目录
+</span></span></span><span class=line><span class=cl><span class=cm>	*/</span>
+</span></span><span class=line><span class=cl>	<span class=nx>viper</span><span class=p>.</span><span class=nf>AddConfigPath</span><span class=p>(</span><span class=s>&#34;./config&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>		2. 读取第一个配置文件app.yaml
+</span></span></span><span class=line><span class=cl><span class=cm>		配置内容为
+</span></span></span><span class=line><span class=cl><span class=cm>		default:
+</span></span></span><span class=line><span class=cl><span class=cm>		  filename: app.yaml
+</span></span></span><span class=line><span class=cl><span class=cm>		  type: yaml
+</span></span></span><span class=line><span class=cl><span class=cm>	*/</span>
+</span></span><span class=line><span class=cl>	<span class=nx>viper</span><span class=p>.</span><span class=nf>SetConfigName</span><span class=p>(</span><span class=s>&#34;app&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>viper</span><span class=p>.</span><span class=nf>SetConfigType</span><span class=p>(</span><span class=s>&#34;yaml&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>ReadInConfig</span><span class=p>();</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Print</span><span class=p>(</span><span class=nx>err</span><span class=p>.</span><span class=nf>Error</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;读取app.yaml: %+v \n&#34;</span><span class=p>,</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>AllSettings</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>	
+</span></span><span class=line><span class=cl>	<span class=c1>// 设置别名filename == default.filename
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>viper</span><span class=p>.</span><span class=nf>RegisterAlias</span><span class=p>(</span><span class=s>&#34;filename&#34;</span><span class=p>,</span> <span class=s>&#34;default.filename&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;default.filename: &#34;</span><span class=p>,</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>GetString</span><span class=p>(</span><span class=s>&#34;default.filename&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;filename: &#34;</span><span class=p>,</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>GetString</span><span class=p>(</span><span class=s>&#34;filename&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;读取app.yaml: %+v \n&#34;</span><span class=p>,</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>AllSettings</span><span class=p>())</span> <span class=c1>// 添加别名后会多出别名的配置
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=7-使用环境变量>7. 使用环境变量</h4><p>使用环境变量有如下方式，如果多个地方设置了相同的参数，需要注意优先级(请看第一部分的简介)</p><ul><li><code>SetEnvPrefix</code> 设置环境变量前缀, <code>XXX</code>，viper会自动添加<code>_</code></li><li><code>BindEnv</code> 手动绑定一些环境变量作为参数</li><li><code>AutomaticEnv</code>自动查找模式，在Get()时viper会根据查找的参数，去环境变量里找对应的值。比如<code>Get("name")</code>，就找<code>NAME</code>,有设置前缀的话就自动加前缀</li><li><code>SetEnvKeyReplacer</code>如果使用<code>Get("aa-bb")</code>获取参数时，viper会从环境变量中查找<code>AA-BB</code>，但是变量名不能有<code>-</code>, 肯定会找不到，所以需要替换<code>AA-BB</code>为<code>AA_BB</code>，使用方法请查看下面的示例</li><li><code>viper.AllowEmptyEnv(true)</code>默认情况下，空环境变量被认为是未设置的，并根据优先级顺序查找config中的内容。使用<code>AllowEmptyEnv</code>方法将空的环境变量视为set。</li></ul><p>示例</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;os&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;strings&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/spf13/viper&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>		使用BindEnv获取环境变量的值
+</span></span></span><span class=line><span class=cl><span class=cm>	*/</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;使用BindEnv获取环境变量的值=========================================================&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 添加环境变量
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>os</span><span class=p>.</span><span class=nf>Setenv</span><span class=p>(</span><span class=s>&#34;MYAPP_NAME&#34;</span><span class=p>,</span> <span class=s>&#34;SoulChild&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>os</span><span class=p>.</span><span class=nf>Setenv</span><span class=p>(</span><span class=s>&#34;NAME2&#34;</span><span class=p>,</span> <span class=s>&#34;随笔记&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 设置环境变量的前缀为 MYAPP_
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>viper</span><span class=p>.</span><span class=nf>SetEnvPrefix</span><span class=p>(</span><span class=s>&#34;MYAPP&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 将name和MYAPP_NAME绑定, 自动识别的环境变量名, 会带上前缀
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>viper</span><span class=p>.</span><span class=nf>BindEnv</span><span class=p>(</span><span class=s>&#34;name&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 将name2和NAME2绑定, 绑定指定的环境变量名, 不会带前缀
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>viper</span><span class=p>.</span><span class=nf>BindEnv</span><span class=p>(</span><span class=s>&#34;name2&#34;</span><span class=p>,</span> <span class=s>&#34;NAME2&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 通过name和name2获取参数值
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>viper</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=s>&#34;name&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>viper</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=s>&#34;name2&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>os</span><span class=p>.</span><span class=nf>Setenv</span><span class=p>(</span><span class=s>&#34;MYAPP_NAME&#34;</span><span class=p>,</span> <span class=s>&#34;newname&#34;</span><span class=p>)</span> <span class=c1>// 如果修改了环境变量, 获取到的值也会发生变化
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>viper</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=s>&#34;name&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>viper</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=s>&#34;name2&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>		使用AutomaticEnv自动绑定变量
+</span></span></span><span class=line><span class=cl><span class=cm>	*/</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;使用AutomaticEnv=========================================================&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 添加环境变量
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>os</span><span class=p>.</span><span class=nf>Setenv</span><span class=p>(</span><span class=s>&#34;MYAPP_NAME2&#34;</span><span class=p>,</span> <span class=s>&#34;随笔记&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 设置环境变量的前缀为 MYAPP_
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>viper</span><span class=p>.</span><span class=nf>SetEnvPrefix</span><span class=p>(</span><span class=s>&#34;MYAPP&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 开启自动获取, 也就是Get(&#34;xx&#34;)的时候，自己去找对应的环境变量
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>viper</span><span class=p>.</span><span class=nf>AutomaticEnv</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>viper</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=s>&#34;name2&#34;</span><span class=p>))</span> <span class=c1>// 从环境变量查找MYAPP_NAME2, 如果没有设置前缀就找NAME2
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>		SetEnvKeyReplacer 替换参数中的字符
+</span></span></span><span class=line><span class=cl><span class=cm>	*/</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;SetEnvKeyReplacer=========================================================&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 设置环境变量
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>os</span><span class=p>.</span><span class=nf>Setenv</span><span class=p>(</span><span class=s>&#34;MYAPP_REFRESH_INTERVAL&#34;</span><span class=p>,</span> <span class=s>&#34;30s&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 创建替换器，将 `-` 替换为 `_`
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>replacer</span> <span class=o>:=</span> <span class=nx>strings</span><span class=p>.</span><span class=nf>NewReplacer</span><span class=p>(</span><span class=s>&#34;-&#34;</span><span class=p>,</span> <span class=s>&#34;_&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 设置替换器到viper实例中, viper内部会调用替换器的Replace()函数实现替换
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>viper</span><span class=p>.</span><span class=nf>SetEnvKeyReplacer</span><span class=p>(</span><span class=nx>replacer</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 后续get带`-`的参数，都会替换为`_`
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>viper</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=s>&#34;refresh-interval&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1>// 也可以自己实现viper.StringReplacer接口实现自定义替换。这个一般应该用不到,上面的方式足够用了
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// viper.NewWithOptions(viper.EnvKeyReplacer(strings.NewReplacer(&#34;-&#34;, &#34;_&#34;))) // 在实例化的时候操作
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=8-使用命令行选项>8. 使用命令行选项</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/spf13/pflag&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/spf13/viper&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>pflag</span><span class=p>.</span><span class=nf>IntP</span><span class=p>(</span><span class=s>&#34;port&#34;</span><span class=p>,</span> <span class=s>&#34;p&#34;</span><span class=p>,</span> <span class=mi>80</span><span class=p>,</span> <span class=s>`服务端口号`</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>pflag</span><span class=p>.</span><span class=nf>StringP</span><span class=p>(</span><span class=s>&#34;LogLevel&#34;</span><span class=p>,</span> <span class=s>&#34;l&#34;</span><span class=p>,</span> <span class=s>&#34;INFO&#34;</span><span class=p>,</span> <span class=s>`日志级别`</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>pflag</span><span class=p>.</span><span class=nf>Parse</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 绑定命令行选项
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>viper</span><span class=p>.</span><span class=nf>BindPFlags</span><span class=p>(</span><span class=nx>pflag</span><span class=p>.</span><span class=nx>CommandLine</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>viper</span><span class=p>.</span><span class=nf>GetInt</span><span class=p>(</span><span class=s>&#34;port&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>viper</span><span class=p>.</span><span class=nf>GetString</span><span class=p>(</span><span class=s>&#34;LogLevel&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=9-远程配置中心>9. 远程配置中心</h4><p><a href=https://pkg.go.dev/github.com/spf13/viper#readme-remote-key-value-store-support target=_blank rel="external nofollow noopener noreferrer">https://pkg.go.dev/github.com/spf13/viper#readme-remote-key-value-store-support<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p>viper支持"etcd", &ldquo;etcd3&rdquo;, &ldquo;consul&rdquo;, &ldquo;firestore"作为远程配置中心,</p><h4 id=10-将配置反序列化到结构体>10. 将配置反序列化到结构体</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/spf13/pflag&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/spf13/viper&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>type</span> <span class=nx>Config</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Port</span>     <span class=kt>int</span>
+</span></span><span class=line><span class=cl>	<span class=nx>LogLevel</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>pflag</span><span class=p>.</span><span class=nf>IntP</span><span class=p>(</span><span class=s>&#34;port&#34;</span><span class=p>,</span> <span class=s>&#34;p&#34;</span><span class=p>,</span> <span class=mi>80</span><span class=p>,</span> <span class=s>`服务端口号`</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>pflag</span><span class=p>.</span><span class=nf>StringP</span><span class=p>(</span><span class=s>&#34;LogLevel&#34;</span><span class=p>,</span> <span class=s>&#34;l&#34;</span><span class=p>,</span> <span class=s>&#34;INFO&#34;</span><span class=p>,</span> <span class=s>`日志级别`</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>pflag</span><span class=p>.</span><span class=nf>Parse</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 绑定命令行选项
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>viper</span><span class=p>.</span><span class=nf>BindPFlags</span><span class=p>(</span><span class=nx>pflag</span><span class=p>.</span><span class=nx>CommandLine</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kd>var</span> <span class=nx>c</span> <span class=nx>Config</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 将viper读取到的配置都存入 c 中
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>viper</span><span class=p>.</span><span class=nf>Unmarshal</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>c</span><span class=p>);</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Print</span><span class=p>(</span><span class=nx>err</span><span class=p>.</span><span class=nf>Error</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>c</span><span class=p>.</span><span class=nx>Port</span><span class=p>,</span> <span class=nx>c</span><span class=p>.</span><span class=nx>LogLevel</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>viper.Unmarshal 如果viper中的配置在结构体中没有, 不会影响反序列化</p><p>viper.UnmarshalExact 如果viper中的配置在结构体中没有, 会panic</p><p>viper.UnmarshalKey 将某个配置，反序列化到结构体或者变量中. eg: <code>viper.UnmarshalKey("port", &c.port)</code></p></blockquote><h4 id=11-读取相关>11. 读取相关</h4><p>通过<code>GetType</code>可以获取不同类型的参数，比如<code>GetInt</code>、<code>GetString</code>、<code>GetIntSlice</code>.</p><p>具体文档在<a href=https://pkg.go.dev/github.com/spf13/viper#readme-getting-values-from-viper target=_blank rel="external nofollow noopener noreferrer">https://pkg.go.dev/github.com/spf13/viper#readme-getting-values-from-viper<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p>通过<code>IsSet</code>判断参数是否存在，不要使用是否为空来判断</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2023-03-04 18:56:11">更新于 2023-03-04 18:56&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/ class=post-tag>Tags</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/logrus%E6%97%A5%E5%BF%97%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/ class=post-nav-item rel=prev title=Logrus日志库的使用><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>Logrus日志库的使用</a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wx.png alt="SoulChild 微信号">
+<span data-animation>微信号</span></div><div><img src=/images/wechatpay.png alt="SoulChild 微信打赏">
+<span data-animation>微信打赏</span></div></div></div><div id=comments><div id=giscus><script src=https://giscus.app/client.js data-repo=SoulChildTc/soulchild-blog data-repo-id=R_kgDOIwJKxg data-category=General data-category-id=DIC_kwDOIwJKxs4CTwRk data-mapping=title data-theme=preferred_color_scheme data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-lang=zh-CN data-loading=lazy crossorigin=anonymous async defer></script></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://giscus.app/ rel="external nofollow noopener noreferrer">giscus</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?7b986d4ea8e2e50e9c04984b78170660",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})()</script><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright fa-fw" aria-hidden=true></i>
+<span itemprop=copyrightYear>2017 - 2023</span><span class=author itemprop=copyrightHolder>
+<a href=https://www.soulchild.cn target=_blank rel="external nofollow noopener noreferrer">SoulChild</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class=site-time title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden=true></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor"><span id=busuanzi_container_site_uv title=总访客数><i class="fa-regular fa-user fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_uv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span><span id=busuanzi_container_site_pv class=footer-divider title=总访问量><i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_pv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span></div><div class="footer-line beian"><span class="icp footer-divider">特别感谢
+<a href=https://gohugo.io target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.109.0">Hugo</a> |
+<a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v0.2.17-RC">FixIt</a> |
+<a href=https://github.com target=_blank rel="noopener noreffer">GitHub</a> |
+<a href=https://vercel.com target=_blank rel="noopener noreffer">Vercel</a></span></div></div></footer></div><div class=widgets><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role=button aria-label=回到顶部><i class="fa-solid fa-arrow-up fa-fw" aria-hidden=true></i><span class=variant-numeric>0%</span></div><div class="fixed-button view-comments d-none" role=button aria-label=查看评论><i class="fa-solid fa-comment fa-fw" aria-hidden=true></i></div></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0;--bg-progress:#438a55;--bg-progress-dark:#438a55></div><noscript><div class=noscript-warning>FixIt 主题在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/lightgallery/css/lightgallery-bundle.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/pace/themes/green/pace-theme-bounce.css><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/algoliasearch-lite.umd.min.js defer></script><script src=/lib/lazysizes/lazysizes.min.js async defer></script><script src=/lib/lightgallery/lightgallery.min.js defer></script><script src=/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js defer></script><script src=/lib/lightgallery/plugins/zoom/lg-zoom.min.js defer></script><script src=/lib/typeit/index.umd.js defer></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/lib/pangu/pangu.min.js defer></script><script src=/lib/cell-watermark/watermark.min.js defer></script><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async defer></script><script src=/lib/pace/pace.min.js async defer></script><script>window.config={autoBookmark:!0,code:{copyTitle:"复制到剪贴板",editLockTitle:"锁定可编辑代码块",editUnLockTitle:"解锁可编辑代码块",editable:!0,maxShownLines:50},comment:{enable:!0,expired:!1,giscus:{darkTheme:"dark",lightTheme:"light"}},data:{"typeit-header-subtitle-desktop":"/usr/bin/sleep infinity","typeit-header-subtitle-mobile":"/usr/bin/sleep infinity"},enablePWA:!0,lightgallery:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},pangu:{enable:!0,selector:"article"},search:{algoliaAppID:"CE9G7Q4H6N",algoliaIndex:"soulchild-blog",algoliaSearchKey:"0f69a431d92a03c2cf4143d8dbc6af0a",highlightTag:"em",maxResultLength:20,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},siteTime:"2017-06-08T21:38:36+08:00",typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},duration:-1,speed:100},watermark:{appendto:".wrapper\u003emain",colspacing:300,content:"SoulChild随笔记",enable:!0,fontfamily:"inherit",fontsize:.85,height:300,opacity:.1,rotate:15,rowspacing:100,width:300}}</script><script src=/js/theme.min.js defer></script></body></html>
