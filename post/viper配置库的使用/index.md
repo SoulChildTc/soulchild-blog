@@ -383,6 +383,8 @@ func main() {
 > viper.UnmarshalExact 如果viper中的配置在结构体中没有, 会panic
 > 
 > viper.UnmarshalKey 将某个配置，反序列化到结构体或者变量中. eg: `viper.UnmarshalKey("port", &c.port)`
+> 
+> 注意!! 通过viper.setDefault设置的内容不会被反序列化
 
 
 #### 11. 读取相关
