@@ -384,7 +384,6 @@ func main() {
 > 
 > viper.UnmarshalKey 将某个配置，反序列化到结构体或者变量中. eg: `viper.UnmarshalKey("port", &c.port)`
 > 
-> 注意!! 通过viper.setDefault设置的内容不会被反序列化
 
 
 #### 11. 读取相关
