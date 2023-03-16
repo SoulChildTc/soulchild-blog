@@ -6,7 +6,7 @@
 在使用 tekton-operator 的时候我们可以通过 TektonConfig CR 来安装tekton组件，其中有一些安装参数,过一遍留个印象
 所有参数 https://tekton.dev/docs/pipelines/additional-configs/
 
-### 官方模板
+## 官方模板
 ```yaml
 apiVersion: operator.tekton.dev/v1alpha1
 kind: TektonConfig
@@ -43,7 +43,7 @@ spec:
 ```
 
 
-## pipeline参数
+### pipeline参数
 
 TektonPipeline CR也可以用来安装Tekton Pipeline组件，但是官方建议的是使用TektonConfig来安装。
 
