@@ -97,6 +97,7 @@ metadata:
 type: kubernetes.io/ssh-auth
 data:
   ssh-privatekey: base64后的ssh-key
+  known_hosts: <base64-encoded-known-hosts> 可选
 ---
 apiVersion: v1
 kind: ServiceAccount
