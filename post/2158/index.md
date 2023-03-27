@@ -152,7 +152,9 @@ https://doc.traefik.io/traefik/routing/routers/#services
 
 
 ## 五、服务
-服务包含了实际的upstream server
+服务包含了实际的upstream servers, 它可以由简单的k8s service提供, 也可以由拥有高级功能的TraefikService提供
+
+服务中还可以包含服务，比如 Host 为 example.com 的流量路由到了service A, service A 包含了 service B 和 service C,并设置了对应的权重，那么路由过来的流量会按照权重转发到service B 和 service C中, 这很适用于灰度发布
 
 ---
 
