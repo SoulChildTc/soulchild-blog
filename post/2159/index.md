@@ -74,7 +74,7 @@ spec:
 ```
 
 让我们通过IngressRoute来配置一个规则
-```
+```yaml
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
