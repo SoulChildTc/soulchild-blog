@@ -61,7 +61,7 @@ spec:
         - name: whoami
           port: 80
       middlewares:
-        - name: stripprefix@kubernetescrd
+        - name: stripprefix # 省略@kubernetescrd
           namespace: appspace
 ```
 
