@@ -1,4 +1,4 @@
-# traefik-IngressRoute基本配置(二)
+# traefik-IngressRoute配置详解(二)
 
 <!--more-->
 IngressRoute是traefik编写的一个自定义资源(CRD),可以更好的配置traefik所需的路由信息
