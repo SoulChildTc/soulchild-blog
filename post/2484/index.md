@@ -79,43 +79,72 @@ EOF
 ```
 #### [参数说明](https://v1-20.docs.kubernetes.io/zh/docs/reference/command-line-tools-reference/kube-controller-manager/#%E9%80%89%E9%A1%B9):
 
-`--allocate-node-cidrs`: 基于云驱动来为 Pod 分配和设置子网掩码。
+`--allocate-node-cidrs`: 是否自动分配CIDR地址范围并设置到云提供商上, 在裸机部署的情况下启用--allocate-node-cidrs参数可以确保将这些CIDR地址范围分配给新加入集群的节点，并将其保存到etcd中。
+
 `--cluster-cidr`: pod ip的范围。要求`--allocate-node-cidrs`为true。
+
 `--service-cluster-ip-range`: cluster ip的范围，和apiserver中的要一致。要求`--allocate-node-cidrs`为true。
+
 `--node-cidr-mask-size`: 设置一个node节点可以使用的pod ip数量及范围，这里填写的是掩码. `所有可用pod ip数量/node可用ip数量=最大节点数。(我猜的。。)`
+
 `--authentication-kubeconfig`: 指定一个拥有创建`tokenreviews.authentication.k8s.io`对象权限的kubeconfig配置文件。如果设置为空，则所有的token请求都被视为匿名，也不会启用客户端CA认证
 
 `--authorization-kubeconfig`: 指定一个拥有创建`subjectaccessreviews.authorization.k8s.io`对象权限的kubeconfig配置文件。如果设置为空,则所有未列入白名单的请求都将被拒绝。
 
 `--bind-address`: 监听地址
+
 `--client-ca-file`: 如果有客户端使用证书来请求`controller-manager`,那么`controller-manager`将会使用此参数指定的根证书进行校验
+
 `--cluster-name`: 集群名称，默认kubernetes
+
 `--cluster-signing-cert-file`: 用于签发证书的CA根证书
+
 `--cluster-signing-key-file`: 用于签发证书的CA根证书的私钥  
+
 `--cluster-signing-duration`: 签发证书的有效期,默认8760h0m0s。(感觉最大能到5年,我设置的10年,通过openssl查看签发的证书有效期只有5年。)
+
 `--concurrent-deployment-syncs`: 允许并发同步deployment的数量,默认5。数字越大，deployment响应越快，但CPU和网络负载会高。
+
 `--controllers`: 要启用的控制器列表。`*`表示启用所有默认启用的控制器。`foo`表示启用名为foo的控制器； `-foo` 表示禁用名为 foo的控制器。
   - `所有控制器`：attachdetach、bootstrapsigner、cloud-node-lifecycle、clusterrole-aggregation、cronjob、csrapproving、csrcleaner、csrsigning、daemonset、deployment、disruption、endpoint、endpointslice、endpointslicemirroring、ephemeral-volume、garbagecollector、horizontalpodautoscaling、job、namespace、nodeipam、nodelifecycle、persistentvolume-binder、persistentvolume-expander、podgc、pv-protection、pvc-protection、replicaset、replicationcontroller、resourcequota、root-ca-cert-publisher、route、service、serviceaccount、serviceaccount-token、statefulset、tokencleaner、ttl、ttl-after-finished
   - `默认禁用的控制器`：bootstrapsigner 和 tokencleaner。
 
 `--horizontal-pod-autoscaler-initial-readiness-delay`: hpa相关配置，初始化时间,用于延迟采样,默认30s
+
 `--horizontal-pod-autoscaler-sync-period`: hpa相关配置，检查周期（默认为15s）
+
 `--kube-api-burst`: controller-manager与apiserver通信时突发请求个数上限。默认30.
+
 `--kube-api-qps`: 与apisever通信时的QPS限制。默认20.
+
 `--kubeconfig`: 与apiserver通信的kubeconfig
+
 `--leader-elect`: true开启leader选举
+
 `--logtostderr`: 将日志输出到stderr，而不是文件，默认true。
+
 `--log-file`: 日志文件路径
+
 `--log-file-max-size`: 单个日志文件的上限大小，默认1800，单位MB
+
 `--node-monitor-period`: 每隔一段时间检查kubelet的状态，默认5s
+
 `--node-monitor-grace-period`: 将一个Node节点标记为notready之前没有响应的时间,默认40s。必须是kubelet的 nodeStatusUpdateFrequency(参数--node-status-update-frequency,默认10s)的N倍
+
 `--node-startup-grace-period`: 将一个Node节点标记为unhealthy之前没有响应的时间,默认1m。
+
 `--pod-eviction-timeout`: 当节点达到unhealthy后等待多久驱逐pod，默认5m。
+
 `--root-ca-file`: 根CA的证书,这个根证书将包含在Service Account对应的Secret中。
+
 `--service-account-private-key-file`: 签发service account所用的私钥。和apiserver的`--service-account-key-file`指定的公钥对应
+
 `--secure-port`: 安全端口,默认10257
+
 `--tls-cert-file`: controller-manager的服务端证书
+
 `--tls-private-key-file`: controller-manager的服务端证书的私钥
+
 `--use-service-account-credentials`: 如果为true，为每个控制器使用单独的service account凭据
 
 ### 四、启动服务
