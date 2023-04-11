@@ -12,8 +12,9 @@ mongoexport --host=xx.xx.xx.xx  --port=3717 -uadmin -p123456 --authenticationDat
 
 ### 常见查询操作符
 
-https://www.mongodb.com/docs/manual/reference/operator/query/
+https://www.mongodb.com/docs/manual/reference/operator/query/\
 
+```bash
 $eq：匹配字段等于指定值的文档
 $ne：匹配字段不等于指定值的文档
 $gt：匹配字段大于指定值的文档
@@ -28,6 +29,7 @@ $regex：使用正则表达式匹配字段值的文档
 $not：取反
 $and
 $or
+```
 
 ### 常用query
 
