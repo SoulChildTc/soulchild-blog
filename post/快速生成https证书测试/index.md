@@ -5,7 +5,7 @@
 
 简单快捷用起来就是一个字 爽
 ```bash
-openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -out headers.ops.com.crt -keyout headers.ops.com.key -subj "/CN=ops.com" -addext "subjectAltName=DNS.1:*.ops.com,DNS.2:*.headers.ops.com,IP.1:127.0.0.1" -nodes
+openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -out headers.ops.com.crt -keyout headers.ops.com.key -subj "/CN=ops.com" -addext "subjectAltName=DNS.1:ops.com,DNS.2:*.ops.com,DNS.3:*.headers.ops.com,IP.1:127.0.0.1" -nodes
 ```
 
 ---
