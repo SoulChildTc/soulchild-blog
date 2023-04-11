@@ -7,7 +7,7 @@
 
 在traefik中内置了两大类的中间件,分别是HTTP和TCP,下面介绍一些常用的中间件
 
-## HTTP
+## HTTP(kind: Middleware)
 
 https://doc.traefik.io/traefik/middlewares/http/overview/#available-http-middlewares
 
@@ -19,7 +19,7 @@ https://doc.traefik.io/traefik/middlewares/http/overview/#available-http-middlew
 - Retry 发生请求错误时重试
 - ...
 
-## TCP
+## TCP(kind: MiddlewareTCP)
 https://doc.traefik.io/traefik/middlewares/tcp/overview/
 
 - InFlightConn 限制同时连接的数量
