@@ -5,15 +5,16 @@
 
 ## 什么是 Kind?
 kind 可以让您在本地运行 Kubernetes 集群。它使用 Docker 容器来模拟 Kubernetes 集群的节点，并使用 kubeadm 来启动集群。
+
 kind 主要用于测试 Kubernetes 本身，但也可用于本地开发或 CI。
 
 ## 为什么要使用 Kind?
 使用 Kind 具有以下优点: 
 
-快速搭建: 在几分钟内创建和销毁 Kubernetes 集群，而无需等待云提供商资源。
-便于测试: Kind 使用 Docker 容器来模拟 Kubernetes 节点，因此您可以轻松地对整个集群或单个组件进行测试。
-简化开发: Kind 可以在本地提供一个类似于生产环境的 Kubernetes 集群，从而加快应用程序的开发和调试过程。
-可移植性: Kind 可以在任何支持 Docker 的环境中运行，例如本地机器、CI/CD 系统、云环境等。
+- 快速搭建: 在几分钟内创建和销毁 Kubernetes 集群，而无需等待云提供商资源。
+- 便于测试: Kind 使用 Docker 容器来模拟 Kubernetes 节点，因此您可以轻松地对整个集群或单个组件进行测试。
+- 简化开发: Kind 可以在本地提供一个类似于生产环境的 Kubernetes 集群，从而加快应用程序的开发和调试过程。
+- 可移植性: Kind 可以在任何支持 Docker 的环境中运行，例如本地机器、CI/CD 系统、云环境等。
 
 ## 安装和配置 Kind
 
