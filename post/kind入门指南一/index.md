@@ -35,7 +35,9 @@ sudo mv ./kind /usr/local/bin/kind
 kind create cluster --name mykind1 --wait 5m
 ```
 > 默认 name 为 kind
+> 
 > 默认安装最新的版本, 可以通过 `--image kindest/node:v1.26.3` 指定k8s版本
+> 
 > 安装成功后需要自行安装配置 kubectl, wget https://dl.k8s.io/v1.26.3/kubernetes-client-linux-amd64.tar.gz
 
 ### 2. 查看集群列表
