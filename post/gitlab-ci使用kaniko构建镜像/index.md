@@ -25,7 +25,7 @@ build:
       --destination "${IMAGE_REF}"
       --cache=true
 ```
---cache=true开启了缓存, 他会将一些层缓存到远程仓库中, 如果镜像名为 `devops/py-demo` , 那么环境的镜像名为 `devops/py-demo/cache`
+--cache=true开启了缓存, 他会将一些层缓存到远程仓库中, 如果镜像名为 `devops/py-demo` , 那么缓存的镜像名为 `devops/py-demo/cache`
 
 
 这里直接上传到 `gitlab container registry` 不需要手动登录, 因为kaniko会自行读取环境变量`CI_REGISTRY_USER`和`CI_REGISTRY_PASSWORD`。
