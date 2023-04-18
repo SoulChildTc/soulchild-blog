@@ -19,6 +19,7 @@ vim $HOME/.vimrc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Sets how many lines of history VIM has to remember
 " "set history=500
+" 光标列高亮
 set cursorcolumn
 " display numbers
 set nu
@@ -48,8 +49,6 @@ set incsearch     " Makes search act like search in modern browsers
 " Don't redraw while executing macros (good performance config)
 set lazyredraw
 
-" For regular expressions turn magic on
-set magic
 
 " Show matching brackets when text indicator is over them
 set showmatch
@@ -63,8 +62,8 @@ set t_vb=
 set tm=500
 
 " Add a bit extra margin to the left
-set foldcolumn=1
-set fdm=marker
+" set foldcolumn=1
+" set fdm=marker
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Fonts
@@ -117,20 +116,21 @@ set noswapfile
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 1 tab == 4 spaces
 set shiftwidth=4
+" tab 的宽度
 set tabstop=4
-set softtabstop=4
+
+set softtabstop=1
 " Use spaces instead of tabs
 set expandtab
 " Be smart when using tabs
-set smarttab
+" set smarttab
 
 "toggle paste mode with hitting F2 key
 set pastetoggle=<F2>
-"set paste    "open paste mode
+set paste    "open paste mode
 
 set ai "Auto indent
 set si "Smart indent
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Wrap and breakline setting
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
