@@ -11,6 +11,12 @@ wget https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim 
 ```
 
 2.修改vimrc
+```bash
+wget https://raw.githubusercontent.com/SoulChildTc/SoulChildTc/main/Individuation/.vimrc -O ~/.vimrc
+```
+
+or
+
 vim $HOME/.vimrc
 
 ```bash
