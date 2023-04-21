@@ -5,11 +5,12 @@
 在traefik中一个请求的走向 入口点 -> 路由器 -> middleware -> service -> upstream
 
 Traefik中的配置可以引用两种不同的内容：
+
 - 路由配置（称为动态配置）`路由的配置`
 - 启动配置（称为静态配置）`traefik本身的配置`
 
-
 ## 一、动态配置(provider)
+
 动态配置定义 traefik 如何​​处理请求。此配置可以热重载，不会造成任何请求中断或连接丢失。traefik 从 provider 中获取动态配置, 比如 traefik 从 `kubernetes-Ingress` 中获取配置,那么它对应的 provider name 是 `kubernetes`。
 
 providers包括：`docker`,`kubernetes-Ingress`,`kubernetes-IngressRoute`,`rancher`,`consul`,`zookeeper`等等。
@@ -19,7 +20,8 @@ Provider Namespace
 
 在 Traefik 动态配置中声明某些对象时，例如中间件、服务、TLS 选项、TCP，它们位于这个 provider 的命名空间中，所以在使用多个 provider 时，如果希望引用在另一个 provider 中声明的此类对象（例如，引用像中间件这样的跨提供者对象），则引用的对象名称 格式为 `<resource-name>@<provider-name>` , kubernetes 比较特殊, 因为 kubernetes 也有Namespace的概念，他需要使用这样的格式 `<middleware in k8s namespace>-<middleware name>@kubernetescrd`。
 
-例如使用 kubernetes CRD 声明了一个中间件，他的 provider name 是 kubernetescrd 
+例如使用 kubernetes CRD 声明了一个中间件，他的 provider name 是 kubernetescrd
+
 ```yaml
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
@@ -33,6 +35,7 @@ spec:
 ```
 
 使用 ingress 引用他
+
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -47,6 +50,7 @@ spec:
 ```
 
 使用 IngressRoute 引用它
+
 ```yaml
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -66,12 +70,12 @@ spec:
           namespace: appspace
 ```
 
-
-动态配置的文档: https://doc.traefik.io/traefik/routing/overview/
-
+动态配置的文档: <https://doc.traefik.io/traefik/routing/overview/>
 
 ## 二、静态配置
+
 在traefik中定义了三种不同的定义方式
+
 1. [在配置文件中](https://doc.traefik.io/traefik/reference/static-configuration/file/)
 2. [在命令行参数](https://doc.traefik.io/traefik/reference/static-configuration/cli/)
 3. [在环境变量中](https://doc.traefik.io/traefik/reference/static-configuration/env/)
@@ -79,6 +83,7 @@ spec:
 优先级按照上面的顺序
 
 ### 配置文件位置
+
 在启动时,traefik搜索一个名为traefik.toml(或traefik.yml或traefik.yaml)的文件
 
 搜索路径如下:
@@ -90,12 +95,13 @@ spec:
 也可以使用命令行参数来配置
 `traefik --configFile=foo/bar/myconfigfile.toml`
 
-
 ## 三、入口点
+
 Traefik的入口点（Entry Point）是指客户端与Traefik之间通信的协议和端口。它定义了如何接收和处理来自客户端的网络流量，并将其路由到正确的服务实例。
 Traefik支持多种类型的入口点，包括HTTP、HTTPS、TCP和UDP，每个入口点都有一个唯一名称，可以同时启用多个入口点。
 
 入口点属于静态配置,[配置参考](https://doc.traefik.io/traefik/routing/entrypoints/#configuration-examples)如下
+
 ```yaml
 entryPoints:
   customName:
@@ -145,17 +151,19 @@ entryPoints:
 ```
 
 ## 四、路由器
-https://doc.traefik.io/traefik/routing/routers/#services
+
+<https://doc.traefik.io/traefik/routing/routers/#services>
 
 路由器支持HTTP、TCP、UDP协议，他的定义就是路由规则，按照不同的host、path、header等信息转发到不同的服务中，在此过程中，路由器可能会使用中间件来更新请求。
 
 一个路由器默认会接收所有 入口点 的请求，也可以显式的指定仅接收来自哪些入口点的请求。
 
-
 ## 五、服务
+
 服务包含了实际的upstream servers, 它可以由简单的k8s service提供, 也可以由拥有高级功能的TraefikService提供
 
 服务中还可以包含服务，比如 Host 为 example.com 的流量路由到了service A, service A 包含了 service B 和 service C,并设置了对应的权重，那么路由过来的流量会按照权重转发到service B 和 service C中, 这很适用于灰度发布
+
 
 ---
 
