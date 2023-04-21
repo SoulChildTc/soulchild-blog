@@ -2,16 +2,20 @@
 
 <!--more-->
 IngressRoute是traefik编写的一个自定义资源(CRD),可以更好的配置traefik所需的路由信息
-https://doc.traefik.io/traefik/reference/dynamic-configuration/kubernetes-crd/#resources
+<https://doc.traefik.io/traefik/reference/dynamic-configuration/kubernetes-crd/#resources>
 
 ## 一、使用helm安装traefik
+
 1.添加traefik仓库
-```
+
+```bash
 helm repo add traefik https://helm.traefik.io/traefik
 helm repo update
 ```
+
 2.安装traefik
-```
+
+```bash
 kubectl create ns traefik-v2
 helm install --namespace=traefik-v2 traefik traefik/traefik 
 ```
@@ -30,9 +34,10 @@ helm install --namespace=traefik-v2 traefik traefik/traefik
 
 ![58456-zpguelkyx.png](images/4043256750.png "4043256750")
 
-
 ## 二、traefik IngressRoute资源配置
+
 下面部署一个nginx应用
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -75,7 +80,7 @@ spec:
 
 让我们通过IngressRoute来配置一个规则
 
-https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/#kind-ingressroute
+<https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/#kind-ingressroute>
 
 ```yaml
 apiVersion: traefik.containo.us/v1alpha1
@@ -94,10 +99,10 @@ spec:
         - name: nginx-test
           port: 80
 ```
+
 可以看到我门刚才配置的规则已经生效了。
 
 ![88637-g703qcu4v6.png](images/407132451.png "407132451")
-
 
 现在将入口点web暴露出来，通过9001端口。
 `kubectl port-forward --address=0.0.0.0 -n traefik-v2 $(kubectl get pods -n traefik-v2 --selector "app.kubernetes.io/name=traefik" --output=name) 9001:8000`
@@ -108,13 +113,14 @@ spec:
 现在我们打开test.com:9001可以看到nginx已经正常访问
 ![40593-17h09vnq5qx.png](images/743072421.png "743072421")
 
-
 ## 三、https配置
+
 1. 生成证书secret
 `kubectl create secret tls nginx-test --cert=tls.crt --key=tls.key`
 
 2. 修改之前的IngressRoute
-```
+
+```yaml
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -133,10 +139,12 @@ spec:
   tls:
     secretName: nginx-test
 ```
+
 因为不是正常的证书,所以访问过不去
 ![54073-f0d04jeun5l.png](images/4030331602.png "4030331602")
 
 ## 四、ingressroute配置详解
+
 ```yaml
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -223,8 +231,8 @@ spec:
       namespace: traefik
 ```
 
-
 ## 五、路由匹配规则
+
 - Headers(\`key\`, \`value\`): 判断请求头是否存在, key 是请求头名称，value是值. 例如`HeadersRegexp("User-Agent", "Chrome|IE")`
 
 - HeadersRegexp(\`key\`, \`regexp\`): 同上,可以使用正则来匹配. 例如`HeadersRegexp("User-Agent", "Chrome|IE")`
@@ -233,7 +241,7 @@ spec:
 
 - HostHeader(\`example.com\`, ...): 同上,因为历史原因才存在的
 
-- HostRegexp(\`example.com\`, \`{subdomain:[a-z]+}.example.com\`, ...): 同上，可以使用正则. 
+- HostRegexp(\`example.com\`, \`{subdomain:[a-z]+}.example.com\`, ...): 同上，可以使用正则.
 
 - Method(\`GET\`, ...): 匹配method (GET, POST, PUT, DELETE, PATCH, HEAD). 例如 Method(\`GET\`, \`POST\`, \`PUT\`)
 
@@ -246,9 +254,11 @@ spec:
 - ClientIP(\`10.0.0.0/16\`, \`::1\`): 如果客户端IP是给定的IP/CIDR之一，则匹配。它接受IPv4, IPv6和CIDR格式。注意它只匹配客户端IP, 也就是remote ip。
 
 ### 正则语法
+
 正则的格式为 `{name: regexp}`, name随便写, regexp是正则
 
 ### 运算符
+
 可以使用 `&&`, `||`, `!`, `()` 将多种规则组和使用
 例如: (Host(\`example.com\`, \`test.com\`) || PathPrefix(\`/products/\`)) && ClientIP(\`10.0.0.0/16\`)
 

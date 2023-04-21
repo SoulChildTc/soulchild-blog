@@ -12,12 +12,12 @@
 <span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#一使用helm安装traefik>一、使用helm安装traefik</a></li><li><a href=#二traefik-ingressroute资源配置>二、traefik IngressRoute资源配置</a></li><li><a href=#三https配置>三、https配置</a></li><li><a href=#四ingressroute配置详解>四、ingressroute配置详解</a></li><li><a href=#五路由匹配规则>五、路由匹配规则</a><ul><li><a href=#正则语法>正则语法</a></li><li><a href=#运算符>运算符</a></li></ul></li></ul></nav></div></div><div class=content id=content data-end-flag=---><div class="details admonition warning open"><div class="details-summary admonition-title"><i class="icon fa-solid fa-exclamation-triangle fa-fw" aria-hidden=true></i>警告<i class="details-icon fa-solid fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>本文最后更新于 2021-10-20 16:24，文中内容可能已过时。</div></div></div><p>IngressRoute是traefik编写的一个自定义资源(CRD),可以更好的配置traefik所需的路由信息
 <a href=https://doc.traefik.io/traefik/reference/dynamic-configuration/kubernetes-crd/#resources target=_blank rel="external nofollow noopener noreferrer">https://doc.traefik.io/traefik/reference/dynamic-configuration/kubernetes-crd/#resources<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><h2 id=一使用helm安装traefik>一、使用helm安装traefik</h2><p>1.添加traefik仓库</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>helm repo add traefik https://helm.traefik.io/traefik
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>helm repo add traefik https://helm.traefik.io/traefik
 </span></span><span class=line><span class=cl>helm repo update
 </span></span></code></pre></td></tr></table></div></div><p>2.安装traefik</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>kubectl create ns traefik-v2
-</span></span><span class=line><span class=cl>helm install --namespace=traefik-v2 traefik traefik/traefik 
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl create ns traefik-v2
+</span></span><span class=line><span class=cl>helm install --namespace<span class=o>=</span>traefik-v2 traefik traefik/traefik 
 </span></span></code></pre></td></tr></table></div></div><p>3.暴露traefik的dashboard
 端口说明:
 9000是dashboard
@@ -146,24 +146,24 @@
 </span><span class=lnt>15
 </span><span class=lnt>16
 </span><span class=lnt>17
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>apiVersion: traefik.containo.us/v1alpha1
-</span></span><span class=line><span class=cl>kind: IngressRoute
-</span></span><span class=line><span class=cl>metadata:
-</span></span><span class=line><span class=cl>  name: nginx-test
-</span></span><span class=line><span class=cl>  namespace: kube-ops
-</span></span><span class=line><span class=cl>spec:
-</span></span><span class=line><span class=cl>  entryPoints:
-</span></span><span class=line><span class=cl>    # 指定入口点为web。这里的web就是traefik静态配置(启动参数)中的 --entryPoints.web.address=:8000,通过仪表盘也可以看到
-</span></span><span class=line><span class=cl>    - web
-</span></span><span class=line><span class=cl>  routes:
-</span></span><span class=line><span class=cl>    - kind: Rule
-</span></span><span class=line><span class=cl>      match: Host(`test.com`) # 匹配规则,第三部分说明
-</span></span><span class=line><span class=cl>      services:
-</span></span><span class=line><span class=cl>        - name: nginx-test
-</span></span><span class=line><span class=cl>          port: 80
-</span></span><span class=line><span class=cl>  tls:
-</span></span><span class=line><span class=cl>    secretName: nginx-test
-</span></span></code></pre></td></tr></table></div></div><p>因为不是正常的证书,所以访问过不去<figure><a class=lightgallery href=/post/2159/images/4030331602.png data-thumbnail=/post/2159/images/4030331602.png data-sub-html="<h2>54073-f0d04jeun5l.png</h2><p>4030331602</p>"><img class=lazyload src=/svg/loading.min.svg data-src=/post/2159/images/4030331602.png data-srcset="/post/2159/images/4030331602.png, /post/2159/images/4030331602.png 1.5x, /post/2159/images/4030331602.png 2x" data-sizes=auto alt=54073-f0d04jeun5l.png title=4030331602 width=1237 height=663></a><figcaption class=image-caption>54073-f0d04jeun5l.png</figcaption></figure></p><h2 id=四ingressroute配置详解>四、ingressroute配置详解</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>traefik.containo.us/v1alpha1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>IngressRoute</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>nginx-test</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-ops</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>entryPoints</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c># 指定入口点为web。这里的web就是traefik静态配置(启动参数)中的 --entryPoints.web.address=:8000,通过仪表盘也可以看到</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>web</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>routes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Rule</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>match</span><span class=p>:</span><span class=w> </span><span class=l>Host(`test.com`)</span><span class=w> </span><span class=c># 匹配规则,第三部分说明</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>services</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>nginx-test</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>tls</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>secretName</span><span class=p>:</span><span class=w> </span><span class=l>nginx-test</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>因为不是正常的证书,所以访问过不去<figure><a class=lightgallery href=/post/2159/images/4030331602.png data-thumbnail=/post/2159/images/4030331602.png data-sub-html="<h2>54073-f0d04jeun5l.png</h2><p>4030331602</p>"><img class=lazyload src=/svg/loading.min.svg data-src=/post/2159/images/4030331602.png data-srcset="/post/2159/images/4030331602.png, /post/2159/images/4030331602.png 1.5x, /post/2159/images/4030331602.png 2x" data-sizes=auto alt=54073-f0d04jeun5l.png title=4030331602 width=1237 height=663></a><figcaption class=image-caption>54073-f0d04jeun5l.png</figcaption></figure></p><h2 id=四ingressroute配置详解>四、ingressroute配置详解</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
