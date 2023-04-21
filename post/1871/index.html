@@ -97,96 +97,96 @@
 </span><span class=lnt>87
 </span><span class=lnt>88
 </span><span class=lnt>89
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>apiVersion: v1
-</span></span><span class=line><span class=cl>kind: Service
-</span></span><span class=line><span class=cl>metadata:
-</span></span><span class=line><span class=cl>  labels:
-</span></span><span class=line><span class=cl>    app: gateway
-</span></span><span class=line><span class=cl>  name: gateway
-</span></span><span class=line><span class=cl>  namespace: {nameSpace}
-</span></span><span class=line><span class=cl>spec:
-</span></span><span class=line><span class=cl>  ports:
-</span></span><span class=line><span class=cl>  - name: gateway
-</span></span><span class=line><span class=cl>    port: 80
-</span></span><span class=line><span class=cl>    protocol: TCP
-</span></span><span class=line><span class=cl>    targetPort: http
-</span></span><span class=line><span class=cl>  selector:
-</span></span><span class=line><span class=cl>    app: gateway
-</span></span><span class=line><span class=cl>  type: ClusterIP
-</span></span><span class=line><span class=cl>---
-</span></span><span class=line><span class=cl>apiVersion: apps/v1
-</span></span><span class=line><span class=cl>kind: Deployment
-</span></span><span class=line><span class=cl>metadata:
-</span></span><span class=line><span class=cl>  name: gateway
-</span></span><span class=line><span class=cl>  namespace: {nameSpace}
-</span></span><span class=line><span class=cl>spec:
-</span></span><span class=line><span class=cl>  replicas: {replicas}
-</span></span><span class=line><span class=cl>  selector:
-</span></span><span class=line><span class=cl>    matchLabels:
-</span></span><span class=line><span class=cl>      app: gateway
-</span></span><span class=line><span class=cl>  template:
-</span></span><span class=line><span class=cl>    metadata:
-</span></span><span class=line><span class=cl>      labels:
-</span></span><span class=line><span class=cl>        app: gateway
-</span></span><span class=line><span class=cl>    spec:
-</span></span><span class=line><span class=cl>      imagePullSecrets:
-</span></span><span class=line><span class=cl>      - name: registry-secret
-</span></span><span class=line><span class=cl>      containers:
-</span></span><span class=line><span class=cl>      - name: gateway
-</span></span><span class=line><span class=cl>        resources:
-</span></span><span class=line><span class=cl>         requests:
-</span></span><span class=line><span class=cl>           cpu: {request_cpu}
-</span></span><span class=line><span class=cl>           memory: {request_memory}
-</span></span><span class=line><span class=cl>         limits:
-</span></span><span class=line><span class=cl>           cpu: {limit_cpu}
-</span></span><span class=line><span class=cl>           memory: {limit_memory}
-</span></span><span class=line><span class=cl>        image: {imageName}
-</span></span><span class=line><span class=cl>        ports:
-</span></span><span class=line><span class=cl>        - containerPort: 80
-</span></span><span class=line><span class=cl>          name: http
-</span></span><span class=line><span class=cl>        env:
-</span></span><span class=line><span class=cl>        - name: JAVA_OPTS
-</span></span><span class=line><span class=cl>          value: &#34;-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MinRAMPercentage=70.0 -XX:MaxRAMPercentage=80.0 -XX:+HeapDumpOnOutOfMemoryError&#34;
-</span></span><span class=line><span class=cl>        command: [&#34;/bin/sh&#34;]
-</span></span><span class=line><span class=cl>        args: [&#34;-c&#34;,&#34;java $JAVA_OPTS -Dspring.profiles.active={deployEnv} -Djava.security.egd=file:/dev/./urandom -jar /gateway.jar&#34;]
-</span></span><span class=line><span class=cl>        readinessProbe:
-</span></span><span class=line><span class=cl>          httpGet:
-</span></span><span class=line><span class=cl>            path: /actuator/info
-</span></span><span class=line><span class=cl>            port: http
-</span></span><span class=line><span class=cl>            scheme: HTTP
-</span></span><span class=line><span class=cl>          initialDelaySeconds: 30
-</span></span><span class=line><span class=cl>          periodSeconds: 30
-</span></span><span class=line><span class=cl>          failureThreshold: 5
-</span></span><span class=line><span class=cl>          successThreshold: 1
-</span></span><span class=line><span class=cl>          timeoutSeconds: 30
-</span></span><span class=line><span class=cl>        livenessProbe:
-</span></span><span class=line><span class=cl>          httpGet:
-</span></span><span class=line><span class=cl>            path: /actuator/info
-</span></span><span class=line><span class=cl>            port: http
-</span></span><span class=line><span class=cl>            scheme: HTTP
-</span></span><span class=line><span class=cl>          initialDelaySeconds: 60
-</span></span><span class=line><span class=cl>          periodSeconds: 30
-</span></span><span class=line><span class=cl>          failureThreshold: 3
-</span></span><span class=line><span class=cl>          successThreshold: 1
-</span></span><span class=line><span class=cl>          timeoutSeconds: 30
-</span></span><span class=line><span class=cl>---
-</span></span><span class=line><span class=cl>apiVersion: networking.k8s.io/v1beta1
-</span></span><span class=line><span class=cl>kind: Ingress
-</span></span><span class=line><span class=cl>metadata:
-</span></span><span class=line><span class=cl>  name: gateway
-</span></span><span class=line><span class=cl>  namespace: {nameSpace}
-</span></span><span class=line><span class=cl>  annotations:
-</span></span><span class=line><span class=cl>    kubernetes.io/ingress.class: &#34;nginx&#34;
-</span></span><span class=line><span class=cl>    nginx.ingress.kubernetes.io/use-regex: &#34;true&#34;
-</span></span><span class=line><span class=cl>spec:
-</span></span><span class=line><span class=cl>  rules:
-</span></span><span class=line><span class=cl>  - host: {domainName}
-</span></span><span class=line><span class=cl>    http:
-</span></span><span class=line><span class=cl>      paths:
-</span></span><span class=line><span class=cl>      - backend:
-</span></span><span class=line><span class=cl>          serviceName: gateway
-</span></span><span class=line><span class=cl>          servicePort: gateway
-</span></span></code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2020-07-06 16:07:42">更新于 2020-07-06 16:07&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/k8s/ class=post-tag>k8s</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/1866/ class=post-nav-item rel=prev title=nginx配置Websocket反向代理><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>nginx配置Websocket反向代理</a>
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>gateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span>{<span class=l>nameSpace}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>targetPort</span><span class=p>:</span><span class=w> </span><span class=l>http</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>gateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>ClusterIP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>apps/v1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Deployment</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span>{<span class=l>nameSpace}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>replicas</span><span class=p>:</span><span class=w> </span>{<span class=l>replicas}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>gateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>template</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>gateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>imagePullSecrets</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>registry-secret</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>containers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>resources</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>         </span><span class=nt>requests</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>           </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span>{<span class=l>request_cpu}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>           </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span>{<span class=l>request_memory}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>         </span><span class=nt>limits</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>           </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span>{<span class=l>limit_cpu}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>           </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span>{<span class=l>limit_memory}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>image</span><span class=p>:</span><span class=w> </span>{<span class=l>imageName}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>http</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>env</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>JAVA_OPTS</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MinRAMPercentage=70.0 -XX:MaxRAMPercentage=80.0 -XX:+HeapDumpOnOutOfMemoryError&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>command</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;/bin/sh&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>args</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;-c&#34;</span><span class=p>,</span><span class=s2>&#34;java $JAVA_OPTS -Dspring.profiles.active={deployEnv} -Djava.security.egd=file:/dev/./urandom -jar /gateway.jar&#34;</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>readinessProbe</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>httpGet</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/actuator/info</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=l>http</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>scheme</span><span class=p>:</span><span class=w> </span><span class=l>HTTP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>initialDelaySeconds</span><span class=p>:</span><span class=w> </span><span class=m>30</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>periodSeconds</span><span class=p>:</span><span class=w> </span><span class=m>30</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>failureThreshold</span><span class=p>:</span><span class=w> </span><span class=m>5</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>successThreshold</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>timeoutSeconds</span><span class=p>:</span><span class=w> </span><span class=m>30</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>livenessProbe</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>httpGet</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/actuator/info</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=l>http</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=nt>scheme</span><span class=p>:</span><span class=w> </span><span class=l>HTTP</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>initialDelaySeconds</span><span class=p>:</span><span class=w> </span><span class=m>60</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>periodSeconds</span><span class=p>:</span><span class=w> </span><span class=m>30</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>failureThreshold</span><span class=p>:</span><span class=w> </span><span class=m>3</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>successThreshold</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>timeoutSeconds</span><span class=p>:</span><span class=w> </span><span class=m>30</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>networking.k8s.io/v1beta1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Ingress</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span>{<span class=l>nameSpace}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>annotations</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>kubernetes.io/ingress.class</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;nginx&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>nginx.ingress.kubernetes.io/use-regex</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;true&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>rules</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>host</span><span class=p>:</span><span class=w> </span>{<span class=l>domainName}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>http</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>paths</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>backend</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>serviceName</span><span class=p>:</span><span class=w> </span><span class=l>gateway</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>servicePort</span><span class=p>:</span><span class=w> </span><span class=l>gateway</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2020-07-06 16:07:42">更新于 2020-07-06 16:07&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/k8s/ class=post-tag>k8s</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/1866/ class=post-nav-item rel=prev title=nginx配置Websocket反向代理><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>nginx配置Websocket反向代理</a>
 <a href=/post/1874/ class=post-nav-item rel=next title=harbor2.0.1安装部署>harbor2.0.1安装部署<i class="fa-solid fa-angle-right fa-fw" aria-hidden=true></i></a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
 <label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wx.png alt="SoulChild 微信号">
 <span data-animation>微信号</span></div><div><img src=/images/wechatpay.png alt="SoulChild 微信打赏">

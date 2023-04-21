@@ -1,7 +1,8 @@
 # yaml模板
 
 <!--more-->
-```
+
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
