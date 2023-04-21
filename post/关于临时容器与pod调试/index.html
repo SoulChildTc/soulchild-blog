@@ -21,17 +21,13 @@
 </span></span><span class=line><span class=cl>Defaulting debug container name to debugger-nb7vl.
 </span></span><span class=line><span class=cl>If you don<span class=err>&#39;</span>t see a <span class=nb>command</span> prompt, try pressing enter.
 </span></span><span class=line><span class=cl>/ <span class=c1># </span>
-</span></span></code></pre></td></tr></table></div></div><blockquote><p>&ndash;image 指定临时容器的镜像
-&ndash;target 指定调试目标容器的名称，目的是将临时容器的进程命名空间加入到要调试的容器中。 当然你不想他们在同一个进程命名空间中不加也无所谓
-cd /proc/1/root可以看到ephemeral-demo容器的文件系统</p></blockquote><h3 id=使用非临时容器调试pod>使用非临时容器调试Pod</h3><h4 id=1-复制pod调试-加入调试容器>1. 复制Pod调试-加入调试容器</h4><p>kubectl会创建新的pod副本，<strong>这不会影响到原有的Pod</strong>，并且新的pod中有我们指定的调试容器，但是这里使用的不是临时容器，而是普通容器。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>&ndash;image 指定临时容器的镜像</p><p>&ndash;target 指定调试目标容器的名称，目的是将临时容器的进程命名空间加入到要调试的容器中。 当然你不想他们在同一个进程命名空间中不加也无所谓</p><p>cd /proc/1/root可以看到ephemeral-demo容器的文件系统</p></blockquote><h3 id=使用非临时容器调试pod>使用非临时容器调试Pod</h3><h4 id=1-复制pod调试-加入调试容器>1. 复制Pod调试-加入调试容器</h4><p>kubectl会创建新的pod副本，<strong>这不会影响到原有的Pod</strong>，并且新的pod中有我们指定的调试容器，但是这里使用的不是临时容器，而是普通容器。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>root@k8s-master-01 yaml<span class=o>]</span><span class=c1># kubectl debug myapp -it --image=ubuntu --share-processes --copy-to=myapp-debug</span>
 </span></span><span class=line><span class=cl>Defaulting debug container name to debugger-8zmpv.
 </span></span><span class=line><span class=cl>If you don<span class=err>&#39;</span>t see a <span class=nb>command</span> prompt, try pressing enter.
-</span></span></code></pre></td></tr></table></div></div><blockquote><p>&ndash;image 调试容器的镜像
-&ndash;copy-to=myapp-debug 表示复制pod，不会对原pod造成侵入
-&ndash;share-processes 开启Pod的share-processes。 (pod.spec.shareProcessNamespace=true) 因为使用了复制Pod调试，这里就不再创建临时容器了，而是普通容器</p></blockquote><h4 id=2-复制pod调试-仅改变原容器启动命令>2. 复制Pod调试-仅改变原容器启动命令</h4><p>这个和上面的区别是，这里并没有添加调试容器，而是复制了Pod，然后改变了原容器的启动命令，所以这种方式不需要指定镜像，因为他只改变了容器的启动命令</p><p>我们有一个如下的Pod，他在运行后立刻会异常退出</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>&ndash;image 调试容器的镜像</p><p>&ndash;copy-to=myapp-debug 表示复制pod，不会对原pod造成侵入</p><p>&ndash;share-processes 开启Pod的share-processes。 (pod.spec.shareProcessNamespace=true) 因为使用了复制Pod调试，这里就不再创建临时容器了，而是普通容器</p></blockquote><h4 id=2-复制pod调试-仅改变原容器启动命令>2. 复制Pod调试-仅改变原容器启动命令</h4><p>这个和上面的区别是，这里并没有添加调试容器，而是复制了Pod，然后改变了原容器的启动命令，所以这种方式不需要指定镜像，因为他只改变了容器的启动命令</p><p>我们有一个如下的Pod，他在运行后立刻会异常退出</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl run --image<span class=o>=</span>busybox:1.28 myapp -- <span class=nb>false</span>
 </span></span></code></pre></td></tr></table></div></div><p>假如我们不知道为什么启动命令执行失败了，我们通过如下命令，可以进入到pod中手动调试启动命令</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl debug myapp -it --copy-to<span class=o>=</span>myapp-debug --container<span class=o>=</span>myapp -- sh

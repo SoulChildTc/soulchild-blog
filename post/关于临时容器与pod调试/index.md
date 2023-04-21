@@ -48,7 +48,9 @@ If you don't see a command prompt, try pressing enter.
 ```
 
 > --image 指定临时容器的镜像
+> 
 > --target 指定调试目标容器的名称，目的是将临时容器的进程命名空间加入到要调试的容器中。 当然你不想他们在同一个进程命名空间中不加也无所谓
+> 
 > cd /proc/1/root可以看到ephemeral-demo容器的文件系统
 
 ### 使用非临时容器调试Pod
@@ -64,7 +66,9 @@ If you don't see a command prompt, try pressing enter.
 ```
 
 > --image 调试容器的镜像
+> 
 > --copy-to=myapp-debug 表示复制pod，不会对原pod造成侵入
+> 
 > --share-processes 开启Pod的share-processes。 (pod.spec.shareProcessNamespace=true) 因为使用了复制Pod调试，这里就不再创建临时容器了，而是普通容器
 
 #### 2. 复制Pod调试-仅改变原容器启动命令
