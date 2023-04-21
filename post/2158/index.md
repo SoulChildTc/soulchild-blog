@@ -16,6 +16,7 @@ providers包括：`docker`,`kubernetes-Ingress`,`kubernetes-IngressRoute`,`ranch
 [不同provider对应的名称](https://doc.traefik.io/traefik/providers/overview/#supported-providers)
 
 Provider Namespace
+
 在 Traefik 动态配置中声明某些对象时，例如中间件、服务、TLS 选项、TCP，它们位于这个 provider 的命名空间中，所以在使用多个 provider 时，如果希望引用在另一个 provider 中声明的此类对象（例如，引用像中间件这样的跨提供者对象），则引用的对象名称 格式为 `<resource-name>@<provider-name>` , kubernetes 比较特殊, 因为 kubernetes 也有Namespace的概念，他需要使用这样的格式 `<middleware in k8s namespace>-<middleware name>@kubernetescrd`。
 
 例如使用 kubernetes CRD 声明了一个中间件，他的 provider name 是 kubernetescrd 
