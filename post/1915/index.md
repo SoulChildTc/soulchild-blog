@@ -2,26 +2,40 @@
 
 <!--more-->
 命令:
-```
+
+```bash
 etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt  --cert=/etc/kubernetes/pki/etcd/peer.crt  --key=/etc/kubernetes/pki/etcd/peer.key
 ```
 
 集群节点列表：
-```ETCDCTL_API=3 etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt  --cert=/etc/kubernetes/pki/etcd/peer.crt  --key=/etc/kubernetes/pki/etcd/peer.key  member list
+
+```bash
+ETCDCTL_API=3 etcdctl \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt  \
+--cert=/etc/kubernetes/pki/etcd/peer.crt  \
+--key=/etc/kubernetes/pki/etcd/peer.key  \
+member list
 ```
 
 etcd备份：
-```
-ETCDCTL_API=3 etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt  --cert=/etc/kubernetes/pki/etcd/peer.crt  --key=/etc/kubernetes/pki/etcd/peer.key snapshot save 202008131304.db
+
+```bash
+ETCDCTL_API=3 etcdctl \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt  \
+--cert=/etc/kubernetes/pki/etcd/peer.crt  \
+--key=/etc/kubernetes/pki/etcd/peer.key \
+snapshot save 202008131304.db
 ```
 
 etcd恢复：
+
+```bash
+ETCDCTL_API=3 etcdctl \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt  \
+--cert=/etc/kubernetes/pki/etcd/peer.crt  \
+--key=/etc/kubernetes/pki/etcd/peer.key \
+snapshot restore 202008131304.db
 ```
-ETCDCTL_API=3 etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt  --cert=/etc/kubernetes/pki/etcd/peer.crt  --key=/etc/kubernetes/pki/etcd/peer.key snapshot restore 202008131304.db
-```
-
-
-
 
 
 ---
