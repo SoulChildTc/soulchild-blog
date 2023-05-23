@@ -1,0 +1,882 @@
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>Jenkins pipeline基础语法详解 - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路，一个记录运维开发、自动化运维、DevOps、Kubernetes、Docker、编程等技术笔记的博客，与您分享实用技巧和心得"><meta name=keywords content><meta itemprop=name content="Jenkins pipeline基础语法详解"><meta itemprop=description content><meta itemprop=datePublished content="2023-05-24T02:00:36+08:00"><meta itemprop=dateModified content="2023-05-24T02:00:36+08:00"><meta itemprop=wordCount content="1947"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content=","><meta property="og:title" content="Jenkins pipeline基础语法详解"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/684864836/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-05-24T02:00:36+08:00"><meta property="article:modified_time" content="2023-05-24T02:00:36+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="Jenkins pipeline基础语法详解"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/684864836/><link rel=prev href=https://www.soulchild.cn/post/%E5%85%B3%E4%BA%8E%E4%B8%B4%E6%97%B6%E5%AE%B9%E5%99%A8%E4%B8%8Epod%E8%B0%83%E8%AF%95/><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Jenkins pipeline基础语法详解","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/684864836\/"},"genre":"posts","keywords":"","wordcount":1947,"url":"https:\/\/www.soulchild.cn\/post\/684864836\/","datePublished":"2023-05-24T02:00:36+08:00","dateModified":"2023-05-24T02:00:36+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item text-start"><a class=menu-link href=https://www.travellings.cn title=开往 rel="noopener noreferrer" target=_blank><i class="fa-solid fa-train-subway fa-sm fa-fw fa-sm" aria-hidden=true></i> 开往</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item text-start"><a class=menu-link href=https://www.travellings.cn title=开往 rel="noopener noreferrer" target=_blank><i class="fa-solid fa-train-subway fa-sm fa-fw fa-sm" aria-hidden=true></i> 开往</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden=true></i></h2><div class="toc-content always-active" id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>Jenkins pipeline基础语法详解</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/devops/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> devops</a></span></div><div class=post-meta-line><span title="2023-05-24 02:00:36"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2023-05-24 02:00">2023-05-24 02:00</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 1947 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 10 分钟</span>&nbsp;<span id=busuanzi_container_page_pv class="busuanzi_visitors comment-visitors" data-flag-title="Jenkins pipeline基础语法详解">
+<i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_page_pv>-</span>&nbsp;次阅读
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#声明式流水线>声明式流水线</a><ul><li><a href=#pipeline>pipeline</a></li><li><a href=#agent>agent</a><ul><li><a href=#any>any</a></li><li><a href=#none>none</a></li><li><a href=#label>label</a></li><li><a href=#node>node</a></li><li><a href=#customworkspace>customWorkspace</a></li><li><a href=#docker>docker</a></li><li><a href=#dockerfile>dockerfile</a></li><li><a href=#kubernetes>kubernetes</a></li><li><a href=#其他>其他</a></li></ul></li><li><a href=#post>post</a><ul><li><a href=#always>always</a></li><li><a href=#changed>changed</a></li><li><a href=#fixed>fixed</a></li><li><a href=#regression>regression</a></li><li><a href=#aborted>aborted</a></li><li><a href=#failure>failure</a></li><li><a href=#success>success</a></li><li><a href=#unstable>unstable</a></li><li><a href=#unsuccessful>unsuccessful</a></li><li><a href=#cleanup>cleanup</a></li></ul></li><li><a href=#stagesstagesteps>stages/stage/steps</a></li><li><a href=#environment>environment</a></li><li><a href=#options>options</a><ul><li><a href=#builddiscarder>buildDiscarder</a></li><li><a href=#checkouttosubdirectory>checkoutToSubdirectory</a></li><li><a href=#disableconcurrentbuilds>disableConcurrentBuilds</a></li><li><a href=#disableresume>disableResume</a></li><li><a href=#newcontainerperstage>newContainerPerStage</a></li><li><a href=#overrideindextriggers>overrideIndexTriggers</a></li><li><a href=#preservestashes>preserveStashes</a></li><li><a href=#quietperiod>quietPeriod</a></li><li><a href=#retryglobalstage>retry(global+stage)</a></li><li><a href=#skipdefaultcheckoutglobalstage>skipDefaultCheckout(global+stage)</a></li><li><a href=#skipstagesafterunstable>skipStagesAfterUnstable</a></li><li><a href=#timeoutglobalstage>timeout(global+stage)</a></li><li><a href=#timestampsglobalstage>timestamps(global+stage)</a></li><li><a href=#parallelsalwaysfailfast>parallelsAlwaysFailFast</a></li></ul></li><li><a href=#paramters>paramters</a></li><li><a href=#triggers>triggers</a><ul><li><a href=#cron>cron</a></li><li><a href=#pollscm>pollSCM</a></li><li><a href=#upstream>upstream</a></li><li><a href=#cron语法>cron语法</a></li></ul></li><li><a href=#tools>tools</a></li><li><a href=#input>input</a><ul><li><a href=#message><strong>message</strong></a></li><li><a href=#id>id</a></li><li><a href=#ok>ok</a></li><li><a href=#submitter>submitter</a></li><li><a href=#submitterparameter><strong>submitterParameter</strong></a></li><li><a href=#parameters>parameters</a></li></ul></li><li><a href=#when>when</a><ul><li><a href=#branch>branch</a></li><li><a href=#buildingtag>buildingTag</a></li><li><a href=#changelog>changelog</a></li><li><a href=#changeset>changeset</a></li><li><a href=#changerequest>changeRequest</a></li><li><a href=#environment-1>environment</a></li><li><a href=#equals>equals</a></li><li><a href=#expression>expression</a></li><li><a href=#tag>tag</a></li><li><a href=#not>not</a></li><li><a href=#allof>allOf</a></li><li><a href=#anyof>anyOf</a></li><li><a href=#triggeredby>triggeredBy</a></li><li><a href=#在当前阶段进入agent之前评估条件>在当前阶段进入agent之前评估条件</a></li><li><a href=#在input指令之前评估条件>在input指令之前评估条件</a></li><li><a href=#在-options-指令之前评估-when>在 options 指令之前评估 when</a></li><li><a href=#官方示例>官方示例</a></li></ul></li><li><a href=#并行>并行</a></li><li><a href=#矩阵运行>矩阵运行</a></li></ul></li><li><a href=#脚本式流水线>脚本式流水线</a></li></ul></nav></div></div><div class=content id=content data-end-flag=---><h2 id=声明式流水线>声明式流水线</h2><h3 id=pipeline>pipeline</h3><p>在声明式管道中所有的内容都在pipeline中填写</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=cm>/* insert Declarative Pipeline here */</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><ul><li>声明式管道中的部分通常包含一个或多个 <a href=https://www.jenkins.io/doc/book/pipeline/syntax/#declarative-directives target=_blank rel="external nofollow noopener noreferrer">指令<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>或<a href=https://www.jenkins.io/doc/book/pipeline/syntax/#declarative-steps target=_blank rel="external nofollow noopener noreferrer">步骤<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>。</li></ul></blockquote><h3 id=agent>agent</h3><p>允许配置在<code>pipeline</code>或<code>stage</code>中
+指定 整个流水线 或者 某个阶段(步骤) 在哪个 环境(节点) 中执行。
+在整个流水线中定义agent(<strong>必须</strong>)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>agent</span> <span class=n>any</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>在某个步骤中定义agent(<strong>可选</strong>)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>agent</span> <span class=n>none</span>
+</span></span><span class=line><span class=cl>    <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Example&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>agent</span> <span class=n>any</span>
+</span></span><span class=line><span class=cl>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>echo</span> <span class=s1>&#39;Hello World&#39;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=any>any</h4><p>在任何可用的节点中执行这个管道或阶段。例如：<code>agent any</code></p><h4 id=none>none</h4><p>当在流水线块的顶层使用none时，不会为整个流水线运行分配全局默认运行节点，每个阶段部分需要指定自己的节点。例如：<code>agent none</code></p><h4 id=label>label</h4><p>根据标签匹配节点，例如<code>agent { label 'my-defined-label' }</code>
+也可以使用条件，例如<code>agent { label 'my-label1 && my-label2' }</code>和<code>agent { label 'my-label1 || my-label2' }</code></p><h4 id=node>node</h4><p><code>agent { node { label 'labelName' } }</code> 和 <code>agent { label 'labelName' }</code>一样， 但是node可以配置额外的选项<code>customWorkspace</code>。</p><h4 id=customworkspace>customWorkspace</h4><p>自定义工作目录</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>agent</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>node</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>label</span> <span class=s1>&#39;my-defined-label&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>customWorkspace</span> <span class=s1>&#39;/some/other/path&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=docker>docker</h4><p>安装插件：<code>Docker</code>、<code>Docker Pipeline</code>
+使用容器执行整个流水线个某个步骤，例如<code>agent { docker 'maven:3.9.0-eclipse-temurin-11' }</code>，下面的方式可以配置更多的选项</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>agent</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>docker</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>image</span> <span class=s1>&#39;maven:3.9.0-eclipse-temurin-11&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>label</span> <span class=s1>&#39;my-defined-label&#39;</span> <span class=c1>// 运行指定节点上的docker
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>args</span>  <span class=s1>&#39;-v /tmp:/tmp&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>registryUrl</span> <span class=s1>&#39;https://myregistry.com/&#39;</span>  <span class=c1>// 自定义仓库
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>registryCredentialsId</span> <span class=s1>&#39;myPredefinedCredentialsInJenkins&#39;</span> <span class=c1>// 指定登录凭证
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>alwaysPull</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=dockerfile>dockerfile</h4><p>根据代码仓库的Dockerfile构建一个容器环境，用作执行整个流水线或某个步骤的节点</p><h4 id=kubernetes>kubernetes</h4><p>使用k8s的pod作为执行整个流水线或某个步骤的节点。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>agent</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>kubernetes</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>defaultContainer</span> <span class=s1>&#39;kaniko&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>yaml</span> <span class=s1>&#39;&#39;&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>kind: Pod
+</span></span></span><span class=line><span class=cl><span class=s1>spec:
+</span></span></span><span class=line><span class=cl><span class=s1>  containers:
+</span></span></span><span class=line><span class=cl><span class=s1>  - name: kaniko
+</span></span></span><span class=line><span class=cl><span class=s1>    image: gcr.io/kaniko-project/executor:debug
+</span></span></span><span class=line><span class=cl><span class=s1>    imagePullPolicy: Always
+</span></span></span><span class=line><span class=cl><span class=s1>    command:
+</span></span></span><span class=line><span class=cl><span class=s1>    - sleep
+</span></span></span><span class=line><span class=cl><span class=s1>    args:
+</span></span></span><span class=line><span class=cl><span class=s1>    - 99d
+</span></span></span><span class=line><span class=cl><span class=s1>    volumeMounts:
+</span></span></span><span class=line><span class=cl><span class=s1>      - name: aws-secret
+</span></span></span><span class=line><span class=cl><span class=s1>        mountPath: /root/.aws/
+</span></span></span><span class=line><span class=cl><span class=s1>      - name: docker-registry-config
+</span></span></span><span class=line><span class=cl><span class=s1>        mountPath: /kaniko/.docker
+</span></span></span><span class=line><span class=cl><span class=s1>  volumes:
+</span></span></span><span class=line><span class=cl><span class=s1>    - name: aws-secret
+</span></span></span><span class=line><span class=cl><span class=s1>      secret:
+</span></span></span><span class=line><span class=cl><span class=s1>        secretName: aws-secret
+</span></span></span><span class=line><span class=cl><span class=s1>    - name: docker-registry-config
+</span></span></span><span class=line><span class=cl><span class=s1>      configMap:
+</span></span></span><span class=line><span class=cl><span class=s1>        name: docker-registry-config
+</span></span></span><span class=line><span class=cl><span class=s1>&#39;&#39;&#39;</span>
+</span></span><span class=line><span class=cl>   <span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p><a href=https://github.com/jenkinsci/kubernetes-plugin/blob/master/examples/kaniko.groovy target=_blank rel="external nofollow noopener noreferrer">https://github.com/jenkinsci/kubernetes-plugin/blob/master/examples/kaniko.groovy<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p></blockquote><h4 id=其他>其他</h4><p><a href=https://www.jenkins.io/doc/book/pipeline/syntax/#agent target=_blank rel="external nofollow noopener noreferrer">https://www.jenkins.io/doc/book/pipeline/syntax/#agent<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><h3 id=post>post</h3><p>允许配置在<code>pipeline</code>和<code>stage</code>中
+可以在流水线或者某个阶段执行后 执行一些其他的动作, 比如当某个步骤执行成功要做什么，执行失败要做什么。
+支持以下的条件</p><h4 id=always>always</h4><p>无论运行成功或失败都执行</p><h4 id=changed>changed</h4><p>如果当前 Pipeline 的运行与上一次运行的完成状态不同，才运行</p><h4 id=fixed>fixed</h4><p>如果当前 Pipeline 的运行成功并且之前的运行失败或不稳定，才运行</p><h4 id=regression>regression</h4><p>仅当前流水线的状态为失败、不稳定或中止且上一次运行成功时，才运行。</p><h4 id=aborted>aborted</h4><p>如果当前 Pipeline 的运行处于“中止”状态，才运行，通常是由于 Pipeline 被手动中止。这通常在 Web UI 中用灰色表示。</p><h4 id=failure>failure</h4><p>仅当前流水线或阶段的运行处于“失败”状态时才运行，通常在 Web UI 中用红色表示。</p><h4 id=success>success</h4><p>仅当前流水线或阶段的运行状态为“成功”时才运行，通常在 Web UI 中用蓝色或绿色表示</p><h4 id=unstable>unstable</h4><p>如果当前 Pipeline 的运行处于“不稳定”状态，则运行，这通常是由测试失败、代码违规等引起的。这通常在 Web UI 中以黄色表示。</p><h4 id=unsuccessful>unsuccessful</h4><p>如果当前流水线或阶段的运行状态不是“成功”，则运行</p><h4 id=cleanup>cleanup</h4><p>在评估所有其他后置条件后，运行此后置条件中的步骤，无论管道或阶段的状态如何。</p><p>示例</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>agent</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>label</span> <span class=s1>&#39;mytest&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Hello&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>echo</span> <span class=s1>&#39;Hello World&#39;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>            <span class=n>post</span> <span class=o>{</span>   <span class=c1>// 步骤中的post
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>always</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>echo</span> <span class=s2>&#34;步骤中 always&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=n>cleanup</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>echo</span> <span class=s2>&#34;步骤中 cleanup&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>post</span> <span class=o>{</span> <span class=c1>// 整个流水线的post
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>always</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>echo</span> <span class=s2>&#34;always&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>cleanup</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>echo</span> <span class=s2>&#34;cleanup&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=stagesstagesteps>stages/stage/steps</h3><p>这里是流水线的核心，他们的关系是:
+全局有一个<code>stages</code>，它包含一个或多个<code>stage</code>，stage具有名称，每个<code>stage</code>包含一个<code>steps</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>agent</span> <span class=n>any</span>
+</span></span><span class=line><span class=cl>    <span class=n>stages</span> <span class=o>{</span> 
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Example&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>echo</span> <span class=s1>&#39;Hello World&#39;</span>
+</span></span><span class=line><span class=cl>                <span class=n>script</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>ls</span> <span class=o>-</span><span class=n>l</span>
+</span></span><span class=line><span class=cl>                    <span class=n>pwd</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>stage可以包含stages，在并行或矩阵运行步骤时有用</p></blockquote><p>关于step，在声明式pipeline中，可以使用很多内置和插件的语法，<a href=https://www.jenkins.io/doc/pipeline/steps/ target=_blank rel="external nofollow noopener noreferrer">https://www.jenkins.io/doc/pipeline/steps/<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>。</p><h3 id=environment>environment</h3><p>允许配置在<code>pipeline</code>或<code>stage</code>中
+<a href=https://www.jenkins.io/doc/book/pipeline/syntax/#declarative-directives target=_blank rel="external nofollow noopener noreferrer">https://www.jenkins.io/doc/book/pipeline/syntax/#declarative-directives<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>
+自定义环境变量，也从jenkins凭据中读取数据到环境变量，这个变量是被保护的哦!!! 也可以使用<code>withCredentials</code>插件获取(<a href=https://www.jenkins.io/doc/pipeline/steps/ target=_blank rel="external nofollow noopener noreferrer">这里搜索<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>agent</span> <span class=n>any</span>
+</span></span><span class=line><span class=cl>    <span class=n>environment</span> <span class=o>{</span> 
+</span></span><span class=line><span class=cl>        <span class=n>CC</span> <span class=o>=</span> <span class=s1>&#39;clang&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=n>PIPELINE_TEST</span> <span class=o>=</span> <span class=n>credentials</span><span class=o>(</span><span class=s1>&#39;pipeline-test&#39;</span><span class=o>)</span>   <span class=c1>// 获取pipeline-test凭据的内容给PIPELINE_TEST，所有的步骤都能读取到
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>IPADDR</span> <span class=o>=</span> <span class=n>sh</span><span class=o>(</span><span class=nl>returnStdout:</span> <span class=kc>true</span><span class=o>,</span> <span class=nl>script:</span> <span class=s2>&#34;hostname -I | awk &#39;{print \$2}&#39;&#34;</span><span class=o>).</span><span class=na>trim</span><span class=o>()</span> <span class=c1>// 执行命令获取
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Example&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>environment</span> <span class=o>{</span> 
+</span></span><span class=line><span class=cl>                <span class=n>AN_ACCESS_KEY</span> <span class=o>=</span> <span class=n>credentials</span><span class=o>(</span><span class=s1>&#39;pipeline-test&#39;</span><span class=o>)</span> <span class=c1>// 只有当前的步骤能读取到AN_ACCESS_KEY
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>sh</span> <span class=s1>&#39;printenv&#39;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>案例2 - 凭据中有多个内容</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>agent</span> <span class=n>any</span>
+</span></span><span class=line><span class=cl>    <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Example Username/Password&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>environment</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>SERVICE_CREDS</span> <span class=o>=</span> <span class=n>credentials</span><span class=o>(</span><span class=s1>&#39;my-predefined-username-password&#39;</span><span class=o>)</span> <span class=c1>// 用户名和密码类型: 存入SERVICE_CREDS_前缀的变量中
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>sh</span> <span class=s1>&#39;echo &#34;Service user is $SERVICE_CREDS_USR&#34;&#39;</span> <span class=c1>// SERVICE_CREDS_USR 是用户名
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>sh</span> <span class=s1>&#39;echo &#34;Service password is $SERVICE_CREDS_PSW&#34;&#39;</span> <span class=c1>// SERVICE_CREDS_PSW 是密码
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>sh</span> <span class=s1>&#39;curl -u $SERVICE_CREDS https://myservice.example.com&#39;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Example SSH Username with private key&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>environment</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>SSH_CREDS</span> <span class=o>=</span> <span class=n>credentials</span><span class=o>(</span><span class=s1>&#39;my-predefined-ssh-creds&#39;</span><span class=o>)</span> <span class=c1>// ssh类型
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>sh</span> <span class=s1>&#39;echo &#34;SSH private key is located at $SSH_CREDS&#34;&#39;</span> <span class=c1>// SSH_CREDS 私钥
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>sh</span> <span class=s1>&#39;echo &#34;SSH user is $SSH_CREDS_USR&#34;&#39;</span> <span class=c1>// SSH_CREDS_USR 用户名
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>sh</span> <span class=s1>&#39;echo &#34;SSH passphrase is $SSH_CREDS_PSW&#34;&#39;</span> <span class=c1>// SSH_CREDS_PSW 密码
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=options>options</h3><p>options允许配置在<code>pipeline</code>或<code>stage(只有部分选项)</code>中
+很好的文章<a href=https://cloudaffaire.com/jenkins-pipeline-part-5-options/ target=_blank rel="external nofollow noopener noreferrer">https://cloudaffaire.com/jenkins-pipeline-part-5-options/<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>
+用于设置流水线和步骤</p><h4 id=builddiscarder>buildDiscarder</h4><p>保留最近 n 个 Pipeline 运行历史记录<code>options { buildDiscarder(logRotator(numToKeepStr: '1')) }</code></p><h4 id=checkouttosubdirectory>checkoutToSubdirectory</h4><p>获取git仓库时，将代码拉到指定的目录中<code>options { checkoutToSubdirectory('MyCustomDir') }</code>
+这里指的是拉取jenkinsfile仓库, 一般jenkinsfile会和代码放在一个仓库</p><h4 id=disableconcurrentbuilds>disableConcurrentBuilds</h4><p>禁止并行运行流水线，可以选择等待之前的流水线运行完毕<code>options { disableConcurrentBuilds() }</code>, 也可以选择终止上一个流水线<code>options { disableConcurrentBuilds(abortPrevious: true) }</code></p><h4 id=disableresume>disableResume</h4><p>如果一个流水线正在运行中，这时候jenkins发生了重启，默认启动后会恢复运行中的流水线， 使用disableResume则不允许流水线恢复。例如<code>options { disableResume() }</code>。jenkins重启了，但是agent不一定重启</p><h4 id=newcontainerperstage>newContainerPerStage</h4><p>如果agent使用了 docker 或 dockerfile 。每个阶段将在同一节点上的新容器实例中运行，而不是所有阶段都在同一容器实例中运行。</p><h4 id=overrideindextriggers>overrideIndexTriggers</h4><p><a href=https://www.jenkins.io/doc/book/pipeline/syntax/#options target=_blank rel="external nofollow noopener noreferrer">https://www.jenkins.io/doc/book/pipeline/syntax/#options<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><h4 id=preservestashes>preserveStashes</h4><p>在jenkins中可以使用stash保存指定的内容给后面的步骤使用，仅限于同一个流水线，作用就是 如果你想要 从指定阶段重新运行，正好流水线又需要unstash，那么可能会报错，因为之前的流水线已经运行完毕，stash的内容会被丢弃，而preserveStashes的作用就是保留它，需要指定保留最近几次构建的内容</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>  
+</span></span><span class=line><span class=cl>    <span class=n>agent</span> <span class=o>{</span> <span class=n>label</span> <span class=s1>&#39;mytest&#39;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>options</span> <span class=o>{</span>  
+</span></span><span class=line><span class=cl>        <span class=n>preserveStashes</span><span class=o>(</span><span class=nl>buildCount:</span> <span class=mi>2</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>stages</span> <span class=o>{</span>    
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;one&#39;</span><span class=o>)</span> <span class=o>{</span>  
+</span></span><span class=line><span class=cl>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>sh</span> <span class=s2>&#34;mkdir input&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=n>writeFile</span> <span class=nl>file:</span> <span class=s2>&#34;input/myfile${BUILD_NUMBER}&#34;</span><span class=o>,</span> <span class=nl>text:</span> <span class=s2>&#34;Hello world!&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=n>stash</span> <span class=nl>name:</span> <span class=s2>&#34;mystash&#34;</span><span class=o>,</span> <span class=nl>includes:</span> <span class=s2>&#34;input/*&#34;</span>  <span class=c1>// 用于将指定目录的内容暂存并提供给后面的阶段使用
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>sh</span> <span class=s2>&#34;rm -r input&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>  
+</span></span><span class=line><span class=cl>        <span class=o>}</span>  
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;two&#39;</span><span class=o>)</span> <span class=o>{</span>  
+</span></span><span class=line><span class=cl>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>sh</span> <span class=s2>&#34;mkdir output&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=n>dir</span><span class=o>(</span><span class=s2>&#34;output&#34;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>unstash</span> <span class=s2>&#34;mystash&#34;</span>  <span class=c1>// 使用之前暂存的内容
+</span></span></span><span class=line><span class=cl><span class=c1></span>                    <span class=n>sh</span> <span class=s2>&#34;ls -lR ${pwd()}&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=n>sh</span> <span class=s2>&#34;rm -r output&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>  
+</span></span><span class=line><span class=cl>        <span class=o>}</span>  
+</span></span><span class=line><span class=cl>    <span class=o>}</span>  
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>这个例子测试流程如下</p><ol><li>完整的运行流水线一次，比如他的构建ID是10</li><li>进入构建ID为10的这个流水线，选择从指定阶段重新运行，选择two阶段。第一次正常运行</li><li>重复步骤二。第二次正常运行</li><li>重复步骤二。第三次运行失败，提示<code>No such saved stash ‘mystash’</code></li></ol></blockquote><h4 id=quietperiod>quietPeriod</h4><p>设置静默期. 什么是静默期？当通过git webhook(或者其他手段) 触发构建后首先会处于静默期，静默期结束才会执行构建。如果在静默期内被触发多次构建，静默期结束也只会执行一次构建。例如<code>options { quietPeriod(30) }</code></p><h4 id=retryglobalstage>retry(global+stage)</h4><p>失败时，重试整个流水线指定的次数. 例如<code>options { retry(3) }</code></p><h4 id=skipdefaultcheckoutglobalstage>skipDefaultCheckout(global+stage)</h4><p>目前测试下来就是，当jenkinsfile从git仓库获取时, 默认会拉取全部的内容到工作空间中，使用skipDefaultCheckout true就不会拉取, 但还是可以获取到jenkinsfile。
+适用于我们的代码仓库和jenkinsfile不在一起的情况。其他情况可能需要配合多分支流水线</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>agent</span> <span class=n>any</span>
+</span></span><span class=line><span class=cl>  <span class=n>options</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>skipDefaultCheckout</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Checkout&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>checkout</span> <span class=n>scm</span> <span class=c1>// 手动执行
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Hello&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>sh</span> <span class=s1>&#39;cat file.txt&#39;</span>
+</span></span><span class=line><span class=cl>      <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=skipstagesafterunstable>skipStagesAfterUnstable</h4><p>如果某个阶段不稳定，那么后续的阶段就不执行了，直接跳过</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=n>agent</span> <span class=o>{</span> <span class=n>label</span> <span class=s1>&#39;test&#39;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=n>options</span> <span class=o>{</span> <span class=err> </span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=n>skipStagesAfterUnstable</span><span class=o>()</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Stable&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=n>sh</span> <span class=s1>&#39;exit 0&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Unstable&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=n>unstable</span><span class=o>(</span><span class=nl>message:</span> <span class=s2>&#34;unknown error&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;StableAgain&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=n>sh</span> <span class=s1>&#39;exit 0&#39;</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=err> </span> <span class=err> </span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=err> </span> <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=timeoutglobalstage>timeout(global+stage)</h4><p>为 Pipeline 运行设置一个超时时间，超时后自动终止流水线。例如<code>options { timeout(time: 1, unit: 'HOURS') }</code></p><h4 id=timestampsglobalstage>timestamps(global+stage)</h4><p>在控制台输出中添加时间，例如 <code>options { timestamps() }</code></p><h4 id=parallelsalwaysfailfast>parallelsAlwaysFailFast</h4><p>设置后，如果某个并行步骤执行失败，后续的并行步骤就不执行了。配置示例<code>options { parallelsAlwaysFailFast() }</code></p><h3 id=paramters>paramters</h3><p>只能在pipeline块中配置一次。
+<a href=https://www.jenkins.io/doc/book/pipeline/syntax/#parameters target=_blank rel="external nofollow noopener noreferrer">https://www.jenkins.io/doc/book/pipeline/syntax/#parameters<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>
+用户交互相关，可以让用户输入内容</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>agent</span> <span class=n>any</span>
+</span></span><span class=line><span class=cl>    <span class=n>parameters</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>string</span><span class=o>(</span><span class=nl>name:</span> <span class=s1>&#39;PERSON&#39;</span><span class=o>,</span> <span class=nl>defaultValue:</span> <span class=s1>&#39;Mr Jenkins&#39;</span><span class=o>,</span> <span class=nl>description:</span> <span class=s1>&#39;请输入一个字符串&#39;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>text</span><span class=o>(</span><span class=nl>name:</span> <span class=s1>&#39;BIOGRAPHY&#39;</span><span class=o>,</span> <span class=nl>defaultValue:</span> <span class=s1>&#39;&#39;</span><span class=o>,</span> <span class=nl>description:</span> <span class=s1>&#39;请输入长文本&#39;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>booleanParam</span><span class=o>(</span><span class=nl>name:</span> <span class=s1>&#39;TOGGLE&#39;</span><span class=o>,</span> <span class=nl>defaultValue:</span> <span class=kc>true</span><span class=o>,</span> <span class=nl>description:</span> <span class=s1>&#39;请勾选&#39;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>choice</span><span class=o>(</span><span class=nl>name:</span> <span class=s1>&#39;CHOICE&#39;</span><span class=o>,</span> <span class=nl>choices:</span> <span class=o>[</span><span class=s1>&#39;One&#39;</span><span class=o>,</span> <span class=s1>&#39;Two&#39;</span><span class=o>,</span> <span class=s1>&#39;Three&#39;</span><span class=o>],</span> <span class=nl>description:</span> <span class=s1>&#39;请选择一项&#39;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>password</span><span class=o>(</span><span class=nl>name:</span> <span class=s1>&#39;PASSWORD&#39;</span><span class=o>,</span> <span class=nl>defaultValue:</span> <span class=s1>&#39;SECRET&#39;</span><span class=o>,</span> <span class=nl>description:</span> <span class=s1>&#39;请输入密码&#39;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Example&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>echo</span> <span class=s2>&#34;Hello ${params.PERSON}&#34;</span> <span class=c1>// 不加params也可以${PERSON}
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>                <span class=n>echo</span> <span class=s2>&#34;Biography: ${params.BIOGRAPHY}&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                <span class=n>echo</span> <span class=s2>&#34;Toggle: ${params.TOGGLE}&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                <span class=n>echo</span> <span class=s2>&#34;Choice: ${params.CHOICE}&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                <span class=n>echo</span> <span class=s2>&#34;Password: ${params.PASSWORD}&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=triggers>triggers</h3><p>只能在pipeline块中配置一次。
+定义自动触发流水线的方式</p><h4 id=cron>cron</h4><p>定时触发，例如<code>triggers { cron('H */4 * * 1-5') }</code></p><h4 id=pollscm>pollSCM</h4><p>在jenkins中配置了从git或其他版本控制工具获取jenkinsfile时，定时检测仓库有没有变化，有变化就执行流水线。这种方式会对git之类的代码服务器造成一些压力。
+使用示例：<code>triggers { pollSCM('H */4 * * 1-5') }</code></p><h4 id=upstream>upstream</h4><p>如果其他项目执行成功，那么触发当前流水线。例如<code>triggers { upstream(upstreamProjects: 'upstream', threshold: hudson.model.Result.SUCCESS) }</code>， 当upstream这个job运行成功，那么就执行当前job。注意当前流水线需要手动执行一次, 后续才会自动触发</p><h4 id=cron语法>cron语法</h4><p><a href=https://www.jenkins.io/doc/book/pipeline/syntax/#cron-syntax target=_blank rel="external nofollow noopener noreferrer">https://www.jenkins.io/doc/book/pipeline/syntax/#cron-syntax<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><h3 id=tools>tools</h3><p>tools允许配置在<code>pipeline</code>和<code>stage</code>中
+使用全局工具中配置的工具，好处是可以指定不同的版本, 并且使用全局工具是可以有自动安装的功能。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>agent</span> <span class=o>{</span> <span class=n>label</span> <span class=s1>&#39;mytest&#39;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;hello&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>tools</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>dockerTool</span> <span class=s1>&#39;docker1&#39;</span>  <span class=c1>// 这里会自动将全局工具中设置的目录添加到PATH中
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>sh</span> <span class=s2>&#34;env;docker version&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=input>input</h3><p>人工卡点</p><h4 id=message><strong>message</strong></h4><p>必需的。给用户的提示语。</p><h4 id=id>id</h4><p>此input的可选标识符。默认值基于阶段名称。</p><h4 id=ok>ok</h4><p>设置确认按钮的文本</p><h4 id=submitter>submitter</h4><p>允许哪些用户提交，多个用户逗号分隔， 管理员总是能提交，默认所有人都能提交</p><h4 id=submitterparameter><strong>submitterParameter</strong></h4><p>将输入input的用户ID存入环境变量中</p><h4 id=parameters>parameters</h4><p>自定义用户输入，请参考上面的parameters部分
+完整示例</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>agent</span> <span class=o>{</span> <span class=n>label</span> <span class=s1>&#39;mytest&#39;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;dev&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>              <span class=n>echo</span> <span class=s2>&#34;building in dev env!&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;prod&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>input</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>message</span> <span class=s2>&#34;Deploy in production?&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=n>ok</span> <span class=s2>&#34;Deploy&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=n>submitter</span> <span class=s2>&#34;alice&#34;</span> <span class=c1>// 只允许alice用户提交
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>parameters</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>string</span><span class=o>(</span><span class=nl>name:</span> <span class=s1>&#39;Version&#39;</span><span class=o>,</span> <span class=nl>defaultValue:</span> <span class=s1>&#39;v1.0.4&#39;</span><span class=o>,</span> <span class=nl>description:</span> <span class=s1>&#39;Build version?&#39;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>echo</span> <span class=s2>&#34;deploying to production, version - $VERSION&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=n>sh</span> <span class=s2>&#34;env&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=when>when</h3><p>只能在stage中使用
+根据条件判断stage是否执行， 必须包含至少一个条件。如果 when 指令包含多个条件，则所有子条件都必须返回 true 才能执行该阶段。</p><h4 id=branch>branch</h4><p>判断分支是否一致，例如<code>when { branch 'master' }</code>。请注意，这仅适用于多分支流水线。
+更复杂的匹配模式，可以指定参数比较器：<code>EQUALS</code> 用于简单的字符串比较，<code>GLOB</code>（默认）用于 ANT 样式路径 glob，或 <code>REGEXP</code> 用于正则表达式匹配。例如正则比较器：<code>when { branch pattern: "release-\\d+", comparator: "REGEXP"}</code></p><h4 id=buildingtag>buildingTag</h4><p>如果当前 git(或其他SCM) 提交有标签，则 buildingTag 运行这个阶段。这种情况受到未修复错误的影响，如果您发现它不起作用，您应该手动设置 TAG_NAME 环境变量。</p><h4 id=changelog>changelog</h4><p>匹配git(或其他SCM)的changelog， 例如<code>when { changelog '.*^\\[DEPENDENCY\\] .+$' }</code></p><h4 id=changeset>changeset</h4><p>匹配git(或其他SCM)本次变更的文件，例如<code>when { changeset "**/*.js" }</code>
+指定参数比较器<code>when { changeset pattern: ".TEST\\.java", comparator: "REGEXP" }</code> or <code>when { changeset pattern: "*/*TEST.java", caseSensitive: true }</code></p><h4 id=changerequest>changeRequest</h4><p>判断是否为更改请求，比如github PR、gitlab MR等,例如<code>when { changeRequest() }</code></p><p>也可以判断一些额外的信息，他们包括<code>id</code>, <code>target</code>, <code>branch</code>, <code>fork</code>, <code>url</code>, <code>title</code>, <code>author</code>, <code>authorDisplayName</code>, <code>authorEmail</code>.
+其中每一个信息都对应一个 <code>CHANGE_*</code> 环境变量，例如：<code>when { changeRequest target: 'master' }</code>。</p><p>也可以指定参数比较器，例如<code>when { changeRequest authorEmail: "[\\w_-.]+@example.com", comparator: 'REGEXP' }</code></p><h4 id=environment-1>environment</h4><p><code>when { environment name: 'DEPLOY_TO', value: 'production' }</code> 判断环境变量DEPLOY_TO的值是不是production</p><h4 id=equals>equals</h4><p>当期望值等于实际值时执行阶段，例如<code>when { equals expected: 2, actual: currentBuild.number }</code>，<code>currentBuild.number</code>的值是2才会执行阶段。
+currentBuild的属性在<a href=http://jenkins.xxx.cn/job/xxx/pipeline-syntax/globals#currentBuild%e5%8f%af%e4%bb%a5%e6%89%be%e5%88%b0 target=_blank rel="external nofollow noopener noreferrer">http://jenkins.xxx.cn/job/xxx/pipeline-syntax/globals#currentBuild可以找到<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><h4 id=expression>expression</h4><p>当指定的 Groovy 表达式计算结果为真时执行该阶段，例如：<code>when { expression { return params.DEBUG_BUILD } }</code> 请注意，当从表达式返回字符串时，它们必须转换为布尔值或返回空值。简单地返回 &ldquo;0&rdquo; 或 &ldquo;false&rdquo; 仍将评估为 &ldquo;true&rdquo;。</p><h4 id=tag>tag</h4><p>如果 TAG_NAME 变量与给定模式匹配，则执行该阶段。示例：<code>when { tag "release-*" }</code>。如果提供了一个空匹配，如果 TAG_NAME 变量存在,与 buildingTag() 相同，该阶段将执行。</p><p>也可以使用参数比较器，例如<code>when { tag pattern: "release-\\d+", comparator: "REGEXP"}</code></p><h4 id=not>not</h4><p>取反，也就是当条件为假时执行该阶段。例如<code>when { not { branch 'master' } }</code>，分支不是master执行该阶段</p><h4 id=allof>allOf</h4><p>所有条件必须为真，例如<code>when { allOf { branch 'master'; environment name: 'DEPLOY_TO', value: 'production' } }</code></p><h4 id=anyof>anyOf</h4><p>或的关系，至少一个条件为真时执行该阶段，例如<code>anyOf { branch 'master'; branch 'staging' } }</code></p><h4 id=triggeredby>triggeredBy</h4><p>当前流水线由指定的方式触发，才会执行该阶段</p><ul><li><code>when { triggeredBy 'SCMTrigger' }</code> 应该是通过pollSCM触发的</li><li><code>when { triggeredBy 'TimerTrigger' }</code> 通过定时触发的</li><li><code>when { triggeredBy 'BuildUpstreamCause' }</code> 由上游构建触发</li><li><code>when { triggeredBy cause: "UserIdCause", detail: "vlinde" }</code> 由 vlinde 用户触发</li></ul><h4 id=在当前阶段进入agent之前评估条件>在当前阶段进入agent之前评估条件</h4><p>默认情况下，如果定义了一个阶段的 when 条件，将在进入该阶段的agent后对其进行评估。
+这可以通过在 when 块中将 <code>beforeAgent</code> 设置为 true 来更改。只有当 when 条件评估为 true 时才会进入代理，如果使用k8s这样的agent，可以免去不必要的pod创建启动</p><h4 id=在input指令之前评估条件>在input指令之前评估条件</h4><p>如果 <code>beforeInput</code> 设置为 true，则首先评估 when 条件，只有当 when 条件评估为 true 时才会执行input。</p><h4 id=在-options-指令之前评估-when>在 options 指令之前评估 when</h4><p><code>beforeOptions</code>设置为true即可</p><h4 id=官方示例>官方示例</h4><p><a href=https://www.jenkins.io/doc/book/pipeline/syntax/#evaluating-when-before-the-options-directive target=_blank rel="external nofollow noopener noreferrer">https://www.jenkins.io/doc/book/pipeline/syntax/#evaluating-when-before-the-options-directive<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><h3 id=并行>并行</h3><p>并行运行步骤的示例</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>agent</span> <span class=n>any</span>
+</span></span><span class=line><span class=cl>    <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Non-Parallel Stage&#39;</span><span class=o>)</span> <span class=o>{</span>  <span class=c1>// 第一个运行，这个运行完后才会运行下一个步骤
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>echo</span> <span class=s1>&#39;This stage will be executed first.&#39;</span>
+</span></span><span class=line><span class=cl>                <span class=n>sh</span> <span class=s2>&#34;sleep 10&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Parallel Stage&#39;</span><span class=o>)</span> <span class=o>{</span> <span class=c1>// 第二个运行，Branch A B C 同时运行， 其中C包含了两个步骤Nested 1 2，他们是串行的
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>failFast</span> <span class=kc>true</span>    <span class=c1>// 某个并行任务失败时，终止其他并行任务，也可以使用options指令设置
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>parallel</span> <span class=o>{</span>  <span class=c1>// 使用parallel包起来的stage是并行的
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Branch A&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>agent</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>label</span> <span class=s2>&#34;mytest&#34;</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>
+</span></span><span class=line><span class=cl>                    <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>echo</span> <span class=s2>&#34;On Branch A&#34;</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Branch B&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>agent</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>label</span> <span class=s2>&#34;mytest&#34;</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>
+</span></span><span class=line><span class=cl>                    <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>echo</span> <span class=s2>&#34;On Branch B&#34;</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Branch C&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>agent</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>label</span> <span class=s2>&#34;mytest&#34;</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>
+</span></span><span class=line><span class=cl>                    <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Nested 1&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                                <span class=n>echo</span> <span class=s2>&#34;In stage Nested 1 within Branch C&#34;</span>
+</span></span><span class=line><span class=cl>                                <span class=n>sh</span> <span class=s2>&#34;sleep 3&#34;</span>
+</span></span><span class=line><span class=cl>                            <span class=o>}</span>
+</span></span><span class=line><span class=cl>                        <span class=o>}</span>
+</span></span><span class=line><span class=cl>                        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Nested 2&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                                <span class=n>echo</span> <span class=s2>&#34;In stage Nested 2 within Branch C&#34;</span>
+</span></span><span class=line><span class=cl>                            <span class=o>}</span>
+</span></span><span class=line><span class=cl>                        <span class=o>}</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=矩阵运行>矩阵运行</h3><p>示例</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>pipeline</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>agent</span> <span class=n>any</span>
+</span></span><span class=line><span class=cl>    <span class=n>parameters</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>choice</span><span class=o>(</span><span class=nl>name:</span> <span class=s1>&#39;PLATFORM_FILTER&#39;</span><span class=o>,</span> <span class=nl>choices:</span> <span class=o>[</span><span class=s1>&#39;all&#39;</span><span class=o>,</span> <span class=s1>&#39;linux&#39;</span><span class=o>,</span> <span class=s1>&#39;windows&#39;</span><span class=o>,</span> <span class=s1>&#39;mac&#39;</span><span class=o>],</span> <span class=nl>description:</span> <span class=s1>&#39;Run on specific platform&#39;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s2>&#34;Build&#34;</span><span class=o>)</span> <span class=o>{</span>  
+</span></span><span class=line><span class=cl>            <span class=n>matrix</span> <span class=o>{</span>  <span class=c1>// 将axes中声明的所有内容组合起来
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>when</span> <span class=o>{</span> <span class=n>anyOf</span> <span class=o>{</span>  <span class=c1>// 只有选择all或者某一个平台才会构建
+</span></span></span><span class=line><span class=cl><span class=c1></span>                    <span class=n>expression</span> <span class=o>{</span> <span class=n>params</span><span class=o>.</span><span class=na>PLATFORM_FILTER</span> <span class=o>==</span> <span class=s1>&#39;all&#39;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>                    <span class=n>expression</span> <span class=o>{</span> <span class=n>params</span><span class=o>.</span><span class=na>PLATFORM_FILTER</span> <span class=o>==</span> <span class=n>env</span><span class=o>.</span><span class=na>PLATFORM</span> <span class=o>}</span>  <span class=c1>// env.PLATFORM就是将要构建的PLATFORM值, 如果不等于选择的平台就不会执行构建
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=o>}</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=n>axes</span> <span class=o>{</span> <span class=c1>// 这将根据下面的stages生成3x2个步骤,分别是linux + 32-bit, mac + 32-bit, windows + 32-bit, linux + 64-bit ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>                    <span class=n>axis</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>name</span> <span class=s1>&#39;PLATFORM&#39;</span>
+</span></span><span class=line><span class=cl>                        <span class=n>values</span> <span class=s1>&#39;linux&#39;</span><span class=o>,</span> <span class=s1>&#39;mac&#39;</span><span class=o>,</span> <span class=s1>&#39;windows&#39;</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>
+</span></span><span class=line><span class=cl>                    <span class=n>axis</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>name</span> <span class=s1>&#39;ARCHITECTURE&#39;</span>
+</span></span><span class=line><span class=cl>                        <span class=n>values</span> <span class=s1>&#39;32-bit&#39;</span><span class=o>,</span> <span class=s1>&#39;64-bit&#39;</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=n>stages</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Package&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>steps</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>sh</span> <span class=s2>&#34;echo build $PLATFORM-$ARCHITECTURE&#34;</span>
+</span></span><span class=line><span class=cl>                        <span class=o>}</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=n>excludes</span> <span class=o>{</span> <span class=c1>// 排除一些组合，他们是mac + 32-bit, windows + 32-bit
+</span></span></span><span class=line><span class=cl><span class=c1></span>                    <span class=n>exclude</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>axis</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>name</span> <span class=s1>&#39;PLATFORM&#39;</span>
+</span></span><span class=line><span class=cl>                            <span class=n>values</span> <span class=s1>&#39;mac&#39;</span>
+</span></span><span class=line><span class=cl>                        <span class=o>}</span>
+</span></span><span class=line><span class=cl>                        <span class=n>axis</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>name</span> <span class=s1>&#39;ARCHITECTURE&#39;</span>
+</span></span><span class=line><span class=cl>                            <span class=n>values</span> <span class=s1>&#39;32-bit&#39;</span>
+</span></span><span class=line><span class=cl>                        <span class=o>}</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>
+</span></span><span class=line><span class=cl>                    <span class=n>exclude</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>axis</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>name</span> <span class=s1>&#39;PLATFORM&#39;</span>
+</span></span><span class=line><span class=cl>                            <span class=n>values</span> <span class=s1>&#39;windows&#39;</span>
+</span></span><span class=line><span class=cl>                        <span class=o>}</span>
+</span></span><span class=line><span class=cl>                        <span class=n>axis</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>name</span> <span class=s1>&#39;ARCHITECTURE&#39;</span>
+</span></span><span class=line><span class=cl>                            <span class=n>values</span> <span class=s1>&#39;32-bit&#39;</span>
+</span></span><span class=line><span class=cl>                        <span class=o>}</span>
+</span></span><span class=line><span class=cl>                    <span class=o>}</span>
+</span></span><span class=line><span class=cl>                <span class=o>}</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=脚本式流水线>脚本式流水线</h2><p>groovy</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=c1>// 设置属性
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>properties</span><span class=o>([</span>
+</span></span><span class=line><span class=cl>    <span class=n>disableConcurrentBuilds</span><span class=o>(),</span>
+</span></span><span class=line><span class=cl>    <span class=n>buildDiscarder</span><span class=o>(</span><span class=n>logRotator</span><span class=o>(</span><span class=nl>numToKeepStr:</span> <span class=s1>&#39;1&#39;</span><span class=o>))</span>
+</span></span><span class=line><span class=cl><span class=o>])</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// timeout需要包裹body
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>timeout</span><span class=o>(</span><span class=nl>time:</span><span class=mi>1</span><span class=o>,</span> <span class=s2>&#34;unit&#34;</span><span class=o>:</span> <span class=s2>&#34;HOURS&#34;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 指定运行节点
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>node</span><span class=o>(</span><span class=s1>&#39;mytest&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Example&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=o>(</span><span class=n>env</span><span class=o>.</span><span class=na>BRANCH_NAME</span> <span class=o>==</span> <span class=s1>&#39;master&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>echo</span> <span class=s1>&#39;I only execute on the master branch&#39;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span> <span class=k>else</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>echo</span> <span class=s1>&#39;I execute elsewhere&#39;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Example2&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>sh</span> <span class=s2>&#34;pwd;sleep 5&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>try-catch</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-groovy data-lang=groovy><span class=line><span class=cl><span class=n>node</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>stage</span><span class=o>(</span><span class=s1>&#39;Example&#39;</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>try</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>sh</span> <span class=s1>&#39;exit 1&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=k>catch</span> <span class=o>(</span><span class=n>exc</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>echo</span> <span class=s1>&#39;Something failed, I should sound the klaxons!&#39;</span>
+</span></span><span class=line><span class=cl>            <span class=k>throw</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2023-05-24 02:00:36">更新于 2023-05-24 02:00&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/ class=post-tag>Tags</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/%E5%85%B3%E4%BA%8E%E4%B8%B4%E6%97%B6%E5%AE%B9%E5%99%A8%E4%B8%8Epod%E8%B0%83%E8%AF%95/ class=post-nav-item rel=prev title=关于临时容器与Pod调试><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>关于临时容器与Pod调试</a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wx.png alt="SoulChild 微信号">
+<span data-animation>微信号</span></div><div><img src=/images/wechatpay.png alt="SoulChild 微信打赏">
+<span data-animation>微信打赏</span></div></div></div><div id=comments><div id=giscus><script src=https://giscus.app/client.js data-repo=SoulChildTc/soulchild-blog data-repo-id=R_kgDOIwJKxg data-category=General data-category-id=DIC_kwDOIwJKxs4CTwRk data-mapping=title data-theme=preferred_color_scheme data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-lang=zh-CN data-loading=lazy crossorigin=anonymous async defer></script></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://giscus.app/ rel="external nofollow noopener noreferrer">giscus</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?7b986d4ea8e2e50e9c04984b78170660",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})(),function(){const e=document.createElement("script");e.async=!0,e.src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2612253564483084",e.crossOrigin="anonymous",document.head.insertBefore(e,document.getElementsByTagName("script")[0])}()</script><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright fa-fw" aria-hidden=true></i>
+<span itemprop=copyrightYear>2017 - 2023</span><span class=author itemprop=copyrightHolder>
+<a href=https://www.soulchild.cn target=_blank rel="external nofollow noopener noreferrer">SoulChild</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class=site-time title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden=true></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor"><span id=busuanzi_container_site_uv title=总访客数><i class="fa-regular fa-user fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_uv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span><span id=busuanzi_container_site_pv class=footer-divider title=总访问量><i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_pv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span></div><div class="footer-line beian"><span class="icp footer-divider">特别感谢
+<a href=https://gohugo.io target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.109.0">Hugo</a> |
+<a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v0.2.17-RC">FixIt</a> |
+<a href=https://github.com target=_blank rel="noopener noreffer">GitHub</a> |
+<a href=https://vercel.com target=_blank rel="noopener noreffer">Vercel</a></span></div></div></footer></div><div class=widgets><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role=button aria-label=回到顶部><i class="fa-solid fa-arrow-up fa-fw" aria-hidden=true></i><span class=variant-numeric>0%</span></div><div class="fixed-button view-comments d-none" role=button aria-label=查看评论><i class="fa-solid fa-comment fa-fw" aria-hidden=true></i></div></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0;--bg-progress:#438a55;--bg-progress-dark:#438a55></div><noscript><div class=noscript-warning>FixIt 主题在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/lightgallery/css/lightgallery-bundle.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/pace/themes/green/pace-theme-bounce.css><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/algoliasearch-lite.umd.min.js defer></script><script src=/lib/lazysizes/lazysizes.min.js async defer></script><script src=/lib/lightgallery/lightgallery.min.js defer></script><script src=/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js defer></script><script src=/lib/lightgallery/plugins/zoom/lg-zoom.min.js defer></script><script src=/lib/typeit/index.umd.js defer></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/lib/pangu/pangu.min.js defer></script><script src=/lib/cell-watermark/watermark.min.js defer></script><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async defer></script><script src=/lib/pace/pace.min.js async defer></script><script>window.config={autoBookmark:!0,code:{copyTitle:"复制到剪贴板",editLockTitle:"锁定可编辑代码块",editUnLockTitle:"解锁可编辑代码块",editable:!0,maxShownLines:50},comment:{enable:!0,expired:!1,giscus:{darkTheme:"dark",lightTheme:"light"}},data:{"typeit-header-subtitle-desktop":"/usr/bin/sleep infinity","typeit-header-subtitle-mobile":"/usr/bin/sleep infinity"},enablePWA:!0,lightgallery:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},pangu:{enable:!0,selector:"article"},search:{algoliaAppID:"CE9G7Q4H6N",algoliaIndex:"soulchild-blog",algoliaSearchKey:"0f69a431d92a03c2cf4143d8dbc6af0a",highlightTag:"em",maxResultLength:20,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},siteTime:"2017-06-08T21:38:36+08:00",typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},duration:-1,speed:100},watermark:{appendto:".wrapper\u003emain",colspacing:300,content:"SoulChild随笔记",enable:!0,fontfamily:"inherit",fontsize:.85,height:300,opacity:.1,rotate:15,rowspacing:100,width:300}}</script><script src=/js/theme.min.js defer></script></body></html>
