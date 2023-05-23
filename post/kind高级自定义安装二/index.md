@@ -4,16 +4,20 @@
 <!--more-->
 
 ## 前言
+
 上一章了解了使用 kind 快速创建一个简单 kubernetes 集群, 但在实际使用中往往是不够用的, 比如我们可能需要访问集群中部署的http服务, 或者我们要启用一些k8s默认关闭的特性, 安装多节点的 k8s 集群等等。为了完成这些高级功能，建议使用 YAML 文件来进行配置。这样可以更好地控制和定制集群。
 
 ## 使用yaml
+
 在创建集群的时候使用 `kind create cluster --config=config.yaml` 就可以安装了。
 在 yaml 配置中主要可以分为 `集群级别`的配置和`节点级别`的配置, 下面主要介绍常用的 yaml 配置怎么写。
 
 > 完整的配置请查看结构体 https://github.com/kubernetes-sigs/kind/blob/v0.18.0/pkg/apis/config/v1alpha4/types.go#L20 
 
 ### 集群配置
+
 #### 1. 集群名称
+
 ```yaml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
@@ -21,15 +25,18 @@ name: app-1-cluster
 ```
 
 #### 2. 启用特性
+
 ```yaml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 featureGates:
   "CSIMigration": true
 ```
+
 > https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#feature-gates-for-alpha-or-beta-features
 
 #### 3. 网络配置
+
 ```yaml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
@@ -55,6 +62,7 @@ networking:
 > ContainerdConfigPatches 和 ContainerdConfigPatchesJSON6902 用来修改 containerd 的配置
 
 ### 节点配置
+
 ```yaml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
@@ -74,6 +82,7 @@ nodes:
     listenAddress: 0.0.0.0 # 宿主机的监听地址,默认0.0.0.0
     protocol: TCP # 可选 TCP, UDP, SCTP
 ```
+
 > KubeadmConfigPatches 用来修改当前节点的 kubeadm 的配置
 > 
 > KubeadmConfigPatchesJSON6902 设置合并策略
@@ -81,6 +90,7 @@ nodes:
 ## 部署一个带ingress的集群
 
 ### 1. 创建集群
+
 ```bash
 [root@mytest kind]# cat > mykind2.yaml <<EOF
 kind: Cluster
@@ -118,11 +128,13 @@ Thanks for using kind! 😊
 ```
 
 ### 2. 安装ingress-nginx-controller
+
 ```bash
 [root@mytest kind]# kubectl --context kind-mykind2 apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 ```
 
 ### 3. 查看pod状态
+
 ```bash
 [root@mytest ~]# kubectl --context kind-mykind2 get pod -n ingress-nginx -o wide 
 NAME                                        READY   STATUS      RESTARTS   AGE   IP           NODE                    NOMINATED NODE   READINESS GATES
@@ -132,7 +144,9 @@ ingress-nginx-controller-6bdf7bdbdd-lq6f8   1/1     Running     0          60s  
 ```
 
 ### 4. 创建测试应用
+
 yaml 如下
+
 ```yaml
 kind: Pod
 apiVersion: v1
@@ -215,6 +229,7 @@ spec:
 ```
 
 ### 5. 访问测试
+
 ```bash
 [root@mytest kind]# curl http://192.168.124.52/foo/hostname ;echo
 foo-app
