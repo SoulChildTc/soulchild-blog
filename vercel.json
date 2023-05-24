@@ -2,7 +2,7 @@
     "redirects": [
       {
         "source": "/:slug(\\d{1,})\\.html",
-        "destination": "/post/:slug",
+        "destination": "/post/:slug/",
         "statusCode": 301
       },
       {
