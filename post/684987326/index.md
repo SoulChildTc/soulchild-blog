@@ -116,7 +116,7 @@ gitlab-ctl pg-upgrade -V 11
 curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
 ```
 
-### 升级
+## 升级
 
 准备工作完成后, 就可以升级了
 
