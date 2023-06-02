@@ -2,6 +2,7 @@
 
 <!--more-->
 ## 一、global(全局配置)
+
 ```yaml
 global:
   # 抓取指标的间隔,默认1m
@@ -14,7 +15,7 @@ global:
   # 可以理解为执行规则的时间间隔
   evaluation_interval: 30s
 
-  # 用于区分不同的prometheus
+  # prometheus抓取到的指标,如果发送到外部系统(联邦、远程存储、alertmanager)时, 会给监控或告警数据添加额外的标签, 用于区分不同的prometheus实例
   external_labels:
     prometheus: test
 
@@ -23,9 +24,12 @@ global:
 ```
 
 ## 二、rule_files(规则配置)
+
 这里介绍一下prometheus支持的两种规则：
+
 - 记录规则(recording rules):允许预先计算使用频繁且开销大的表达式，并将结果保存为一个新的时间序列数据，然后查询的时候就不会耗费太多的系统资源和加快查询速度。
 - 警报规则(alerting rules): 这个就是自定义告警规则的
+
 ```yaml
 # 加载指定的规则文件
 rule_files:
@@ -34,6 +38,7 @@ rule_files:
 ```
 
 ## 三、remote_read、remote_write（远程读写配置）
+
 ```yaml
 remote_write:
   # 指定写入数据的url
