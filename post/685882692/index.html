@@ -1,0 +1,231 @@
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>二进制包部署pulsar集群 - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路，一个记录运维开发、自动化运维、DevOps、Kubernetes、Docker、编程等技术笔记的博客，与您分享实用技巧和心得"><meta name=keywords content><meta itemprop=name content="二进制包部署pulsar集群"><meta itemprop=description content><meta itemprop=datePublished content="2023-06-04T20:44:52+08:00"><meta itemprop=dateModified content="2023-06-04T20:44:52+08:00"><meta itemprop=wordCount content="517"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content=","><meta property="og:title" content="二进制包部署pulsar集群"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/685882692/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-06-04T20:44:52+08:00"><meta property="article:modified_time" content="2023-06-04T20:44:52+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="二进制包部署pulsar集群"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/685882692/><link rel=prev href=https://www.soulchild.cn/post/685869310/><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"二进制包部署pulsar集群","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/685882692\/"},"genre":"posts","keywords":"","wordcount":517,"url":"https:\/\/www.soulchild.cn\/post\/685882692\/","datePublished":"2023-06-04T20:44:52+08:00","dateModified":"2023-06-04T20:44:52+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item text-start"><a class=menu-link href=https://www.travellings.cn title=开往 rel="noopener noreferrer" target=_blank><i class="fa-solid fa-train-subway fa-sm fa-fw fa-sm" aria-hidden=true></i> 开往</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item text-start"><a class=menu-link href=https://www.travellings.cn title=开往 rel="noopener noreferrer" target=_blank><i class="fa-solid fa-train-subway fa-sm fa-fw fa-sm" aria-hidden=true></i> 开往</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden=true></i></h2><div class="toc-content always-active" id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>二进制包部署pulsar集群</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> 系统服务</a></span></div><div class=post-meta-line><span title="2023-06-04 20:44:52"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2023-06-04 20:44">2023-06-04 20:44</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 517 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 3 分钟</span>&nbsp;<span id=busuanzi_container_page_pv class="busuanzi_visitors comment-visitors" data-flag-title=二进制包部署pulsar集群>
+<i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_page_pv>-</span>&nbsp;次阅读
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#安装jdk17>安装jdk17</a></li><li><a href=#配置hosts或dns>配置hosts或dns</a></li><li><a href=#安装pulsar>安装pulsar</a></li><li><a href=#部署zk集群>部署zk集群</a></li><li><a href=#初始化pulsar集群元数据>初始化pulsar集群元数据</a></li><li><a href=#部署bookkeeper集群>部署bookkeeper集群</a></li><li><a href=#部署pulsar-broker>部署Pulsar broker</a></li><li><a href=#测试>测试</a></li></ul></li></ul></nav></div></div><div class=content id=content data-end-flag=---><table><thead><tr><th>IP</th><th>主机名</th><th>角色</th></tr></thead><tbody><tr><td>192.168.124.66</td><td>pulsar-broker-01</td><td>zk + broker</td></tr><tr><td>192.168.124.67</td><td>pulsar-broker-02</td><td>zk + broker</td></tr><tr><td>192.168.124.68</td><td>pulsar-broker-03</td><td>zk + broker</td></tr><tr><td>192.168.124.69</td><td>pulsar-bookie-01</td><td>bookie</td></tr><tr><td>192.168.124.70</td><td>pulsar-bookie-02</td><td>bookie</td></tr><tr><td>192.168.124.71</td><td>pulsar-bookie-03</td><td>bookie</td></tr></tbody></table><h3 id=安装jdk17>安装jdk17</h3><p><a href=https://github.com/apache/pulsar/blob/master/README.md#pulsar-runtime-java-version-recommendation target=_blank rel="external nofollow noopener noreferrer">java版本推荐<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>wget https://download.oracle.com/java/17/archive/jdk-17.0.7_linux-x64_bin.rpm
+</span></span><span class=line><span class=cl>rpm -ivh jdk-17.0.7_linux-x64_bin.rpm
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>67..71<span class=o>}</span><span class=p>;</span><span class=k>do</span> scp jdk-17.0.7_linux-x64_bin.rpm 192.168.124.<span class=nv>$i</span>:  <span class=p>;</span><span class=k>done</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>67..71<span class=o>}</span><span class=p>;</span><span class=k>do</span> ssh 192.168.124.<span class=nv>$i</span> rpm -ivh jdk-17.0.7_linux-x64_bin.rpm  <span class=p>;</span><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=配置hosts或dns>配置hosts或dns</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># pulsar</span>
+</span></span><span class=line><span class=cl>192.168.124.66 zk1.pulsar.ops.cn broker1.pulsar.ops.cn
+</span></span><span class=line><span class=cl>192.168.124.67 zk2.pulsar.ops.cn broker2.pulsar.ops.cn
+</span></span><span class=line><span class=cl>192.168.124.68 zk3.pulsar.ops.cn broker3.pulsar.ops.cn
+</span></span><span class=line><span class=cl>192.168.124.69 bookie1.pulsar.ops.cn
+</span></span><span class=line><span class=cl>192.168.124.70 bookie2.pulsar.ops.cn
+</span></span><span class=line><span class=cl>192.168.124.71 bookie3.pulsar.ops.cn
+</span></span></code></pre></td></tr></table></div></div><h3 id=安装pulsar>安装pulsar</h3><p>pulsar二进制包 包含了所有的组件, 只需要下载分发到所有节点即可</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>wget https://archive.apache.org/dist/pulsar/pulsar-3.0.0/apache-pulsar-3.0.0-bin.tar.gz
+</span></span><span class=line><span class=cl>tar xf apache-pulsar-3.0.0-bin.tar.gz -C /usr/local/
+</span></span><span class=line><span class=cl>ln -s /usr/local/apache-pulsar-3.0.0/ /usr/local/pulsar
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>67..71<span class=o>}</span><span class=p>;</span><span class=k>do</span> scp apache-pulsar-3.0.0-bin.tar.gz 192.168.124.<span class=nv>$i</span>: <span class=p>;</span><span class=k>done</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>67..71<span class=o>}</span><span class=p>;</span><span class=k>do</span> ssh 192.168.124.<span class=nv>$i</span> <span class=s2>&#34;tar xf apache-pulsar-3.0.0-bin.tar.gz -C /usr/local/ &amp;&amp; ln -s /usr/local/apache-pulsar-3.0.0/ /usr/local/pulsar&#34;</span>  <span class=p>;</span><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=部署zk集群>部署zk集群</h3><p>这里使用pulsar内置的zk，如果你有单独的zk集群，建议用外部的zk</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 配置zk server地址</span>
+</span></span><span class=line><span class=cl>cat &gt;&gt; /usr/local/pulsar/conf/zookeeper.conf <span class=s>&lt;&lt;EOF
+</span></span></span><span class=line><span class=cl><span class=s>server.1=zk1.pulsar.ops.cn:2888:3888;2181
+</span></span></span><span class=line><span class=cl><span class=s>server.2=zk2.pulsar.ops.cn:2888:3888;2181
+</span></span></span><span class=line><span class=cl><span class=s>server.3=zk3.pulsar.ops.cn:2888:3888;2181
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 配置zk数据目录</span>
+</span></span><span class=line><span class=cl>sed -i <span class=s2>&#34;s#^\(dataDir=\).*#\1/data/zookeeper#&#34;</span> /usr/local/pulsar/conf/zookeeper.conf
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 分发配置文件</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>67,68<span class=o>}</span><span class=p>;</span><span class=k>do</span> scp /usr/local/pulsar/conf/zookeeper.conf 192.168.124.<span class=nv>$i</span>:/usr/local/pulsar/conf/zookeeper.conf <span class=p>;</span><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 创建myid文件</span>
+</span></span><span class=line><span class=cl><span class=nv>servers</span><span class=o>=([</span>66<span class=o>]=</span><span class=m>1</span> <span class=o>[</span>67<span class=o>]=</span><span class=m>2</span> <span class=o>[</span>68<span class=o>]=</span>3<span class=o>)</span><span class=p>;</span> <span class=k>for</span> server in <span class=si>${</span><span class=p>!servers[@]</span><span class=si>}</span><span class=p>;</span><span class=k>do</span> ssh 192.168.124.<span class=nv>$server</span> <span class=s2>&#34;mkdir -p /data/zookeeper &amp;&amp; echo </span><span class=si>${</span><span class=nv>servers</span><span class=p>[</span><span class=nv>$server</span><span class=p>]</span><span class=si>}</span><span class=s2> &gt; /data/zookeeper/myid&#34;</span> <span class=p>;</span><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 启动zk</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>66,67,68<span class=o>}</span><span class=p>;</span><span class=k>do</span> ssh 192.168.124.<span class=nv>$i</span> <span class=s2>&#34;/usr/local/pulsar/bin/pulsar-daemon start zookeeper&#34;</span> <span class=p>;</span><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 检查运行状态</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>66,67,68<span class=o>}</span><span class=p>;</span><span class=k>do</span> ssh 192.168.124.<span class=nv>$i</span> <span class=s2>&#34;netstat -lntp | grep 2181&#34;</span> <span class=p>;</span><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=初始化pulsar集群元数据>初始化pulsar集群元数据</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>/usr/local/pulsar/bin/pulsar initialize-cluster-metadata <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --cluster pulsar-cluster-1 <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --metadata-store zk:zk1.pulsar.ops.cn:2181,zk2.pulsar.ops.cn:2181,zk3.pulsar.ops.cn:2181 <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --configuration-metadata-store zk:zk1.pulsar.ops.cn:2181,zk2.pulsar.ops.cn:2181,zk3.pulsar.ops.cn:2181 <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --web-service-url http://broker1.pulsar.ops.cn:8080,broker2.pulsar.ops.cn:8080,broker3.pulsar.ops.cn:8080 <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --broker-service-url pulsar://broker1.pulsar.ops.cn:6650,broker2.pulsar.ops.cn:6650,broker3.pulsar.ops.cn:6650
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 最后输出</span>
+</span></span><span class=line><span class=cl>Cluster metadata <span class=k>for</span> <span class=s1>&#39;pulsar-cluster-1&#39;</span> setup correctly
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>&ndash;cluster 指定集群名称</p><p>&ndash;metadata-store 元数据存储位置，元数据包括topic元数据、schema、broker所负责的topic和partition的元数据信息等。<a href=https://pulsar.apache.org/docs/3.0.x/concepts-architecture-overview/#metadata-store target=_blank rel="external nofollow noopener noreferrer">doc<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p>&ndash;configuration-metadata-store 配置元数据存储位置，包括集群、租户、命名空间、分区主题相关的配置等。<a href=https://pulsar.apache.org/docs/3.0.x/concepts-architecture-overview/#configuration-store target=_blank rel="external nofollow noopener noreferrer">doc<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p>&ndash;web-service-url 用于管理和监控Pulsar集群的地址</p><p>&ndash;broker-service-url 用于与Pulsar Broker建立连接并发送/接收消息的地址</p></blockquote><h3 id=部署bookkeeper集群>部署bookkeeper集群</h3><p>pulsar中所有的消息都是存在BookKeeper集群中的, 这里使用3个bookie节点组成bookkeeper集群</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 修改配置文件, 需要注意的内容如下</span>
+</span></span><span class=line><span class=cl><span class=nv>journalDirectory</span><span class=o>=</span>/data/bookkeeper/journal <span class=c1># 预写日志(wal)目录</span>
+</span></span><span class=line><span class=cl><span class=nv>ledgerDirectories</span><span class=o>=</span>/data/bookkeeper/ledgers <span class=c1># ledgers数据目录</span>
+</span></span><span class=line><span class=cl><span class=nv>advertisedAddress</span><span class=o>=</span> <span class=c1># 宣告自己的地址,  默认使用eth0的地址, 也可以手动写dns名称或者IP</span>
+</span></span><span class=line><span class=cl><span class=nv>metadataServiceUri</span><span class=o>=</span>zk+hierarchical://zk1.pulsar.ops.cn:2181<span class=p>;</span>zk2.pulsar.ops.cn:2181<span class=p>;</span>zk3.pulsar.ops.cn:2181/ledgers <span class=c1># zk地址</span>
+</span></span><span class=line><span class=cl><span class=c1>#zkServers=localhost:2181  # 被弃用的参数,这里注释它, 使用metadataServiceUri替代</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 批量修改</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>69,70,71<span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=k>do</span> 
+</span></span><span class=line><span class=cl>  ssh 192.168.124.<span class=nv>$i</span> <span class=s2>&#34;sed -i -e &#39;s#^journalDirectory=data/bookkeeper/journal#journalDirectory=/data/bookkeeper/journal#&#39; -e &#39;s#^ledgerDirectories=data/bookkeeper/ledgers#ledgerDirectories=/data/bookkeeper/ledgers#&#39; -e &#39;s#^metadataServiceUri=#metadataServiceUri=zk+hierarchical://zk1.pulsar.ops.cn:2181;zk2.pulsar.ops.cn:2181;zk3.pulsar.ops.cn:2181/ledgers#&#39; -e &#39;s@^\(zkServers=.*\)@#\1@&#39; /usr/local/pulsar/conf/bookkeeper.conf&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 验证</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>69,70,71<span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=k>do</span> 
+</span></span><span class=line><span class=cl>  ssh 192.168.124.<span class=nv>$i</span> <span class=s2>&#34;echo ======</span><span class=nv>$i</span><span class=s2>======= ; grep -E &#39;^journalDirectory|^ledgerDirectories|^advertisedAddress|^metadataServiceUri|^#zkServers&#39; /usr/local/pulsar/conf/bookkeeper.conf&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 创建预写日志(wal)目录和ledgers目录</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>69,70,71<span class=o>}</span><span class=p>;</span><span class=k>do</span> ssh 192.168.124.<span class=nv>$i</span> <span class=s2>&#34;mkdir -p /data/bookkeeper/{journal,ledgers}&#34;</span> <span class=p>;</span><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 启动bookie节点</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>69,70,71<span class=o>}</span><span class=p>;</span><span class=k>do</span> ssh 192.168.124.<span class=nv>$i</span> <span class=s2>&#34;/usr/local/pulsar/bin/pulsar-daemon start bookie&#34;</span> <span class=p>;</span><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 检查集群健康状况</span>
+</span></span><span class=line><span class=cl>/usr/local/pulsar/bin/bookkeeper shell bookiesanity
+</span></span></code></pre></td></tr></table></div></div><h3 id=部署pulsar-broker>部署Pulsar broker</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 修改配置文件, 需要注意的内容如下</span>
+</span></span><span class=line><span class=cl><span class=nv>metadataStoreUrl</span><span class=o>=</span>zk:zk1.pulsar.ops.cn:2181,zk2.pulsar.ops.cn:2181,zk3.pulsar.ops.cn:2181
+</span></span><span class=line><span class=cl><span class=nv>configurationMetadataStoreUrl</span><span class=o>=</span>zk:zk1.pulsar.ops.cn:2181,zk2.pulsar.ops.cn:2181,zk3.pulsar.ops.cn:2181
+</span></span><span class=line><span class=cl><span class=nv>clusterName</span><span class=o>=</span>pulsar-cluster-1 <span class=c1># 和初始化集群元数据的时候指定的集群名称一致</span>
+</span></span><span class=line><span class=cl><span class=nv>brokerServicePort</span><span class=o>=</span><span class=m>6650</span> <span class=c1># 默认无需修改</span>
+</span></span><span class=line><span class=cl><span class=nv>webServicePort</span><span class=o>=</span><span class=m>8080</span> <span class=c1># 默认无需修改</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 批量修改</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>66,67,68<span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=k>do</span> 
+</span></span><span class=line><span class=cl>  <span class=nv>zk_url</span><span class=o>=</span><span class=s2>&#34;zk:zk1.pulsar.ops.cn:2181,zk2.pulsar.ops.cn:2181,zk3.pulsar.ops.cn:2181&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nv>cluster_name</span><span class=o>=</span><span class=s2>&#34;pulsar-cluster-1&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> ssh 192.168.124.<span class=nv>$i</span> <span class=s2>&#34;sed -i -e &#39;s#^metadataStoreUrl=.*#metadataStoreUrl=</span><span class=si>${</span><span class=nv>zk_url</span><span class=si>}</span><span class=s2>#&#39; -e &#39;s#^configurationMetadataStoreUrl=.*#configurationMetadataStoreUrl=</span><span class=si>${</span><span class=nv>zk_url</span><span class=si>}</span><span class=s2>#&#39; -e &#39;s#^clusterName=.*#clusterName=</span><span class=si>${</span><span class=nv>cluster_name</span><span class=si>}</span><span class=s2>#&#39; /usr/local/pulsar/conf/broker.conf&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 启动</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=o>{</span>66,67,68<span class=o>}</span><span class=p>;</span><span class=k>do</span> ssh 192.168.124.<span class=nv>$i</span> <span class=s2>&#34;/usr/local/pulsar/bin/pulsar-daemon start broker&#34;</span> <span class=p>;</span><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=测试>测试</h3><p>修改客户端配置</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>vim /usr/local/pulsar/conf/client.conf
+</span></span><span class=line><span class=cl><span class=nv>webServiceUrl</span><span class=o>=</span>http://broker1.pulsar.ops.cn:8080,broker2.pulsar.ops.cn:8080,broker2.pulsar.ops.cn:8080
+</span></span><span class=line><span class=cl><span class=nv>brokerServiceUrl</span><span class=o>=</span>pulsar://broker1.pulsar.ops.cn:6650,broker2.pulsar.ops.cn:6650,broker3.pulsar.ops.cn:6650
+</span></span></code></pre></td></tr></table></div></div><p>开启消费者等待数据</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>/usr/local/pulsar/bin/pulsar-client consume <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    persistent://public/default/test <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -n <span class=m>100</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -s <span class=s2>&#34;consumer-test&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -t <span class=s2>&#34;Exclusive&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>-n 要消费的消息数量,默认1,0代表一直消费</p><p>-s 订阅者的名称</p><p>-t 订阅的类型, 支持Exclusive, Shared, Failover. Exclusive 代表独占模式, 使其他消费者无法消费</p></blockquote><p>生产者生产数据</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>/usr/local/pulsar/bin/pulsar-client produce <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    persistent://public/default/test <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -n <span class=m>1</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -m <span class=s2>&#34;Hello Pulsar&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>-n 发送消息的次数</p><p>-m 发送的内容</p></blockquote><p><figure><a class=lightgallery href=/post/685882692/images/20230604204527.png data-thumbnail=/post/685882692/images/20230604204527.png data-sub-html="<h2>20230604204527.png</h2><p>20230604204527</p>"><img class=lazyload src=/svg/loading.min.svg data-src=/post/685882692/images/20230604204527.png data-srcset="/post/685882692/images/20230604204527.png, /post/685882692/images/20230604204527.png 1.5x, /post/685882692/images/20230604204527.png 2x" data-sizes=auto alt=20230604204527.png title=20230604204527 width=1673 height=678></a><figcaption class=image-caption>20230604204527.png</figcaption></figure></p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2023-06-04 20:44:52">更新于 2023-06-04 20:44&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/ class=post-tag>Tags</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/685869310/ class=post-nav-item rel=prev title="zk客户端报错Invalid config event received"><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>zk客户端报错Invalid config event received</a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wx.png alt="SoulChild 微信号">
+<span data-animation>微信号</span></div><div><img src=/images/wechatpay.png alt="SoulChild 微信打赏">
+<span data-animation>微信打赏</span></div></div></div><div id=comments><div id=giscus><script src=https://giscus.app/client.js data-repo=SoulChildTc/soulchild-blog data-repo-id=R_kgDOIwJKxg data-category=General data-category-id=DIC_kwDOIwJKxs4CTwRk data-mapping=title data-theme=preferred_color_scheme data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-lang=zh-CN data-loading=lazy crossorigin=anonymous async defer></script></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://giscus.app/ rel="external nofollow noopener noreferrer">giscus</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?7b986d4ea8e2e50e9c04984b78170660",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})(),function(){const e=document.createElement("script");e.async=!0,e.src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2612253564483084",e.crossOrigin="anonymous",document.head.insertBefore(e,document.getElementsByTagName("script")[0])}()</script><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright fa-fw" aria-hidden=true></i>
+<span itemprop=copyrightYear>2017 - 2023</span><span class=author itemprop=copyrightHolder>
+<a href=https://www.soulchild.cn target=_blank rel="external nofollow noopener noreferrer">SoulChild</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class=site-time title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden=true></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor"><span id=busuanzi_container_site_uv title=总访客数><i class="fa-regular fa-user fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_uv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span><span id=busuanzi_container_site_pv class=footer-divider title=总访问量><i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_pv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span></div><div class="footer-line beian"><span class="icp footer-divider">特别感谢
+<a href=https://gohugo.io target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.109.0">Hugo</a> |
+<a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v0.2.17-RC">FixIt</a> |
+<a href=https://github.com target=_blank rel="noopener noreffer">GitHub</a> |
+<a href=https://vercel.com target=_blank rel="noopener noreffer">Vercel</a></span></div></div></footer></div><div class=widgets><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role=button aria-label=回到顶部><i class="fa-solid fa-arrow-up fa-fw" aria-hidden=true></i><span class=variant-numeric>0%</span></div><div class="fixed-button view-comments d-none" role=button aria-label=查看评论><i class="fa-solid fa-comment fa-fw" aria-hidden=true></i></div></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0;--bg-progress:#438a55;--bg-progress-dark:#438a55></div><noscript><div class=noscript-warning>FixIt 主题在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/lightgallery/css/lightgallery-bundle.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/pace/themes/green/pace-theme-bounce.css><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/algoliasearch-lite.umd.min.js defer></script><script src=/lib/lazysizes/lazysizes.min.js async defer></script><script src=/lib/lightgallery/lightgallery.min.js defer></script><script src=/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js defer></script><script src=/lib/lightgallery/plugins/zoom/lg-zoom.min.js defer></script><script src=/lib/typeit/index.umd.js defer></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/lib/pangu/pangu.min.js defer></script><script src=/lib/cell-watermark/watermark.min.js defer></script><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async defer></script><script src=/lib/pace/pace.min.js async defer></script><script>window.config={autoBookmark:!0,code:{copyTitle:"复制到剪贴板",editLockTitle:"锁定可编辑代码块",editUnLockTitle:"解锁可编辑代码块",editable:!0,maxShownLines:50},comment:{enable:!0,expired:!1,giscus:{darkTheme:"dark",lightTheme:"light"}},data:{"typeit-header-subtitle-desktop":"/usr/bin/sleep infinity","typeit-header-subtitle-mobile":"/usr/bin/sleep infinity"},enablePWA:!0,lightgallery:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},pangu:{enable:!0,selector:"article"},search:{algoliaAppID:"CE9G7Q4H6N",algoliaIndex:"soulchild-blog",algoliaSearchKey:"0f69a431d92a03c2cf4143d8dbc6af0a",highlightTag:"em",maxResultLength:20,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},siteTime:"2017-06-08T21:38:36+08:00",typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},duration:-1,speed:100},watermark:{appendto:".wrapper\u003emain",colspacing:300,content:"SoulChild随笔记",enable:!0,fontfamily:"inherit",fontsize:.85,height:300,opacity:.1,rotate:15,rowspacing:100,width:300}}</script><script src=/js/theme.min.js defer></script></body></html>
