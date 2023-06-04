@@ -12,7 +12,7 @@
 | 192.168.124.70 | pulsar-bookie-02 | bookie |
 | 192.168.124.71 | pulsar-bookie-03 | bookie |
 
-### 安装jdk17
+### 1. 安装jdk17
 
 [java版本推荐](https://github.com/apache/pulsar/blob/master/README.md#pulsar-runtime-java-version-recommendation)
 
@@ -24,7 +24,7 @@ for i in {67..71};do scp jdk-17.0.7_linux-x64_bin.rpm 192.168.124.$i:  ;done
 for i in {67..71};do ssh 192.168.124.$i rpm -ivh jdk-17.0.7_linux-x64_bin.rpm  ;done
 ```
 
-### 配置hosts或dns
+### 2. 配置hosts或dns
 
 ```bash
 # pulsar
@@ -36,7 +36,7 @@ for i in {67..71};do ssh 192.168.124.$i rpm -ivh jdk-17.0.7_linux-x64_bin.rpm  ;
 192.168.124.71 bookie3.pulsar.ops.cn
 ```
 
-### 安装pulsar
+### 3. 安装pulsar包
 
 pulsar二进制包 包含了所有的组件, 只需要下载分发到所有节点即可
 
@@ -49,7 +49,7 @@ for i in {67..71};do scp apache-pulsar-3.0.0-bin.tar.gz 192.168.124.$i: ;done
 for i in {67..71};do ssh 192.168.124.$i "tar xf apache-pulsar-3.0.0-bin.tar.gz -C /usr/local/ && ln -s /usr/local/apache-pulsar-3.0.0/ /usr/local/pulsar"  ;done
 ```
 
-### 部署zk集群
+### 4. 部署zk集群
 
 这里使用pulsar内置的zk，如果你有单独的zk集群，建议用外部的zk
 
@@ -78,7 +78,7 @@ for i in {66,67,68};do ssh 192.168.124.$i "/usr/local/pulsar/bin/pulsar-daemon s
 for i in {66,67,68};do ssh 192.168.124.$i "netstat -lntp | grep 2181" ;done
 ```
 
-### 初始化pulsar集群元数据
+### 5. 初始化pulsar集群元数据
 
 ```bash
 /usr/local/pulsar/bin/pulsar initialize-cluster-metadata \
@@ -102,7 +102,7 @@ Cluster metadata for 'pulsar-cluster-1' setup correctly
 > 
 > --broker-service-url  用于与Pulsar Broker建立连接并发送/接收消息的地址
 
-### 部署bookkeeper集群
+### 6. 部署bookkeeper集群
 
 pulsar中所有的消息都是存在BookKeeper集群中的, 这里使用3个bookie节点组成bookkeeper集群
 
@@ -136,7 +136,7 @@ for i in {69,70,71};do ssh 192.168.124.$i "/usr/local/pulsar/bin/pulsar-daemon s
 /usr/local/pulsar/bin/bookkeeper shell bookiesanity
 ```
 
-### 部署Pulsar broker
+### 7. 部署Pulsar broker
 
 ```bash
 # 修改配置文件, 需要注意的内容如下
@@ -158,7 +158,7 @@ done
 for i in {66,67,68};do ssh 192.168.124.$i "/usr/local/pulsar/bin/pulsar-daemon start broker" ;done
 ```
 
-### 测试
+### 8. 测试
 
 修改客户端配置
 
