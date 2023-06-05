@@ -1,3 +1,6 @@
+// https://www.json.cn/json/jshx.html
+// 勾选 K保护、调试保护、禁用控制台输出、保护间隔
+
 window.onload = function () {
     function d() {
       var t = document.createElement("div"),
