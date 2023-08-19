@@ -10,11 +10,12 @@ UserParameter=tps[*],sh /server/scripts/tps.sh $1
 
 ```bash
 cat /server/scripts/tps.sh
-<pre class="pure-highlightjs"><code class="bash">#!/bin/bash
-iostat | awk '/^'$1'/{print $2}'</code></pre>
+#!/bin/bash
+iostat | awk '/^'$1'/{print $2}'
 ```
 
 测试获取sda：
+
 ```bash
 zabbix_get -s 172.16.1.7 -k tps[sda]
 
