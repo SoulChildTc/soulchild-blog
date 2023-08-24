@@ -127,29 +127,7 @@
 </span></span></span><span class=line><span class=cl><span class=s>[Install]
 </span></span></span><span class=line><span class=cl><span class=s>WantedBy=multi-user.target
 </span></span></span><span class=line><span class=cl><span class=s>EOF</span>
-</span></span></code></pre></td></tr></table></div></div><blockquote><p>如果你看懂了下面的参数介绍，相信你可以写出其他两台etcd节点的参数配置</p></blockquote><h4 id=参数简介>参数简介</h4><p><code>--name</code>: 节点名称
-<code>--data-dir</code>: 数据存储目录
-<code>--wal-dir</code>: wal预写日志，所有的修改在提交之前都要先写入log文件中。默认路径在&ndash;data-dir目录下
-<code>--heartbeat-interval</code>: 心跳间隔时间(毫秒)。leader通知所有的followers，他还是Leader的时间间隔。默认100ms
-<code>--election-timeout</code>: 选举超时的时间(毫秒)。表示follower在多久后还没有收到leader的心跳，他就申请选举自己为Leader。默认1000ms。关于raft动画介绍: <a href=http://thesecretlivesofdata.com/raft target=_blank rel="external nofollow noopener noreferrer">http://thesecretlivesofdata.com/raft<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>
-<code>--listen-peer-urls</code>: 监听地址，与集群其它成员通信的地址。
-<code>--listen-client-urls</code>: 监听地址，与客户端通信的地址。
-<code>--initial-advertise-peer-urls</code>: 向集群中其他成员通告自己的地址，对应<code>--listen-peer-urls</code>
-<code>--advertise-client-urls</code>: 向客户端通告自己的地址，对应<code>--listen-client-urls</code>。这里有一个助于理解的文档：https://www.jianshu.com/p/7bbef1ca9733
-<code>--initial-cluster</code>: 指定与集群中其他成员的通信地址(所有节点的地址)。形式为:<code>name=http://xxxx:2380</code>,name代表<code>--name</code>指定的值
-<code>--initial-cluster-state</code>: 指定<code>new</code>或<code>existing</code>.前者为初始化新的集群，后者代表加入现有集群
-<code>--initial-cluster-token</code>: 引导期间etcd集群的初始集群令牌,同一个集群令牌一致。
-<code>--cert-file</code>: 服务端证书
-<code>--key-file</code>: 服务端证书私钥
-<code>--client-cert-auth</code>: 启用客户端证书认证
-<code>--trusted-ca-file</code>: 指定信任的CA(校验客户端证书)
-<code>--peer-cert-file</code>: 集群间通信的证书
-<code>--peer-key-file</code>: 集群间通信的证书私钥
-<code>--peer-client-cert-auth</code>: 启用集群间通信证书认证
-<code>--peer-trusted-ca-file</code>: 指定信任的CA(校验集群间通信证书)
-<code>--enable-v2</code>: 启用v2版本api
-<code>--logger</code>: 指定日志器，默认capnslog,在3.5版本中已弃用。可选项zap是结构化日志。
-<code>--log-level</code>: 日志级别，可选项debug, info, warn, error, panic, fatal。默认info</p><h4 id=其他etcd节点配置>其他etcd节点配置</h4><p><strong>etcd02</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>如果你看懂了下面的参数介绍，相信你可以写出其他两台etcd节点的参数配置</p></blockquote><h4 id=参数简介>参数简介</h4><p><code>--name</code>: 节点名称</p><p><code>--data-dir</code>: 数据存储目录</p><p><code>--wal-dir</code>: wal预写日志，所有的修改在提交之前都要先写入log文件中。默认路径在&ndash;data-dir目录下</p><p><code>--heartbeat-interval</code>: 心跳间隔时间(毫秒)。leader通知所有的followers，他还是Leader的时间间隔。默认100ms</p><p><code>--election-timeout</code>: 选举超时的时间(毫秒)。表示follower在多久后还没有收到leader的心跳，他就申请选举自己为Leader。默认1000ms。关于raft动画介绍: <a href=http://thesecretlivesofdata.com/raft target=_blank rel="external nofollow noopener noreferrer">http://thesecretlivesofdata.com/raft<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p><code>--listen-peer-urls</code>: 监听地址，与集群其它成员通信的地址。</p><p><code>--listen-client-urls</code>: 监听地址，与客户端通信的地址。</p><p><code>--initial-advertise-peer-urls</code>: 向集群中其他成员通告自己的地址，对应<code>--listen-peer-urls</code></p><p><code>--advertise-client-urls</code>: 向客户端通告自己的地址，对应<code>--listen-client-urls</code>。这里有一个助于理解的文档：https://www.jianshu.com/p/7bbef1ca9733</p><p><code>--initial-cluster</code>: 指定与集群中其他成员的通信地址(所有节点的地址)。形式为:<code>name=http://xxxx:2380</code>,name代表<code>--name</code>指定的值</p><p><code>--initial-cluster-state</code>: 指定<code>new</code>或<code>existing</code>.前者为初始化新的集群，后者代表加入现有集群</p><p><code>--initial-cluster-token</code>: 引导期间etcd集群的初始集群令牌,同一个集群令牌一致。</p><p><code>--cert-file</code>: 服务端证书</p><p><code>--key-file</code>: 服务端证书私钥</p><p><code>--client-cert-auth</code>: 启用客户端证书认证</p><p><code>--trusted-ca-file</code>: 指定信任的CA(校验客户端证书)</p><p><code>--peer-cert-file</code>: 集群间通信的证书</p><p><code>--peer-key-file</code>: 集群间通信的证书私钥</p><p><code>--peer-client-cert-auth</code>: 启用集群间通信证书认证</p><p><code>--peer-trusted-ca-file</code>: 指定信任的CA(校验集群间通信证书)</p><p><code>--enable-v2</code>: 启用v2版本api</p><p><code>--logger</code>: 指定日志器，默认capnslog,在3.5版本中已弃用。可选项zap是结构化日志。</p><p><code>--log-level</code>: 日志级别，可选项debug, info, warn, error, panic, fatal。默认info</p><h4 id=其他etcd节点配置>其他etcd节点配置</h4><p><strong>etcd02</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
