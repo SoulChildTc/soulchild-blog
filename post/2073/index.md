@@ -2,6 +2,7 @@
 
 <!--more-->
 ## 1.配置文件
+
 ```yaml
 global:
   # 经过此时间后，如果尚未更新告警，则将告警声明为已恢复。(即prometheus没有向alertmanager发送告警了)
@@ -26,13 +27,13 @@ route:
   # 如果不想使用分组，可以这样写group_by: [...]
   group_by: ['alertname', 'cluster', 'service']
 
-  # 第一组告警发送通知需要等待的时间，这种方式可以确保有足够的时间为同一分组获取多个告警，然后一起触发这个告警信息。
+  # 第一组告警发送通知需要等待的时间，等待可以确保有足够的时间为同一分组获取多个告警，然后一起触发这个告警信息。
   group_wait: 30s
 
-  # 发送第一个告警后，等待"group_interval"发送一组新告警。
+  # 告警组第一次发送通知后, 后续有新的告警进入告警组, 等待多长时间再发送通知
   group_interval: 5m
 
-  # 分组内发送相同告警的时间间隔。这里的配置是每3小时发送告警到分组中。举个例子：收到告警后，一个分组被创建，等待5分钟发送组内告警，如果后续组内的告警信息相同,这些告警会在3小时后发送，但是3小时内这些告警不会被发送。
+  # 告警组中没有新告警加入时, 每过多久发送一次告警
   repeat_interval: 3h 
 
   # 这里先说一下，告警发送是需要指定接收器的，接收器在receivers中配置，接收器可以是email、webhook、pagerduty、wechat等等。一个接收器可以有多种发送方式。
@@ -136,13 +137,11 @@ receivers:
 ```
 
 ## 2.接收器详细参数配置文档
+
 - email: https://prometheus.io/docs/alerting/latest/configuration/#email_config
 - webhook: https://prometheus.io/docs/alerting/latest/configuration/#webhook_config
 - wechat: https://prometheus.io/docs/alerting/latest/configuration/#wechat_config
 - pagerduty：https://prometheus.io/docs/alerting/latest/configuration/#pagerduty_config
-
-
-
 
 
 ---
