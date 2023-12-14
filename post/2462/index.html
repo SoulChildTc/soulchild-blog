@@ -73,12 +73,7 @@
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1># 生成ca的证书签名请求文件、ca私钥、ca证书</span>
 </span></span><span class=line><span class=cl>cfssl gencert -initca ca-csr.json <span class=p>|</span> cfssljson -bare ca
-</span></span></code></pre></td></tr></table></div></div><blockquote><p><code>ca.expiry:</code>: ca证书的过期时间，默认5年，我改成了50年
-<code>CN</code>: Common Name，kube-apiserver 从证书中提取该字段作为请求的用户名 (User Name)；浏览器使用该字段验证网站是否合法；
-<code>O</code>: Organization，kube-apiserver 从证书中提取该字段作为请求用户所属的组 (Group)
-<code>C</code>: 国家
-<code>ST</code>: 省份
-<code>L</code>: 城市</p></blockquote><h4 id=2准备ca用于签发的配置文件>2.准备CA用于签发的配置文件</h4><p>后面使用的证书都会使用我们之前生成的CA来颁发，下面是颁发证书时的默认配置</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><blockquote><p><code>ca.expiry:</code>: ca证书的过期时间，默认5年，我改成了50年</p></blockquote><blockquote><p><code>CN</code>: Common Name，kube-apiserver 从证书中提取该字段作为请求的用户名 (User Name)；浏览器使用该字段验证网站是否合法；</p></blockquote><blockquote><p><code>O</code>: Organization，kube-apiserver 从证书中提取该字段作为请求用户所属的组 (Group)</p></blockquote><blockquote><p><code>C</code>: 国家</p></blockquote><blockquote><p><code>ST</code>: 省份</p></blockquote><blockquote><p><code>L</code>: 城市</p></blockquote><h4 id=2准备ca用于签发的配置文件>2.准备CA用于签发的配置文件</h4><p>后面使用的证书都会使用我们之前生成的CA来颁发，下面是颁发证书时的默认配置</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -118,8 +113,7 @@
 </span></span></span><span class=line><span class=cl><span class=s>    }
 </span></span></span><span class=line><span class=cl><span class=s>}
 </span></span></span><span class=line><span class=cl><span class=s>EOF</span>
-</span></span></code></pre></td></tr></table></div></div><blockquote><p><code>default.expiry</code>: 全局配置，颁发的证书默认有效期10年
-<code>profiles</code>中可以定义多个配置，这里定义了一个kubernetes，在使用的时候可以指定profile。例如: -config=ca-config.json -profile=kubernetes</p></blockquote><h3 id=四签发etcd证书>四、签发etcd证书</h3><h4 id=1创建证书请求配置文件>1.创建证书请求配置文件</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><blockquote><p><code>default.expiry</code>: 全局配置，颁发的证书默认有效期10年</p></blockquote><blockquote><p><code>profiles</code>中可以定义多个配置，这里定义了一个kubernetes，在使用的时候可以指定profile。例如: -config=ca-config.json -profile=kubernetes</p></blockquote><h3 id=四签发etcd证书>四、签发etcd证书</h3><h4 id=1创建证书请求配置文件>1.创建证书请求配置文件</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -289,11 +283,7 @@
 </span></span></span><span class=line><span class=cl><span class=s>    ]
 </span></span></span><span class=line><span class=cl><span class=s>}
 </span></span></span><span class=line><span class=cl><span class=s>EOF</span>
-</span></span></code></pre></td></tr></table></div></div><blockquote><p>k8s有一个内置的<code>ClusterRoleBinding</code>名为<code>system:kube-controller-manager</code>。
-这个clusterrolebinding将<code>system:kube-controller-manager</code>这个clusterrole与用户<code>system:kube-controller-manager</code>绑定
-k8s通过证书中的CN获取用户名,所以指定CN为<code>system:kube-controller-manager</code>作为用户名,并且证书是由CA签名过的，所以CN指定的用户名是可信的。
-如果部署完后你想查看，可以通过如下命令:<code>k get ClusterRolebinding system:kube-controller-manager -o yaml</code>
-官方说明：https://kubernetes.io/zh/docs/setup/best-practices/certificates/#%E4%B8%BA%E7%94%A8%E6%88%B7%E5%B8%90%E6%88%B7%E9%85%8D%E7%BD%AE%E8%AF%81%E4%B9%A6</p></blockquote><blockquote><p>controller-manager的高可用通过选举实现，只有一个实例在真正工作，所以这里的证书扩展中没有vip，我们的vip是给apiserver使用的。</p></blockquote><h4 id=2签发证书-2>2.签发证书</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>k8s有一个内置的<code>ClusterRoleBinding</code>名为<code>system:kube-controller-manager</code>。</p></blockquote><blockquote><p>这个clusterrolebinding将<code>system:kube-controller-manager</code>这个clusterrole与用户<code>system:kube-controller-manager</code>绑定</p></blockquote><blockquote><p>k8s通过证书中的CN获取用户名,所以指定CN为<code>system:kube-controller-manager</code>作为用户名,并且证书是由CA签名过的，所以CN指定的用户名是可信的。</p></blockquote><blockquote><p>如果部署完后你想查看，可以通过如下命令:<code>k get ClusterRolebinding system:kube-controller-manager -o yaml</code></p></blockquote><blockquote><p>官方说明：<a href=https://kubernetes.io/zh-cn/docs/setup/best-practices/certificates/#%e4%b8%ba%e7%94%a8%e6%88%b7%e5%b8%90%e6%88%b7%e9%85%8d%e7%bd%ae%e8%af%81%e4%b9%a6 target=_blank rel="external nofollow noopener noreferrer">Go<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p></blockquote><blockquote><p>controller-manager的高可用通过选举实现，只有一个实例在真正工作，所以这里的证书扩展中没有vip，我们的vip是给apiserver使用的。</p></blockquote><h4 id=2签发证书-2>2.签发证书</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>cfssl gencert -ca /etc/kubernetes/pki/ca/ca.pem -ca-key /etc/kubernetes/pki/ca/ca-key.pem -config /etc/kubernetes/pki/ca/ca-config.json --profile kubernetes ./kube-controller-manager.json  <span class=p>|</span> cfssljson -bare kube-controller-manager
 </span></span></code></pre></td></tr></table></div></div><h3 id=六签发scheduler证书>六.签发scheduler证书</h3><p>scheduler作为apiserver的客户端，这里配置的是客户端证书,包含了客户端的信息。（CN代表用户）</p><h4 id=1创建证书请求配置文件-3>1.创建证书请求配置文件</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
@@ -429,10 +419,9 @@ k8s通过证书中的CN获取用户名,所以指定CN为<code>system:kube-contro
 </span></span></span><span class=line><span class=cl><span class=s>    ]
 </span></span></span><span class=line><span class=cl><span class=s>}
 </span></span></span><span class=line><span class=cl><span class=s>EOF</span>
-</span></span></code></pre></td></tr></table></div></div><blockquote><p>一个名为<code>system:node-proxier</code>的ClusterRoleBinding，将ClusterRole <code>system:node-proxier</code>与User(用户)<code>system:kube-proxy</code>绑定
-kube-proxy是node节点组件，IP并不是固定的，所以这里没有写hosts</p></blockquote><h4 id=2签发证书-5>2.签发证书</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>一个名为<code>system:node-proxier</code>的ClusterRoleBinding，将ClusterRole <code>system:node-proxier</code>与User(用户)<code>system:kube-proxy</code>绑定</p></blockquote><blockquote><p>kube-proxy是node节点组件，IP并不是固定的，所以这里没有写hosts</p></blockquote><h4 id=2签发证书-5>2.签发证书</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>cfssl gencert -ca /etc/kubernetes/pki/ca/ca.pem -ca-key /etc/kubernetes/pki/ca/ca-key.pem -config /etc/kubernetes/pki/ca/ca-config.json --profile kubernetes ./kube-proxy.json  <span class=p>|</span> cfssljson -bare kube-proxy
-</span></span></code></pre></td></tr></table></div></div><h3 id=九关于kubelet证书>九、关于kubelet证书</h3><p><a href=https://kubernetes.io/zh/docs/reference/command-line-tools-reference/kubelet-tls-bootstrapping/ target=_blank rel="external nofollow noopener noreferrer">https://kubernetes.io/zh/docs/reference/command-line-tools-reference/kubelet-tls-bootstrapping/<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p>当集群开启了 TLS 认证后，每个节点的 kubelet 组件都要使用由 apiserver 使用的 CA 签发的有效证书才能与 apiserver 通讯；此时如果节点多起来，为每个节点单独签署证书将是一件非常繁琐的事情；</p><p>TLS bootstrapping 功能就是让 node节点上的kubelet组件先使用一个预定的低权限用户连接到 apiserver，然后向 apiserver 申请证书，kubelet 的证书由 apiserver 动态签署；</p><h3 id=十配置flannel证书>十、配置flannel证书</h3><h4 id=1创建证书请求配置文件-6>1.创建证书请求配置文件</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span></span></code></pre></td></tr></table></div></div><h3 id=九关于kubelet证书>九、关于kubelet证书</h3><p><a href=https://kubernetes.io/zh/docs/reference/command-line-tools-reference/kubelet-tls-bootstrapping/ target=_blank rel="external nofollow noopener noreferrer">官方文档<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p>当集群开启了 TLS 认证后，每个节点的 kubelet 组件都要使用由 apiserver 使用的 CA 签发的有效证书才能与 apiserver 通讯；此时如果节点多起来，为每个节点单独签署证书将是一件非常繁琐的事情；</p><p>TLS bootstrapping 功能就是让 node节点上的kubelet组件先使用一个预定的低权限用户连接到 apiserver，然后向 apiserver 申请证书，kubelet 的证书由 apiserver 动态签署；</p><h3 id=十配置flannel证书>十、配置flannel证书</h3><h4 id=1创建证书请求配置文件-6>1.创建证书请求配置文件</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4

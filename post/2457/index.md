@@ -4,6 +4,7 @@
 ## 所有节点执行
 
 ### 一、升级内核
+
 ```bash
 # 导入公钥
 rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
@@ -31,6 +32,7 @@ reboot
 ```
 
 ### 二、修改hosts
+
 ```bash
 cat >> /etc/hosts << EOF
 172.17.20.201 master01
@@ -43,6 +45,7 @@ EOF
 ```
 
 ### 三、关闭防火墙和selinux
+
 ```bash
 systemctl stop firewalld
 setenforce 0
@@ -50,17 +53,20 @@ sed -i 's/^SELINUX=.\*/SELINUX=disabled/' /etc/selinux/config
 ```
 
 ### 四、关闭swap
+
 ```bash
 swapoff -a
 sed -i 's/.*swap.*/#&/' /etc/fstab
 ```
 
 ### 五、安装常用软件包
+
 ```bash
 yum -y install bridge-utils chrony ipvsadm ipset sysstat conntrack libseccomp wget tcpdump screen vim nfs-utils bind-utils wget socat telnet sshpass net-tools sysstat lrzsz yum-utils device-mapper-persistent-data lvm2 tree nc lsof strace nmon iptraf iftop rpcbind mlocate ipvsadm
 ```
 
 ### 六、时间同步
+
 ```bash
 yum install -y chrony
 systemctl start chronyd
@@ -68,6 +74,7 @@ systemctl enable chronyd
 ```
 
 ### 七、修改资源限制
+
 ```bash
 > /etc/security/limits.d/20-nproc.conf
 
@@ -82,6 +89,7 @@ EOF
 ```
 
 ### 八、加载ipvs内核模块
+
 ```bash
 cat > /etc/sysconfig/modules/ipvs.modules <<EOF 
 #!/bin/bash 
@@ -100,6 +108,7 @@ lsmod | grep -e ip_vs -e nf_conntrack_ipv4
 ```
 
 ### 九、修改内核参数
+
 ```bash
 cat > /etc/sysctl.d/k8s.conf <<EOF
 net.bridge.bridge-nf-call-iptables=1
@@ -118,17 +127,12 @@ sysctl -p /etc/sysctl.d/k8s.conf
 
 
 ### 十、免密配置(可选)
+
 ```bash
 ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 
 for i in `awk '/172/{print $1}' /etc/hosts | uniq`;do ssh-copy-id -i ~/.ssh/id_rsa.pub root@$i ;done
 ```
-
-
-
-
-
-
 
 
 ---

@@ -92,14 +92,7 @@
 </span></span><span class=line><span class=cl><span class=c1># 修改hostnameOverride信息</span>
 </span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=m>202</span> <span class=m>203</span> <span class=m>210</span> <span class=m>211</span> 212<span class=p>;</span><span class=k>do</span> ssh 172.17.20.<span class=nv>$i</span> <span class=s1>&#39;sed -i &#34;s#hostnameOverride.*#hostnameOverride: $(ip a s eth0 | grep -o 172\.17\.20.*/ | tr -d /)#&#34; /etc/kubernetes/kube-proxy.yaml&#39;</span> <span class=p>;</span><span class=k>done</span>
 </span></span></code></pre></td></tr></table></div></div><p>参数说明:
-<code>bindAddress</code>: 监听地址
-<code>healthzBindAddress</code>: 健康检查服务的监听地址和端口，默认0.0.0.0:10256
-<code>metricsBindAddress</code>: metrics指标服务的监听地址和端口，默认127.0.0.1:10249
-<code>bindAddressHardFail</code>: 端口绑定失败视为严重错误，直接退出程序
-<code>enableProfiling</code>: 启用性能分析
-<code>clusterCIDR</code>: pod的ip范围
-<code>hostnameOverride</code>: 参数值必须与 kubelet 的值一致，否则 kube-proxy 启动后会找不到该 Node，从而不会创建任何 ipvs 规则
-<code>clientConnection</code>: kube-proxy客户端的配置</p><ul><li><code>kubeconfig</code>: kubeconfig文件路径</li><li><code>qps</code>: 每秒允许的查询数</li><li><code>burst</code>: 与apiserver通信时的并发数</li></ul><p><code>mode</code>: 使用的网络代理模式，可选项userspace、iptables、ipvs</p><h3 id=四配置systemd启动脚本>四、配置systemd启动脚本</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+<code>bindAddress</code>: 监听地址</p><p><code>healthzBindAddress</code>: 健康检查服务的监听地址和端口，默认0.0.0.0:10256</p><p><code>metricsBindAddress</code>: metrics指标服务的监听地址和端口，默认127.0.0.1:10249</p><p><code>bindAddressHardFail</code>: 端口绑定失败视为严重错误，直接退出程序</p><p><code>enableProfiling</code>: 启用性能分析</p><p><code>clusterCIDR</code>: pod的ip范围</p><p><code>hostnameOverride</code>: 参数值必须与 kubelet 的值一致，否则 kube-proxy 启动后会找不到该 Node，从而不会创建任何 ipvs 规则</p><p><code>clientConnection</code>: kube-proxy客户端的配置</p><ul><li><code>kubeconfig</code>: kubeconfig文件路径</li><li><code>qps</code>: 每秒允许的查询数</li><li><code>burst</code>: 与apiserver通信时的并发数</li></ul><p><code>mode</code>: 使用的网络代理模式，可选项userspace、iptables、ipvs</p><h3 id=四配置systemd启动脚本>四、配置systemd启动脚本</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4

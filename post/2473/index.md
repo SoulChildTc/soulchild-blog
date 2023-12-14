@@ -2,7 +2,9 @@
 
 <!--more-->
 ### 一、安装apiserver
+
 #### 1.下载server包
+
 ```bash
 cd /server/packages/
 wget https://dl.k8s.io/v1.20.7/kubernetes-server-linux-amd64.tar.gz
@@ -21,9 +23,13 @@ cp kubernetes/server/bin/kube-apiserver /usr/local/bin
 ```
 
 #### 3.创建审计日志策略配置文件
+
 `None` - 符合这条规则的日志将不会记录
+
 `Metadata` - 记录请求的元数据（请求的用户、时间戳、资源、动词等等）， 但是不记录请求或者响应的消息体。
+
 `Request` - 记录事件的元数据和请求的消息体，但是不记录响应的消息体。 这不适用于非资源类型的请求。
+
 `RequestResponse` - 记录事件的元数据，请求和响应的消息体。这不适用于非资源类型的请求。
 
 审计配置的api文档:https://kubernetes.io/zh/docs/reference/config-api/apiserver-audit.v1/#resource-types
@@ -190,12 +196,15 @@ rules:
       - "RequestReceived"
 EOF
 ```
+
 分发审计策略配置到其他机器
+
 ```bash
 for i in {202..203};do scp /etc/kubernetes/audit-policy.yaml 172.17.20.$i:/etc/kubernetes/ ;done
 ```
 
 #### 4.配置静态加密Secret数据
+
 官方文档: https://kubernetes.io/zh/docs/tasks/administer-cluster/encrypt-data/
 
 默认情况下secret的数据存储在etcd上是没有加密的,为了相对安全一些我们可以配置静态secret数据加密,将存在etcd中的secret数据进行加密。使用静态加密需要给apiserver添加`--encryption-provider-config`参数,并指定一个配置文件。
@@ -223,13 +232,16 @@ for i in {202..203};do scp /etc/kubernetes/static-secret-encryption.yaml 172.17.
 ```
 
 #### 5.创建令牌认证文件
+
 kubelet在启动时会向apiserver发送给csr请求，这里我们创建一个权限有限的token,用于kubelet向apiserver申请证书。
+
 ```bash
 # token,user,uid,"group1,group2,group3"
 echo "$(head -c 16 /dev/urandom | od -An -t x | tr -d ' '),kubelet-bootstrap,10001,"system:bootstrappers"" > /etc/kubernetes/token.csv
 ```
 
 #### 6.创建systemd启动脚本
+
 ```bash
 cat > /etc/systemd/system/kube-apiserver.service <<EOF
 [Unit]
@@ -293,19 +305,33 @@ LimitNOFILE=65536
 WantedBy=multi-user.target
 EOF
 ```
+
 **[参数说明](https://v1-20.docs.kubernetes.io/zh/docs/reference/command-line-tools-reference/kube-apiserver/):**
+
 `--advertise-address`: 向集群成员通知apiserver的IP地址
+
 `--allow-privileged`: 设置为true，允许特权容器
+
 `--apiserver-count`: 集群中运行的apiserver数量
+
 `--audit-log-maxage`: 保留旧审计日志文件的最大天数
+
 `--audit-log-maxbackup`: 保留的旧审计日志文件的最大数量
+
 `--audit-log-maxsize`: 审计日志文件轮转大小(单个日志文件的最大大小)单位MB
+
 `--audit-log-path`: 指定用来写入审计事件的日志文件路径。不指定此标志会禁用日志`-` 表示stdout
+
 `--audit-policy-file`: 审计策略的配置文件路径
+
 `--authorization-mode`: 在安全端口上进行鉴权的插件的顺序列表。逗号分隔的列表：`AlwaysAllow`,`AlwaysDeny`,`ABAC`,`Webhook`,`Node`,`RBAC`
+
 `--bind-address`: 安全端口的监听IP地址。
+
 `--client-ca-file`: 指定签发客户端证书的根CA机构证书,apiserver会使用此CA证书校验证书合法性，并且对客户端证书中的CommonName对身份进行校验
+
 `--delete-collection-workers`: 调用`DeleteCollection`的worker数量。 这可以用于加速namespace清理。
+
 `--enable-admission-plugins`: 指定要启用除了默认插件以外的哪些插件。
 
 - `默认已启用的插件`:NamespaceLifecycle、LimitRanger、ServiceAccount、TaintNodesByCondition、Priority、DefaultTolerationSeconds、DefaultStorageClass、StorageObjectInUseProtection、PersistentVolumeClaimResize、RuntimeClass、CertificateApproval、CertificateSigning、CertificateSubjectRestriction、DefaultIngressClass、MutatingAdmissionWebhook、ValidatingAdmissionWebhook、ResourceQuota
@@ -315,34 +341,53 @@ EOF
 `--enable-bootstrap-token-auth`: 设置是否允许将`kube-system`命名空间中，类型为`bootstrap.kubernetes.io/token`的`Secret`用于TLS引导身份验证。
 
 `--encryption-provider-config`: 静态加密secret的配置文件
+
 `--etcd-cafile`: 用于和etcd通信的证书的颁发机构的证书(即颁发etcd客户端证书的CA机构证书)
+
 `--etcd-certfile`: 用于和etcd通信的证书
+
 `--etcd-healthcheck-timeout`: 检查etcd健康状况时的超时时长。默认2s
+
 `--etcd-keyfile`: 用户和etcd通信的证书的配套私钥
+
 `--etcd-servers`: etcd服务器的列表,格式为`scheme://ip:port`,多个地址使用逗号分隔
+
 `--etcd-servers-overrides`: 将不同的资源存入不同的etcd集群。格式为`group/resource#servers`。例如将event事件单独存储: `/events#http://etcd4:2379,http://etcd5:2379,http://etcd6:2379`
+
 `--event-ttl`: 事件的保留时长默认`1h0m0s`
+
 `--feature-gates`: 控制试验性功能。多个条目用逗号分隔，可选项: https://v1-20.docs.kubernetes.io/zh/docs/reference/command-line-tools-reference/kube-apiserver/
+
 `--kubelet-certificate-authority`: 校验kubelet服务端的证书(因为apiserver也会请求kubelet，比如logs,exec等操作)，这里指定kubelet服务端证书的ca机构证书
+
 `--kubelet-client-certificate`: apiserver访问kubelet使用的客户端证书
+
 `--kubelet-client-key`: apiserver访问kubelet使用的客户端证书的私钥
+
 `--logtostderr`: 默认true，输出日志到stderr，而不是输出到文件
+
 `--log-file`: 日志文件路径
+
 `--log-file-max-size`: 日志文件最大大小,默认1800M
+
 `--profiling`: 启用web性能分析
+
 `--contention-profiling`: 当web性能分析启用时, 设置是否启用锁竞争分析功能
 
-`--proxy-client-cert-file`: apiserver的客户端证书，用于访问扩展apiserver服务器使用。
+`--proxy-client-cert-file`: apiserver访问其他服务使用的客户端证书，用于访问扩展apiserver服务器使用。
   - https://v1-20.docs.kubernetes.io/zh/docs/tasks/extend-kubernetes/configure-aggregation-layer/#身份认证流程
   - https://v1-20.docs.kubernetes.io/zh/docs/tasks/extend-kubernetes/setup-extension-api-server/#安装一个扩展的-api-服务器来使用聚合层
 
 `--proxy-client-key-file`: apiserver的客户端证书私钥
+
 `--requestheader-client-ca-file`: 签发apiserver客户端证书的CA证书(kube-apiserver访问扩展apiserver的客户端证书的CA证书)
 
 `--requestheader-allowed-names`: 这个选项用来指定一个CN(Common Name)列表。客户端证书的CN是我们指定的CN列表之一才可以建立连接。如果没有指定CN列表,只要是`--requestheader-client-ca-file`签发的客户端证书都可以通过apiserver认证。
 
 `--requestheader-username-headers`: apiserver将客户端请求的用户名发给扩展apiserver是通过请求头发送的。这里是设置请求头的名称。推荐使用(X-Remote-User)，前提是和扩展apiserver对应。
+
 `--requestheader-group-headers`: 同上，这个是用户组，推荐使用(X-Remote-Group)
+
 `--requestheader-extra-headers-prefix`: 扩展信息前缀。推荐使用(X-Remote-Extra-)
 
 `--runtime-config`: 用于启用或禁用内置api。可选项如下
@@ -356,18 +401,24 @@ EOF
 `--secure-port`: 监听的安全端口(https)默认6443
 
 `--service-account-issuer`: 当使用sa token 卷投射(`Service Account Token Volume Projection`)时，这里指的是jwt token颁发者的标识符(通过在线jwt解析的网站可以看到iss字段就是我们设置的值).取值必须是 HTTPS URL。可以设置成(https://kubernetes.default.svc.cluster.local)。
+
 `--service-account-key-file`: 指定的是私钥对应的公钥，用于在身份认证过程中确保ServiceAccount token没有被篡改
+
 `--service-account-signing-key-file`: 当使用sa token 卷投射(`Service Account Token Volume Projection`)时,这里指定的是对token签名的私钥
+
 > 关于sa token 卷投射: https://kubernetes.io/zh/docs/tasks/configure-pod-container/configure-service-account/#service-account-token-volume-projection
 
 `--service-cluster-ip-range`: cluster ip范围。
-`--service-node-port-range`: nodeport的端口范围
-`--tls-cert-file`: apiserver的服务端证书
-`--tls-private-key-file`: apiserver的服务端证书私钥
 
+`--service-node-port-range`: nodeport的端口范围
+
+`--tls-cert-file`: apiserver的服务端证书
+
+`--tls-private-key-file`: apiserver的服务端证书私钥
 
 **其他两台的配置**
 apiserver02
+
 ```bash
 cat > /etc/systemd/system/kube-apiserver.service <<EOF
 [Unit]
@@ -432,6 +483,7 @@ EOF
 ```
 
 apiserver03
+
 ```bash
 cat > /etc/systemd/system/kube-apiserver.service <<EOF
 [Unit]
@@ -496,13 +548,16 @@ EOF
 ```
 
 #### 7.启动服务
+
 ```bash
 systemctl start kube-apiserver
 systemctl enable kube-apiserver
 ```
 
 ### 二、安装配置nginx
+
 #### 1. 安装
+
 ```bash
 mkdir /server/packages/ -p
 cd /server/packages/
@@ -512,13 +567,19 @@ cd nginx-1.16.1/
 ./configure --prefix=/usr/local/nginx --with-stream --without-http --without-http_uwsgi_module 
 
 ```
+
 > 编译参数说明: 
+
 > `--with-stream`: 开启tcp/udp代理
+
 > `--without-http`: 禁用http服务器
+
 > `--without-http_uwsgi_module`: 禁用uwsgi传输功能
 
 #### 2.配置
-**两台nginx相同**
+
+两台nginx相同
+
 ```bash
 cat > /usr/local/nginx/conf/nginx.conf <<EOF
 worker_processes  auto;
@@ -553,20 +614,25 @@ stream {
 }
 EOF
 ```
+
 #### 3.启动服务
+
 ```bash
 /usr/local/nginx/sbin/nginx
 ```
 
-
 ### 三、安装keepalived
+
 #### 1. 安装
+
 ```bash
 yum install -y keepalived
 ```
 
 #### 2.配置
-**nginx01的keepalived**
+
+nginx01的keepalived
+
 ```bash
 cat > /etc/keepalived/keepalived.conf <<EOF
 global_defs {
@@ -613,7 +679,8 @@ vrrp_instance nginx {
 EOF
 ```
 
-**nginx02的keepalived**
+nginx02的keepalived
+
 ```bash
 cat > /etc/keepalived/keepalived.conf <<EOF
 global_defs {
@@ -661,17 +728,16 @@ EOF
 ```
 
 #### 3.启动服务
+
 ```bash
 systemctl start keepalived
 systemctl enable keepalived
 ```
 
 #### 4.验证vip漂移
+
 停止nginx01的keepalived,观察vip是否会漂移到nginx02上
 启动nginx01的keepalived,观察vip是否会漂移到nginx01上(当前配置是抢占模式，nginx01恢复后会抢占VIP)
-
-
-
 
 
 ---

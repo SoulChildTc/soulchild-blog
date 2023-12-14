@@ -2,12 +2,14 @@
 
 <!--more-->
 ### 一、安装controller-manager
+
 ```bash
 # 三台机器执行
 cp /server/packages/kubernetes/server/bin/kube-controller-manager /usr/local/bin/
 ```
 
 ### 二、生成kubeconfig文件
+
 关于kubeconfig可以看上一篇文章: https://soulchild.cn/2478.html
 
 ```bash
@@ -29,7 +31,9 @@ for i in {202..203};do scp /etc/kubernetes/controller-manager.conf 172.17.20.$i:
 ```
 
 ### 三、创建systemd启动脚本
+
 #### 三台配置相同
+
 ```bash
 cat > /etc/systemd/system/kube-controller-manager.service <<EOF
 [Unit]
@@ -77,7 +81,8 @@ LimitNOFILE=65536
 WantedBy=multi-user.target
 EOF
 ```
-#### [参数说明](https://v1-20.docs.kubernetes.io/zh/docs/reference/command-line-tools-reference/kube-controller-manager/#%E9%80%89%E9%A1%B9):
+
+#### [参数说明](https://v1-20.docs.kubernetes.io/zh/docs/reference/command-line-tools-reference/kube-controller-manager/#%E9%80%89%E9%A1%B9)
 
 `--allocate-node-cidrs`: 是否自动分配CIDR地址范围并设置到云提供商上, 在裸机部署的情况下启用--allocate-node-cidrs参数可以确保将这些CIDR地址范围分配给新加入集群的节点，并将其保存到etcd中。
 
@@ -148,13 +153,16 @@ EOF
 `--use-service-account-credentials`: 如果为true，为每个控制器使用单独的service account凭据
 
 ### 四、启动服务
+
 ```bash
 systemctl start kube-controller-manager
 systemctl enable kube-controller-manager
 ```
 
 ### 五、测试
+
 查看当前leader节点
+
 ```bash
 kubectl get lease -n kube-system kube-controller-manager
 

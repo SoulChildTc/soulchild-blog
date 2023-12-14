@@ -2,9 +2,11 @@
 
 <!--more-->
 ### 一、下载yaml
+
 coredns使用k8s部署,官方提供的模板:https://github.com/coredns/deployment/blob/master/kubernetes/coredns.yaml.sed
 
 下载后的yaml需要替换如下字段
+
 ```bash
 # 这个对应kubelet的DNS
 CLUSTER_DNS_IP: 10.1.0.10
@@ -20,6 +22,7 @@ coredns/coredns:1.7.1
 ### 二、部署
 
 修改后的coredns.yaml
+
 ```bash
 apiVersion: v1
 kind: ServiceAccount
@@ -222,19 +225,21 @@ spec:
 ```
 
 部署
+
 ```bash
 kubectl apply -f coredns.yaml
 ```
 
 ### 三、测试
+
 ```bash
 # 运行一个pod，测试通过service访问我们之前创建的my-pod1
 kubectl run svc-test --image=busybox -it --rm --command -- sh
 
 wget -O - -o /dev/null my-pod1
 ```
-![95421-1tuh8msyjrg.png](images/2306878688.png "2306878688")
 
+![95421-1tuh8msyjrg.png](images/2306878688.png "2306878688")
 
 
 ---

@@ -9,9 +9,7 @@
 <span class=post-category>收录于 <a href=/categories/kubernetes/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> kubernetes</a></span></div><div class=post-meta-line><span title="2021-06-18 16:20:00"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2021-06-18 16:20">2021-06-18 16:20</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 148 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 1 分钟</span>&nbsp;<span id=busuanzi_container_page_pv class="busuanzi_visitors comment-visitors" data-flag-title="kubernetes 1.20.7 二进制安装-kubectl客户端配置以及kubeconfig说明(六)">
 <i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_page_pv>-</span>&nbsp;次阅读
 </span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#1安装kubectl>1.安装kubectl</a></li><li><a href=#2配置kubeconfig>2.配置kubeconfig</a><ul><li><a href=#1将群集信息添加到配置文件中>1.将群集信息添加到配置文件中</a></li><li><a href=#2将用户认证信息添加到配置文件中>2.将用户认证信息添加到配置文件中</a></li><li><a href=#3将上下文context信息添加到配置文件中>3.将上下文(context)信息添加到配置文件中</a></li><li><a href=#4指定默认要使用哪个上下文配置>4.指定默认要使用哪个上下文配置</a></li><li><a href=#5复制配置文件到默认查找目录>5.复制配置文件到默认查找目录</a></li></ul></li><li><a href=#3测试是否正常使用>3.测试是否正常使用</a></li></ul></li></ul></nav></div></div><div class=content id=content data-end-flag=---><div class="details admonition warning open"><div class="details-summary admonition-title"><i class="icon fa-solid fa-exclamation-triangle fa-fw" aria-hidden=true></i>警告<i class="details-icon fa-solid fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>本文最后更新于 2021-06-21 10:20，文中内容可能已过时。</div></div></div><p>官方文档:
-<a href=https://kubernetes.io/zh/docs/concepts/configuration/organize-cluster-access-kubeconfig/ target=_blank rel="external nofollow noopener noreferrer">https://kubernetes.io/zh/docs/concepts/configuration/organize-cluster-access-kubeconfig/<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a>
-<a href=https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands target=_blank rel="external nofollow noopener noreferrer">https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><h3 id=1安装kubectl>1.安装kubectl</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#1安装kubectl>1.安装kubectl</a></li><li><a href=#2配置kubeconfig>2.配置kubeconfig</a><ul><li><a href=#1将群集信息添加到配置文件中>1.将群集信息添加到配置文件中</a></li><li><a href=#2将用户认证信息添加到配置文件中>2.将用户认证信息添加到配置文件中</a></li><li><a href=#3将上下文context信息添加到配置文件中>3.将上下文(context)信息添加到配置文件中</a></li><li><a href=#4指定默认要使用哪个上下文配置>4.指定默认要使用哪个上下文配置</a></li><li><a href=#5复制配置文件到默认查找目录>5.复制配置文件到默认查找目录</a></li></ul></li><li><a href=#3测试是否正常使用>3.测试是否正常使用</a></li></ul></li></ul></nav></div></div><div class=content id=content data-end-flag=---><div class="details admonition warning open"><div class="details-summary admonition-title"><i class="icon fa-solid fa-exclamation-triangle fa-fw" aria-hidden=true></i>警告<i class="details-icon fa-solid fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>本文最后更新于 2021-06-21 10:20，文中内容可能已过时。</div></div></div><p>官方文档:</p><p><a href=https://kubernetes.io/zh/docs/concepts/configuration/organize-cluster-access-kubeconfig/ target=_blank rel="external nofollow noopener noreferrer">https://kubernetes.io/zh/docs/concepts/configuration/organize-cluster-access-kubeconfig/<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p><a href=https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands target=_blank rel="external nofollow noopener noreferrer">https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><h3 id=1安装kubectl>1.安装kubectl</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -40,11 +38,7 @@
 </span></span></span><span class=line><span class=cl><span class=se></span>  --server<span class=o>=</span>https://172.17.20.200:6443 <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>  --kubeconfig<span class=o>=</span>admin.conf
 </span></span></code></pre></td></tr></table></div></div><p>参数说明:
-<code>--set-cluster kubernetes</code>: 后续的设置将对一个名为kubernetes的集群生效(不存在会在配置文件中添加)
-<code>--embed-certs</code>: 设置为true，将证书信息内嵌到配置文件中(默认是配置的证书路径)
-<code>--certificate-authority</code>: 指定一个信任的根CA，用于校验服务端证书
-<code>--server</code>: 指定apiserver的地址
-<code>--kubeconfig</code>: 指定配置文件路径</p><h4 id=2将用户认证信息添加到配置文件中>2.将用户认证信息添加到配置文件中</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+<code>--set-cluster kubernetes</code>: 后续的设置将对一个名为kubernetes的集群生效(不存在会在配置文件中添加)</p><p><code>--embed-certs</code>: 设置为true，将证书信息内嵌到配置文件中(默认是配置的证书路径)</p><p><code>--certificate-authority</code>: 指定一个信任的根CA，用于校验服务端证书</p><p><code>--server</code>: 指定apiserver的地址</p><p><code>--kubeconfig</code>: 指定配置文件路径</p><h4 id=2将用户认证信息添加到配置文件中>2.将用户认证信息添加到配置文件中</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -54,13 +48,8 @@
 </span></span></span><span class=line><span class=cl><span class=se></span>  --client-certificate<span class=o>=</span>/etc/kubernetes/pki/admin.pem <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>  --client-key<span class=o>=</span>/etc/kubernetes/pki/admin-key.pem <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>  --kubeconfig<span class=o>=</span>admin.conf 
-</span></span></code></pre></td></tr></table></div></div><blockquote><p>这时kubectl有了集群信息,用户认证信息，但还是不能使用，我们需要在添加一个上下文信息，用于表示哪个用户和哪个集群绑定
-参数说明:
-<code>set-credentials admin</code>: 对当前用户设置一个名称(随便起)
-<code>--embed-certs</code>: 设置为true，将证书信息内嵌到配置文件中(默认是配置的证书路径)
-<code>--client-certificate</code>: 访问apiserver使用的证书
-<code>--client-key</code>: 访问apiserver使用的证书的私钥
-<code>--kubeconfig</code>: 指定配置文件路径</p></blockquote><h4 id=3将上下文context信息添加到配置文件中>3.将上下文(context)信息添加到配置文件中</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>这时kubectl有了集群信息,用户认证信息，但还是不能使用，我们需要在添加一个上下文信息，用于表示哪个用户和哪个集群绑定</p></blockquote><p>参数说明:
+<code>set-credentials admin</code>: 对当前用户设置一个名称(随便起)</p><p><code>--embed-certs</code>: 设置为true，将证书信息内嵌到配置文件中(默认是配置的证书路径)</p><p><code>--client-certificate</code>: 访问apiserver使用的证书</p><p><code>--client-key</code>: 访问apiserver使用的证书的私钥</p><p><code>--kubeconfig</code>: 指定配置文件路径</p><h4 id=3将上下文context信息添加到配置文件中>3.将上下文(context)信息添加到配置文件中</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -68,11 +57,7 @@
 </span></span></span><span class=line><span class=cl><span class=se></span>  --cluster<span class=o>=</span>kubernetes <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>  --user<span class=o>=</span>admin <span class=se>\
 </span></span></span><span class=line><span class=cl><span class=se></span>  --kubeconfig<span class=o>=</span>admin.conf
-</span></span></code></pre></td></tr></table></div></div><blockquote><p>将admin用户与kubernetes这个集群绑定,这时通过kubectl cluster info &ndash;kubeconfig=admin.conf &ndash;context=kubernetes就可以使用了，但是指定上下文很不方便，我们下一步设置一个默认的上下文
-<code>set-context kubernetes</code>: 上下文的名称
-<code>--cluster</code>: 指定哪个集群
-<code>--user</code>: 指定哪个用户
-<code>--kubeconfig</code>: 指定配置文件路径</p></blockquote><h4 id=4指定默认要使用哪个上下文配置>4.指定默认要使用哪个上下文配置</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>将admin用户与kubernetes这个集群绑定,这时通过kubectl cluster info &ndash;kubeconfig=admin.conf &ndash;context=kubernetes就可以使用了，但是指定上下文很不方便，我们下一步设置一个默认的上下文</p></blockquote><p><code>set-context kubernetes</code>: 上下文的名称</p><p><code>--cluster</code>: 指定哪个集群</p><p><code>--user</code>: 指定哪个用户</p><p><code>--kubeconfig</code>: 指定配置文件路径</p><h4 id=4指定默认要使用哪个上下文配置>4.指定默认要使用哪个上下文配置</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl config use-context kubernetes --kubeconfig<span class=o>=</span>admin.conf
 </span></span></code></pre></td></tr></table></div></div><h4 id=5复制配置文件到默认查找目录>5.复制配置文件到默认查找目录</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>cp admin.conf ~/.kube/config

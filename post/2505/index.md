@@ -2,15 +2,17 @@
 
 <!--more-->
 ### 一、安装kubelet
+
 ```bash
 # 安装kubelet
 for i in {201..203};do scp /server/packages/kubernetes/server/bin/kube-proxy root@172.17.20.$i:/usr/local/bin/ ;done
 for i in {210..212};do scp /server/packages/kubernetes/server/bin/kube-proxy root@172.17.20.$i:/usr/local/bin/ ;done
 ```
 
-
 ### 二、配置kube-config
+
 #### master节点执行
+
 ```bash
 cd /etc/kubernetes/
 # 设置集群信息
@@ -30,6 +32,7 @@ for i in 202 203 210 211 212;do scp /etc/kubernetes/kube-proxy.conf 172.17.20.$i
 ```
 
 ### 三、kube-proxy配置文件
+
 ```bash
 cat > /etc/kubernetes/kube-proxy.yaml <<EOF
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
@@ -55,14 +58,22 @@ for i in 202 203 210 211 212;do scp /etc/kubernetes/kube-proxy.yaml 172.17.20.$i
 # 修改hostnameOverride信息
 for i in 202 203 210 211 212;do ssh 172.17.20.$i 'sed -i "s#hostnameOverride.*#hostnameOverride: $(ip a s eth0 | grep -o 172\.17\.20.*/ | tr -d /)#" /etc/kubernetes/kube-proxy.yaml' ;done
 ```
+
 参数说明:
 `bindAddress`: 监听地址
+
 `healthzBindAddress`: 健康检查服务的监听地址和端口，默认0.0.0.0:10256
+
 `metricsBindAddress`: metrics指标服务的监听地址和端口，默认127.0.0.1:10249
+
 `bindAddressHardFail`: 端口绑定失败视为严重错误，直接退出程序
+
 `enableProfiling`: 启用性能分析
+
 `clusterCIDR`: pod的ip范围
+
 `hostnameOverride`: 参数值必须与 kubelet 的值一致，否则 kube-proxy 启动后会找不到该 Node，从而不会创建任何 ipvs 规则
+
 `clientConnection`: kube-proxy客户端的配置
   - `kubeconfig`: kubeconfig文件路径
   - `qps`: 每秒允许的查询数
@@ -70,8 +81,8 @@ for i in 202 203 210 211 212;do ssh 172.17.20.$i 'sed -i "s#hostnameOverride.*#h
 
 `mode`: 使用的网络代理模式，可选项userspace、iptables、ipvs
 
-
 ### 四、配置systemd启动脚本
+
 ```bash
 cat > /etc/systemd/system/kube-proxy.service <<EOF
 [Unit]
@@ -99,15 +110,18 @@ for i in 202 203 210 211 212;do scp /etc/systemd/system/kube-proxy.service 172.1
 ```
 
 ### 五、启动服务
+
 ```bash
 systemctl start kube-proxy
 systemctl enable kube-proxy
 ```
 
 ### 六、查看状态
+
 ```bash
 for i in 201 202 203 210 211 212;do echo -e "172.17.20.$i:" ;ssh 172.17.20.$i 'systemctl status kube-proxy|grep Active' ;done
 ```
+
 ![08048-t8btv6tuquh.png](images/291040891.png "291040891")
 
 
