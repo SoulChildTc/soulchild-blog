@@ -88,7 +88,7 @@ Kubernetes 自动发现提供程序监视 Kubernetes node、pod、service 的创
 
 - `kube_client_options` 限制请求 apiserver 的并发, [官方文档](https://www.elastic.co/guide/en/beats/filebeat/current/configuration-autodiscover.html#_kubernetes)
 
-- `resource` (可选项) 选择要进行发现的资源。目前支持的 Kubernetes 资源有 pod、service 和 node。如果没有配置，资源默认为 pod. 现在还不确定 node 和 service 的使用场景
+- `resource` (可选项) 选择要进行发现的资源。目前支持的 Kubernetes 资源有 pod、service 和 node。如果没有配置，资源默认为 pod. 现在还不确定 node 和 service 的使用场景. 如果要使用 service 自动发现, scope 要为 cluster 。service 必须要有 ClusterIP, 没有 ClusterIP 的 service 会被忽略
 
 - `scope` (可选项) node 或 cluster。 节点范围允许发现当前节点中的资源(pod, node)。集群范围允许集群范围内的发现(service)。
 
