@@ -86,6 +86,7 @@ pyenv rehash
 
 ```bash
 # 查看当前所有的虚拟环境
+pyenv virtualenvs
 
 # 创建环境 - 使用默认的 python 版本
 pyenv virtualenv env1
