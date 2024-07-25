@@ -51,7 +51,7 @@ pvc:
 pullsecret:
 ```
 
-### 3. 导出 pacp
+### 3. 导出 pcap
 
 ```shell
 # 导出之前可以看看 pod 日志有没有捕获到流量
