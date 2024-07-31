@@ -143,9 +143,6 @@ project, including configuration, build, internationalization, help files, etc.
 %setup -q # setup宏可以确保我们在正确的目录中工作，清除先前构建的残留，解压源压缩包，并设置一些默认权限。-q 表示安静模式，减少输出信息 
 
 %build # 编译阶段
-%configure
-make %{?_smp_mflags}
-
 %configure # 这个宏用于运行配置脚本，通常是源码包中的`./configure`脚本。这个脚本会根据系统的环境和配置选项生成Makefile，使得后续的编译和安装过程能够正确执行。`%configure`会自动处理一些常见的配置选项，比如是否启用调试符号、选择正确的编译器等，从而简化了SPEC文件的编写。
 
 make %{?_smp_mflags} # 这条命令用于启动实际的编译过程。`make`命令基于前面`%configure`生成的Makefile来编译源码。`%{?_smp_mflags}`是一个特殊的宏，它在多处理器或多核心系统上会自动添加并行编译的标志，如`-jN`，其中`N`是系统中逻辑处理器的数量。这可以显著加快编译速度。如果没有`_smp_mflags`这个条件宏被定义，那么这部分将不会被展开，`make`命令就会默认执行串行编译。
