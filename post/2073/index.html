@@ -165,10 +165,10 @@
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># 第一组告警发送通知需要等待的时间，等待可以确保有足够的时间为同一分组获取多个告警，然后一起触发这个告警信息。</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>group_wait</span><span class=p>:</span><span class=w> </span><span class=l>30s</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># 告警组第一次发送通知后, 后续有新的告警进入告警组, 等待多长时间再发送通知</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># 告警组第一次发送告警后, 后续有新的告警进入告警组, 等待多长时间再发送告警</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>group_interval</span><span class=p>:</span><span class=w> </span><span class=l>5m</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># 告警组中没有新告警加入时, 每过多久发送一次告警</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># 已经发送过的告警, 每过多久重复发送</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>repeat_interval</span><span class=p>:</span><span class=w> </span><span class=l>3h </span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># 这里先说一下，告警发送是需要指定接收器的，接收器在receivers中配置，接收器可以是email、webhook、pagerduty、wechat等等。一个接收器可以有多种发送方式。</span><span class=w>
