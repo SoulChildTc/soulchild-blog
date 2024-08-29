@@ -49,6 +49,9 @@ pyenv install -l
 
 ```bash
 # 安装
+# 如果出现ssl相关报错, 安装前先执行如下命令
+# openssldir=$(openssl version -d |  awk -F ':' '{print $2}' | xargs dirname)
+# export CPPFLAGS="-I${openssldir}/include" && explort LDFLAGS="-L${openssldir}/lib"
 pyenv install 3.5.10
 
 # 卸载

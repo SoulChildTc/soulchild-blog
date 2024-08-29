@@ -69,6 +69,9 @@ asdf latest --all
 
 ```bash
 # 安装指定的版本
+# 如果出现ssl相关报错, 安装前先执行如下命令
+# openssldir=$(openssl version -d |  awk -F ':' '{print $2}' | xargs dirname)
+# export CPPFLAGS="-I${openssldir}/include" && explort LDFLAGS="-L${openssldir}/lib"
 asdf install python 3.2.0
 
 # 安装指定的版本中的稳定版本
