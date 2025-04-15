@@ -1,0 +1,737 @@
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>Python Uv备忘 - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="uv 是用 Rust 编写的极速 Python 包和项目管理工具，可替代 pip、pip-tools、pipx、poetry、pyenv、twine、virtualenv 等多种工具，本文提供从入门到精通的完整指南"><meta name=keywords content="Python,uv"><meta itemprop=name content="Python Uv备忘"><meta itemprop=description content="uv 是用 Rust 编写的极速 Python 包和项目管理工具，可替代 pip、pip-tools、pipx、poetry、pyenv、twine、virtualenv 等多种工具，本文提供从入门到精通的完整指南"><meta itemprop=datePublished content="2025-04-15T21:18:11+08:00"><meta itemprop=dateModified content="2025-04-15T21:18:11+08:00"><meta itemprop=wordCount content="2014"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content="Python,uv,"><meta property="og:title" content="Python Uv备忘"><meta property="og:description" content="uv 是用 Rust 编写的极速 Python 包和项目管理工具，可替代 pip、pip-tools、pipx、poetry、pyenv、twine、virtualenv 等多种工具，本文提供从入门到精通的完整指南"><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/744723091/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-04-15T21:18:11+08:00"><meta property="article:modified_time" content="2025-04-15T21:18:11+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="Python Uv备忘"><meta name=twitter:description content="uv 是用 Rust 编写的极速 Python 包和项目管理工具，可替代 pip、pip-tools、pipx、poetry、pyenv、twine、virtualenv 等多种工具，本文提供从入门到精通的完整指南"><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/744723091/><link rel=prev href=https://www.soulchild.cn/post/729592950/><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Python Uv备忘","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/744723091\/"},"genre":"posts","keywords":"Python, uv","wordcount":2014,"url":"https:\/\/www.soulchild.cn\/post\/744723091\/","datePublished":"2025-04-15T21:18:11+08:00","dateModified":"2025-04-15T21:18:11+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":"uv 是用 Rust 编写的极速 Python 包和项目管理工具，可替代 pip、pip-tools、pipx、poetry、pyenv、twine、virtualenv 等多种工具，本文提供从入门到精通的完整指南"}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item text-start"><a class=menu-link href=https://www.travellings.cn title=开往 rel="noopener noreferrer" target=_blank><i class="fa-solid fa-train-subway fa-sm fa-fw fa-sm" aria-hidden=true></i> 开往</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item text-start"><a class=menu-link href=https://www.travellings.cn title=开往 rel="noopener noreferrer" target=_blank><i class="fa-solid fa-train-subway fa-sm fa-fw fa-sm" aria-hidden=true></i> 开往</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden=true></i></h2><div class="toc-content always-active" id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>Python Uv备忘</span></h1><p class="single-subtitle animate__animated animate__fadeIn">极速 Python 包管理与项目管理工具完全指南</p></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> 常用命令</a></span></div><div class=post-meta-line><span title="2025-04-15 21:18:11"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2025-04-15 21:18">2025-04-15 21:18</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 2014 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 10 分钟</span>&nbsp;<span id=busuanzi_container_page_pv class="busuanzi_visitors comment-visitors" data-flag-title="Python Uv备忘">
+<i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_page_pv>-</span>&nbsp;次阅读
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#一核心功能模块>一、核心功能模块</a><ul><li><a href=#1-安装与配置>1. 安装与配置</a><ul><li><a href=#11-什么是-uv>1.1 什么是 uv？</a></li><li><a href=#12-为什么选择-uv>1.2 为什么选择 uv？</a></li><li><a href=#13-安装-uv>1.3 安装 uv</a></li></ul></li><li><a href=#2-虚拟环境管理>2. 虚拟环境管理</a><ul><li><a href=#21-创建与管理虚拟环境>2.1 创建与管理虚拟环境</a></li></ul></li><li><a href=#3-依赖管理>3. 依赖管理</a><ul><li><a href=#31-包管理基础操作>3.1 包管理基础操作</a></li><li><a href=#32-高级依赖管理>3.2 高级依赖管理</a><ul><li><a href=#321-依赖文件编译>3.2.1 依赖文件编译</a></li><li><a href=#322-依赖文件的高级选项>3.2.2 依赖文件的高级选项</a></li><li><a href=#323-自定义包源>3.2.3 自定义包源</a><ul><li><a href=#命令行临时指定>命令行临时指定</a></li><li><a href=#配置文件永久设置>配置文件永久设置</a></li></ul></li><li><a href=#324-依赖版本控制>3.2.4 依赖版本控制</a></li><li><a href=#325-依赖安装的高级选项>3.2.5 依赖安装的高级选项</a></li><li><a href=#326-实际应用场景>3.2.6 实际应用场景</a></li></ul></li></ul></li><li><a href=#4-项目初始化与工作流>4. 项目初始化与工作流</a><ul><li><a href=#41-创建新项目>4.1 创建新项目</a></li><li><a href=#42-管理项目依赖>4.2 管理项目依赖</a></li><li><a href=#43-锁定和同步依赖>4.3 锁定和同步依赖</a></li></ul></li><li><a href=#5-python-版本管理>5. Python 版本管理</a><ul><li><a href=#51-版本请求格式>5.1 版本请求格式</a></li><li><a href=#52-python-版本文件>5.2 Python 版本文件</a></li><li><a href=#53-安装-python-版本>5.3 安装 Python 版本</a></li><li><a href=#54-查看可用的-python-版本>5.4 查看可用的 Python 版本</a></li><li><a href=#55-查找-python-可执行文件>5.5 查找 Python 可执行文件</a></li><li><a href=#56-python-版本发现机制>5.6 Python 版本发现机制</a></li><li><a href=#57-禁用自动-python-下载>5.7 禁用自动 Python 下载</a></li><li><a href=#58-python-实现支持>5.8 Python 实现支持</a></li></ul></li><li><a href=#6-打包与发布>6. 打包与发布</a><ul><li><a href=#61-准备项目打包>6.1 准备项目打包</a></li><li><a href=#62-打包你的项目>6.2 打包你的项目</a></li><li><a href=#63-发布到-pypi>6.3 发布到 PyPI</a></li><li><a href=#64-测试你发布的包>6.4 测试你发布的包</a></li><li><a href=#65-发布到测试平台>6.5 发布到测试平台</a></li></ul></li></ul></li><li><a href=#二高级功能与特性>二、高级功能与特性</a><ul><li><a href=#1-脚本运行与命令执行>1. 脚本运行与命令执行</a><ul><li><a href=#11-运行无依赖的脚本>1.1 运行无依赖的脚本</a></li><li><a href=#12-运行有依赖的脚本>1.2 运行有依赖的脚本</a></li><li><a href=#13-创建-python-脚本>1.3 创建 Python 脚本</a></li><li><a href=#14-声明脚本依赖>1.4 声明脚本依赖</a></li><li><a href=#15-使用替代包索引>1.5 使用替代包索引</a></li><li><a href=#16-锁定依赖>1.6 锁定依赖</a></li><li><a href=#17-提高可重现性>1.7 提高可重现性</a></li><li><a href=#18-使用不同的-python-版本>1.8 使用不同的 Python 版本</a></li><li><a href=#19-使用-gui-脚本>1.9 使用 GUI 脚本</a></li></ul></li><li><a href=#2-全局工具管理>2. 全局工具管理</a><ul><li><a href=#21-临时运行工具>2.1 临时运行工具</a></li><li><a href=#22-安装全局工具>2.2 安装全局工具</a></li><li><a href=#23-管理已安装的工具>2.3 管理已安装的工具</a></li></ul></li><li><a href=#3-兼容性与扩展>3. 兼容性与扩展</a><ul><li><a href=#31-缓存管理>3.1 缓存管理</a></li><li><a href=#32-并行处理>3.2 并行处理</a></li><li><a href=#33-迁移现有项目>3.3 迁移现有项目</a></li></ul></li></ul></li><li><a href=#三对比传统工具的优势>三、对比传统工具的优势</a><ul><li><a href=#1-一体化设计>1. 一体化设计</a></li><li><a href=#2-现代化标准>2. 现代化标准</a></li><li><a href=#3-跨平台一致性>3. 跨平台一致性</a></li></ul></li><li><a href=#参考资料>参考资料</a></li><li><a href=#总结>总结</a></li></ul></nav></div></div><div class=content id=content data-end-flag=---><h1 id=uv-python-包管理的未来>uv: Python 包管理的未来</h1><h2 id=一核心功能模块>一、核心功能模块</h2><h3 id=1-安装与配置>1. 安装与配置</h3><h4 id=11-什么是-uv>1.1 什么是 uv？</h4><p>uv 是一个用 Rust 编写的极速 Python 包和项目管理工具，由 Ruff 的创建者 Astral 团队开发。它的设计目标是提供一个统一的工具来替代 Python 生态系统中的多个工具，包括 pip、pip-tools、pipx、poetry、pyenv、twine、virtualenv 等。</p><h4 id=12-为什么选择-uv>1.2 为什么选择 uv？</h4><ul><li><strong>性能卓越</strong>：比传统的 pip 快 10-100 倍</li><li><strong>功能全面</strong>：单一工具覆盖项目管理、依赖管理、脚本运行、工具安装等多种功能</li><li><strong>兼容性好</strong>：提供与现有工具兼容的接口，便于迁移</li><li><strong>高效资源利用</strong>：全局缓存系统实现依赖去重，节省磁盘空间</li><li><strong>多平台支持</strong>：支持 macOS、Linux 和 Windows</li></ul><h4 id=13-安装-uv>1.3 安装 uv</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># macOS 和 Linux 安装</span>
+</span></span><span class=line><span class=cl>curl -LsSf https://astral.sh/uv/install.sh <span class=p>|</span> sh
+</span></span><span class=line><span class=cl><span class=c1># 或使用 Homebrew 安装</span>
+</span></span><span class=line><span class=cl>brew install uv
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Windows 安装</span>
+</span></span><span class=line><span class=cl>powershell -ExecutionPolicy ByPass -c <span class=s2>&#34;irm https://astral.sh/uv/install.ps1 | iex&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 pip 安装</span>
+</span></span><span class=line><span class=cl>pip install uv
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 验证安装</span>
+</span></span><span class=line><span class=cl>uv --version
+</span></span></code></pre></td></tr></table></div></div><h3 id=2-虚拟环境管理>2. 虚拟环境管理</h3><h4 id=21-创建与管理虚拟环境>2.1 创建与管理虚拟环境</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 创建虚拟环境（默认在当前目录的 .venv 文件夹）</span>
+</span></span><span class=line><span class=cl>uv venv
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 指定 Python 版本创建虚拟环境</span>
+</span></span><span class=line><span class=cl>uv venv --python 3.11
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 指定路径创建虚拟环境</span>
+</span></span><span class=line><span class=cl>uv venv /path/to/venv
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 激活虚拟环境</span>
+</span></span><span class=line><span class=cl><span class=c1># Linux/macOS</span>
+</span></span><span class=line><span class=cl><span class=nb>source</span> .venv/bin/activate
+</span></span><span class=line><span class=cl><span class=c1># Windows</span>
+</span></span><span class=line><span class=cl>.venv<span class=se>\S</span>cripts<span class=se>\a</span>ctivate
+</span></span></code></pre></td></tr></table></div></div><h3 id=3-依赖管理>3. 依赖管理</h3><h4 id=31-包管理基础操作>3.1 包管理基础操作</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 安装包</span>
+</span></span><span class=line><span class=cl>uv pip install requests
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 安装特定版本</span>
+</span></span><span class=line><span class=cl>uv pip install <span class=nv>requests</span><span class=o>==</span>2.28.1
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 从 requirements.txt 安装</span>
+</span></span><span class=line><span class=cl>uv pip install -r requirements.txt
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 升级包</span>
+</span></span><span class=line><span class=cl>uv pip install --upgrade requests
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 卸载包</span>
+</span></span><span class=line><span class=cl>uv pip uninstall requests
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 列出已安装的包</span>
+</span></span><span class=line><span class=cl>uv pip list
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看包信息</span>
+</span></span><span class=line><span class=cl>uv pip show requests
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 搜索包</span>
+</span></span><span class=line><span class=cl>uv pip search requests
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 冻结当前环境</span>
+</span></span><span class=line><span class=cl>uv pip freeze &gt; requirements.txt
+</span></span></code></pre></td></tr></table></div></div><h4 id=32-高级依赖管理>3.2 高级依赖管理</h4><h5 id=321-依赖文件编译>3.2.1 依赖文件编译</h5><p>在 Python 项目中，我们通常使用 <code>requirements.txt</code> 来管理依赖。但是直接维护这个文件可能会很困难，特别是当项目依赖很多时。uv 提供了依赖文件编译功能，可以从一个简单的 <code>requirements.in</code> 文件生成完整的 <code>requirements.txt</code>(requirements.in 通常是开发者手动维护的)。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 从 requirements.in 编译生成 requirements.txt</span>
+</span></span><span class=line><span class=cl>uv pip compile requirements.in --output-file requirements.txt
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 示例 requirements.in 文件内容：</span>
+</span></span><span class=line><span class=cl><span class=c1># requests&gt;=2.28.0</span>
+</span></span><span class=line><span class=cl><span class=c1># beautifulsoup4</span>
+</span></span><span class=line><span class=cl><span class=c1># pytest&gt;=7.0.0</span>
+</span></span></code></pre></td></tr></table></div></div><h5 id=322-依赖文件的高级选项>3.2.2 依赖文件的高级选项</h5><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 生成平台无关的依赖文件（不包含特定平台的包）</span>
+</span></span><span class=line><span class=cl>uv pip compile requirements.in --universal --output-file requirements.txt
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 生成包含哈希值的依赖文件（提高安全性，防止安装被篡改的包）</span>
+</span></span><span class=line><span class=cl>uv pip compile requirements.in --generate-hashes --output-file requirements.txt
+</span></span></code></pre></td></tr></table></div></div><h5 id=323-自定义包源>3.2.3 自定义包源</h5><p>有时候我们需要从不同的包源安装包，比如使用国内镜像源或者私有仓库。uv 提供了多种方式来配置包源：</p><h6 id=命令行临时指定>命令行临时指定</h6><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 使用清华镜像源安装包</span>
+</span></span><span class=line><span class=cl>uv pip install --index-url https://pypi.tuna.tsinghua.edu.cn/simple requests
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 添加额外的包源（比如私有仓库）</span>
+</span></span><span class=line><span class=cl>uv pip install --extra-index-url https://my-private-index.com/simple private-package
+</span></span></code></pre></td></tr></table></div></div><h6 id=配置文件永久设置>配置文件永久设置</h6><p>uv 支持通过配置文件设置默认的包源，配置文件有多个级别：项目级、用户级和系统级。</p><ol><li><p><strong>配置文件类型和位置</strong>：</p><ul><li><p><strong>项目级配置</strong>：</p><ul><li><code>pyproject.toml</code>（在 <code>[tool.uv]</code> 表下配置）</li><li><code>uv.toml</code>（优先于 <code>pyproject.toml</code>）</li></ul></li><li><p><strong>用户级配置</strong>：</p><ul><li>Linux/macOS: <code>~/.config/uv/uv.toml</code> 或 <code>$XDG_CONFIG_HOME/uv/uv.toml</code></li><li>Windows: <code>%APPDATA%\uv\uv.toml</code></li></ul></li><li><p><strong>系统级配置</strong>：</p><ul><li>Linux/macOS: <code>/etc/uv/uv.toml</code> 或 <code>$XDG_CONFIG_DIRS/uv/uv.toml</code></li><li>Windows: <code>%SYSTEMDRIVE%\ProgramData\uv\uv.toml</code></li></ul></li></ul></li><li><p><strong>设置 pip 接口的包源</strong>：</p><p>可以通过 <code>[tool.uv.pip]</code> 或 <code>[pip]</code> 部分设置仅影响 <code>uv pip</code> 命令的配置：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=c># pyproject.toml</span>
+</span></span><span class=line><span class=cl><span class=p>[</span><span class=nx>tool</span><span class=p>.</span><span class=nx>uv</span><span class=p>.</span><span class=nx>pip</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=nx>index-url</span> <span class=p>=</span> <span class=s2>&#34;https://pypi.tuna.tsinghua.edu.cn/simple&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>或者在 <code>uv.toml</code> 中：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=c># ~/.config/uv/uv.toml</span>
+</span></span><span class=line><span class=cl><span class=p>[</span><span class=nx>pip</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=nx>index-url</span> <span class=p>=</span> <span class=s2>&#34;https://pypi.tuna.tsinghua.edu.cn/simple&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>重要说明</strong>：<code>[tool.uv.pip]</code> 或 <code>[pip]</code> 配置<strong>仅对 <code>uv pip</code> 子命令生效</strong>，例如 <code>uv pip install</code>、<code>uv pip uninstall</code> 等。这些配置<strong>不会影响</strong> <code>uv sync</code>、<code>uv lock</code>、<code>uv run</code> 等其他命令。如果你希望这些命令也使用相同的包源，需要使用全局索引配置（见下一部分）。</p></li><li><p><strong>设置全局包源配置</strong>：</p><p>通过全局索引配置，可以影响所有 uv 命令：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=c># pyproject.toml(项目级)</span>
+</span></span><span class=line><span class=cl><span class=p>[[</span><span class=nx>tool</span><span class=p>.</span><span class=nx>uv</span><span class=p>.</span><span class=nx>index</span><span class=p>]]</span>
+</span></span><span class=line><span class=cl><span class=nx>url</span> <span class=p>=</span> <span class=s2>&#34;https://pypi.tuna.tsinghua.edu.cn/simple&#34;</span>
+</span></span><span class=line><span class=cl><span class=nx>default</span> <span class=p>=</span> <span class=kc>true</span>
+</span></span></code></pre></td></tr></table></div></div><p>或者在 <code>uv.toml</code> 中：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=c># ~/.config/uv/uv.toml(全局)</span>
+</span></span><span class=line><span class=cl><span class=p>[[</span><span class=nx>index</span><span class=p>]]</span>
+</span></span><span class=line><span class=cl><span class=nx>url</span> <span class=p>=</span> <span class=s2>&#34;https://pypi.tuna.tsinghua.edu.cn/simple&#34;</span>
+</span></span><span class=line><span class=cl><span class=nx>default</span> <span class=p>=</span> <span class=kc>true</span>
+</span></span></code></pre></td></tr></table></div></div></li><li><p><strong>常用国内镜像源</strong>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=c># 清华镜像源</span>
+</span></span><span class=line><span class=cl><span class=nx>url</span> <span class=p>=</span> <span class=s2>&#34;https://pypi.tuna.tsinghua.edu.cn/simple&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 阿里云镜像源</span>
+</span></span><span class=line><span class=cl><span class=c># url = &#34;https://mirrors.aliyun.com/pypi/simple&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 中国科技大学镜像源</span>
+</span></span><span class=line><span class=cl><span class=c># url = &#34;https://pypi.mirrors.ustc.edu.cn/simple&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># 豆瓣镜像源</span>
+</span></span><span class=line><span class=cl><span class=c># url = &#34;https://pypi.douban.com/simple&#34;</span>
+</span></span></code></pre></td></tr></table></div></div></li><li><p><strong>优先级规则</strong>：</p><ul><li>命令行参数 > 环境变量 > 项目配置 > 用户配置 > 系统配置</li><li><code>uv.toml</code> 优先于同一目录中的 <code>pyproject.toml</code></li><li>可以使用 <code>--no-config</code> 禁用所有配置文件</li><li>可以使用 <code>--config-file &lt;path></code> 指定特定配置文件</li></ul></li><li><p><strong>验证配置</strong>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 使用 --dry-run 选项查看将要执行的命令而不实际执行</span>
+</span></span><span class=line><span class=cl>uv pip install --verbose requests --dry-run
+</span></span></code></pre></td></tr></table></div></div><p>uv 会在安装过程中显示使用的配置信息，包括包源等。</p></li></ol><h5 id=324-依赖版本控制>3.2.4 依赖版本控制</h5><p>在大型项目中，可能会遇到依赖版本冲突的问题。uv 提供了多种方式来解决这个问题：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 使用约束文件覆盖特定依赖的版本</span>
+</span></span><span class=line><span class=cl>uv pip install -r requirements.txt --constraint <span class=s2>&#34;requests==2.28.0&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 从单独的约束文件读取版本限制</span>
+</span></span><span class=line><span class=cl>uv pip install -r requirements.txt --constraint constraints.txt
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 示例 constraints.txt 文件内容：</span>
+</span></span><span class=line><span class=cl><span class=c1># requests==2.28.0</span>
+</span></span><span class=line><span class=cl><span class=c1># urllib3&lt;2.0.0</span>
+</span></span></code></pre></td></tr></table></div></div><h5 id=325-依赖安装的高级选项>3.2.5 依赖安装的高级选项</h5><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 跳过依赖关系检查，只安装指定的包</span>
+</span></span><span class=line><span class=cl>uv pip install --no-deps requests
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 这个选项在以下情况很有用：</span>
+</span></span><span class=line><span class=cl><span class=c1># 1. 你知道所有需要的依赖都已经安装</span>
+</span></span><span class=line><span class=cl><span class=c1># 2. 你想手动控制依赖版本</span>
+</span></span><span class=line><span class=cl><span class=c1># 3. 你正在调试依赖问题</span>
+</span></span></code></pre></td></tr></table></div></div><h5 id=326-实际应用场景>3.2.6 实际应用场景</h5><ol><li><strong>开发环境与生产环境分离</strong></li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 开发环境依赖</span>
+</span></span><span class=line><span class=cl>uv pip compile requirements.in --output-file requirements-dev.txt
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 生产环境依赖（不包含开发工具）</span>
+</span></span><span class=line><span class=cl>uv pip compile requirements.in --output-file requirements-prod.txt --no-dev
+</span></span></code></pre></td></tr></table></div></div><ol start=2><li><strong>多环境依赖管理</strong></li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 为不同 Python 版本生成依赖文件</span>
+</span></span><span class=line><span class=cl>uv pip compile requirements.in --python-version 3.8 --output-file requirements-3.8.txt
+</span></span><span class=line><span class=cl>uv pip compile requirements.in --python-version 3.9 --output-file requirements-3.9.txt
+</span></span></code></pre></td></tr></table></div></div><ol start=3><li><strong>依赖锁定与更新</strong></li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 锁定所有依赖到特定版本</span>
+</span></span><span class=line><span class=cl>uv pip compile requirements.in --generate-hashes --output-file requirements.lock
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 更新所有依赖到最新版本</span>
+</span></span><span class=line><span class=cl>uv pip compile requirements.in --upgrade --output-file requirements.txt
+</span></span></code></pre></td></tr></table></div></div><h3 id=4-项目初始化与工作流>4. 项目初始化与工作流</h3><h4 id=41-创建新项目>4.1 创建新项目</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 创建一个项目</span>
+</span></span><span class=line><span class=cl>uv init my-project
+</span></span><span class=line><span class=cl><span class=nb>cd</span> my-project
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 项目结构</span>
+</span></span><span class=line><span class=cl><span class=c1># my-project/</span>
+</span></span><span class=line><span class=cl><span class=c1># ├── pyproject.toml  # 项目配置文件</span>
+</span></span><span class=line><span class=cl><span class=c1># ├── README.md       # 自动生成的文档</span>
+</span></span><span class=line><span class=cl><span class=c1># └── src/            # 源代码目录</span>
+</span></span><span class=line><span class=cl><span class=c1>#     └── my_project/ # 项目代码</span>
+</span></span><span class=line><span class=cl><span class=c1>#         └── __init__.py</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=42-管理项目依赖>4.2 管理项目依赖</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 添加依赖</span>
+</span></span><span class=line><span class=cl>uv add requests
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 添加开发依赖</span>
+</span></span><span class=line><span class=cl>uv add --dev pytest
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 指定版本约束</span>
+</span></span><span class=line><span class=cl>uv add <span class=s2>&#34;requests&gt;=2.28.0,&lt;3.0.0&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 从 Git 仓库添加依赖</span>
+</span></span><span class=line><span class=cl>uv add git+https://github.com/user/repo.git
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 移除依赖</span>
+</span></span><span class=line><span class=cl>uv remove requests
+</span></span></code></pre></td></tr></table></div></div><h4 id=43-锁定和同步依赖>4.3 锁定和同步依赖</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 生成锁文件（uv.lock）</span>
+</span></span><span class=line><span class=cl>uv lock
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 同步依赖（按照锁文件安装）</span>
+</span></span><span class=line><span class=cl>uv sync
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 更新锁文件中的依赖</span>
+</span></span><span class=line><span class=cl>uv lock --update
+</span></span></code></pre></td></tr></table></div></div><h3 id=5-python-版本管理>5. Python 版本管理</h3><h4 id=51-版本请求格式>5.1 版本请求格式</h4><p>uv 支持多种 Python 版本请求格式，可以在大多数命令中使用 <code>--python</code> 标志指定：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 创建虚拟环境时指定 Python 版本</span>
+</span></span><span class=line><span class=cl>uv venv --python 3.11.6
+</span></span></code></pre></td></tr></table></div></div><p>支持的版本请求格式：</p><ul><li><strong>版本号</strong>：<code>3</code>、<code>3.12</code>、<code>3.12.3</code></li><li><strong>版本规范</strong>：<code>>=3.12,&lt;3.13</code></li><li><strong>实现</strong>：<code>cpython</code> 或 <code>cp</code></li><li><strong>实现@版本</strong>：<code>cpython@3.12</code></li><li><strong>实现+版本</strong>：<code>cpython3.12</code> 或 <code>cp312</code></li><li><strong>实现+版本规范</strong>：<code>cpython>=3.12,&lt;3.13</code></li><li><strong>完整规范</strong>：<code>cpython-3.12.3-macos-aarch64-none</code></li></ul><p>此外，还可以请求特定的系统 Python 解释器：</p><ul><li><strong>可执行文件路径</strong>：<code>/opt/homebrew/bin/python3</code></li><li><strong>可执行文件名称</strong>：<code>mypython3</code></li><li><strong>安装目录</strong>：<code>/some/environment/</code></li></ul><h4 id=52-python-版本文件>5.2 Python 版本文件</h4><p><code>.python-version</code> 文件可用于创建默认的 Python 版本请求。uv 会在工作目录及其父目录中搜索 <code>.python-version</code> 文件。如果未找到，uv 将检查用户级配置目录。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 在当前目录创建 .python-version 文件(固定 python 版本)</span>
+</span></span><span class=line><span class=cl>uv python pin 3.11
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在用户配置目录创建全局 .python-version 文件(固定 python 版本)</span>
+</span></span><span class=line><span class=cl>uv python pin --global 3.11
+</span></span></code></pre></td></tr></table></div></div><h4 id=53-安装-python-版本>5.3 安装 Python 版本</h4><p>uv 捆绑了适用于 macOS、Linux 和 Windows 的可下载 CPython 和 PyPy 发行版列表。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 安装特定版本</span>
+</span></span><span class=line><span class=cl>uv python install 3.12.3
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 安装最新的补丁版本</span>
+</span></span><span class=line><span class=cl>uv python install 3.12
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 安装满足约束的版本</span>
+</span></span><span class=line><span class=cl>uv python install <span class=s1>&#39;&gt;=3.8,&lt;3.10&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 安装多个版本</span>
+</span></span><span class=line><span class=cl>uv python install 3.9 3.10 3.11
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 安装特定实现</span>
+</span></span><span class=line><span class=cl>uv python install pypy
+</span></span></code></pre></td></tr></table></div></div><p><strong>重要说明</strong>：可用的 Python 版本在每个 uv 版本中都是固定的。要安装新的 Python 版本，可能需要升级 uv。</p><h4 id=54-查看可用的-python-版本>5.4 查看可用的 Python 版本</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 列出已安装和可用的 Python 版本</span>
+</span></span><span class=line><span class=cl>uv python list <span class=c1># 只列出 cpython 解释器</span>
+</span></span><span class=line><span class=cl>uv python list pypy  <span class=c1># 只列出 PyPy 解释器</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 过滤 Python 版本</span>
+</span></span><span class=line><span class=cl>uv python list 3.13  <span class=c1># 显示所有 Python 3.13 解释器</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看所有版本(包含老的补丁版本)</span>
+</span></span><span class=line><span class=cl>uv python list --all-versions
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看其他平台的 Python 版本</span>
+</span></span><span class=line><span class=cl>uv python list --all-platforms
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 仅显示已安装的 Python 版本</span>
+</span></span><span class=line><span class=cl>uv python list --only-installed
+</span></span></code></pre></td></tr></table></div></div><h4 id=55-查找-python-可执行文件>5.5 查找 Python 可执行文件</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 查找 Python 可执行文件</span>
+</span></span><span class=line><span class=cl>uv python find
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查找特定版本的 Python 可执行文件</span>
+</span></span><span class=line><span class=cl>uv python find <span class=s1>&#39;&gt;=3.11&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 忽略虚拟环境，仅使用系统 Python</span>
+</span></span><span class=line><span class=cl>uv python find --system
+</span></span></code></pre></td></tr></table></div></div><h4 id=56-python-版本发现机制>5.6 Python 版本发现机制</h4><p>uv 在搜索 Python 版本时，会按以下顺序检查以下位置：</p><ol><li><code>UV_PYTHON_INSTALL_DIR</code> 中的托管 Python 安装</li><li><code>PATH</code> 上的 Python 解释器（在 macOS 和 Linux 上为 <code>python</code>、<code>python3</code> 或 <code>python3.x</code>，在 Windows 上为 <code>python.exe</code>）</li><li>在 Windows 上，检查 Windows 注册表和 Microsoft Store Python 解释器</li></ol><h4 id=57-禁用自动-python-下载>5.7 禁用自动 Python 下载</h4><p>默认情况下，uv 会在需要时自动下载 Python 版本。可以通过 <a href=python-downloads>https://docs.astral.sh/uv/reference/settings/#python-downloads</a> 选项禁用此行为：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 如果没有发现可用的 python 版本, 禁用自动下载</span>
+</span></span><span class=line><span class=cl>uv pip install --no-python-downloads requests
+</span></span></code></pre></td></tr></table></div></div><h4 id=58-python-实现支持>5.8 Python 实现支持</h4><p>uv 支持 CPython、PyPy 和 GraalPy Python 实现。可以使用长名称或短名称请求实现：</p><ul><li>CPython: <code>cpython</code>、<code>cp</code></li><li>PyPy: <code>pypy</code>、<code>pp</code></li><li>GraalPy: <code>graalpy</code>、<code>gp</code></li></ul><h3 id=6-打包与发布>6. 打包与发布</h3><h4 id=61-准备项目打包>6.1 准备项目打包</h4><p>在把你的项目发布出去之前，先确保它已经准备好了：</p><p>如果你的 <code>pyproject.toml</code> 文件里没有 <code>[build-system]</code> 这一部分，uv 默认不会帮你构建。这说明你的项目可能还没准备好发布。</p><p><strong>小贴士</strong>：如果你有些包只是内部使用不想公开发布，可以这样标记它：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=p>[</span><span class=nx>project</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=nx>classifiers</span> <span class=p>=</span> <span class=p>[</span><span class=s2>&#34;Private :: Do Not Upload&#34;</span><span class=p>]</span>
+</span></span></code></pre></td></tr></table></div></div><p>这样设置后，PyPI 就会拒绝你上传的包。这个设置只影响 PyPI，不会影响你用其他仓库。</p><p>为安全起见，最好只为特定项目生成令牌，这样就不会意外把不该发布的包发出去了。</p><h4 id=62-打包你的项目>6.2 打包你的项目</h4><p>这里说的"打包"是指把 Python 项目打包成可以在 PyPI（Python包索引）上发布的包。这些包可以是：</p><ol><li><strong>Python 依赖库</strong>：被其他 Python 项目导入使用的库，如 requests、pandas 等</li><li><strong>命令行工具</strong>：安装后可以直接在命令行中执行的工具，如 trzsz、uv 本身</li></ol><p>当你用 <code>pip install</code> 或 <code>uv pip install</code> 安装这些包时：</p><ul><li>如果是依赖库，你可以在 Python 代码中通过 <code>import</code> 语句使用它</li><li>如果是命令行工具，安装后可以直接在终端中输入命令名来执行它</li></ul><p><strong>依赖库和命令行工具的打包区别</strong>：</p><p>打包过程本身没有区别，都是用 <code>uv build</code> 命令。关键区别在于 <code>pyproject.toml</code> 的配置：</p><ol><li>要创建命令行工具，需要在 <code>pyproject.toml</code> 中添加 <code>[project.scripts]</code> 部分：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=p>[</span><span class=nx>project</span><span class=p>.</span><span class=nx>scripts</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=err>工具名称</span> <span class=p>=</span> <span class=s2>&#34;包名.模块:函数&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>例如，一个叫 &ldquo;hello-tool&rdquo; 的命令，执行 <code>mypackage.cli</code> 模块中的 <code>main</code> 函数：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=p>[</span><span class=nx>project</span><span class=p>.</span><span class=nx>scripts</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=nx>hello-tool</span> <span class=p>=</span> <span class=s2>&#34;mypackage.cli:main&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>安装后，用户可以直接在命令行中输入 <code>hello-tool</code> 来运行你的程序。</p><ol start=2><li>对于依赖库，不需要特别配置，只需确保包含必要的 <code>__init__.py</code> 文件和代码结构。</li></ol><p>用这个命令来打包你的项目：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 简单打包</span>
+</span></span><span class=line><span class=cl>uv build
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 这会在当前目录构建项目，并把生成的文件放在 dist/ 文件夹里</span>
+</span></span><span class=line><span class=cl><span class=c1># 生成的文件通常是 .whl (wheel) 和 .tar.gz (源码包) 格式</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 打包指定目录的项目</span>
+</span></span><span class=line><span class=cl>uv build 项目路径
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在多项目工作区中打包特定项目</span>
+</span></span><span class=line><span class=cl>uv build --package 项目名称
+</span></span></code></pre></td></tr></table></div></div><p><strong>小贴士</strong>：默认情况下，<code>uv build</code> 会按照你在 <code>tool.uv.sources</code> 里的设置去找构建依赖。如果你要发布包，建议用 <code>uv build --no-sources</code> 命令，这样可以确保在其他人用不同工具构建时也能成功。</p><h4 id=63-发布到-pypi>6.3 发布到 PyPI</h4><p>用 publish 命令发布你的包：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 发布到 PyPI</span>
+</span></span><span class=line><span class=cl>uv publish
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 可以用 --token 或环境变量 UV_PUBLISH_TOKEN 来设置你的 PyPI 令牌</span>
+</span></span><span class=line><span class=cl><span class=c1># 也可以用 --username/UV_PUBLISH_USERNAME 和 --password/UV_PUBLISH_PASSWORD 设置账号密码</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>注意</strong>：现在 PyPI 已经不支持用户名密码方式发布了，你需要用令牌。用令牌就相当于设置用户名为 <code>__token__</code>，密码为你的令牌值。</p><p>如果你想用自定义的包仓库，可以这样配置：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-toml data-lang=toml><span class=line><span class=cl><span class=p>[[</span><span class=nx>tool</span><span class=p>.</span><span class=nx>uv</span><span class=p>.</span><span class=nx>index</span><span class=p>]]</span>
+</span></span><span class=line><span class=cl><span class=nx>name</span> <span class=p>=</span> <span class=s2>&#34;测试PyPI&#34;</span>
+</span></span><span class=line><span class=cl><span class=nx>url</span> <span class=p>=</span> <span class=s2>&#34;https://test.pypi.org/simple/&#34;</span>
+</span></span><span class=line><span class=cl><span class=nx>publish-url</span> <span class=p>=</span> <span class=s2>&#34;https://test.pypi.org/legacy/&#34;</span>
+</span></span><span class=line><span class=cl><span class=nx>explicit</span> <span class=p>=</span> <span class=kc>true</span>
+</span></span></code></pre></td></tr></table></div></div><p>然后发布时指定这个仓库：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>uv publish --index 测试PyPI
+</span></span></code></pre></td></tr></table></div></div><p><strong>注意</strong>：用 <code>--index</code> 参数时，系统必须能找到 <code>pyproject.toml</code> 文件，所以在自动化发布流程中要确保先拉取了代码。</p><p>有时候发布过程可能会中断，导致部分文件上传成功，部分没有。遇到这种情况时：</p><ul><li>如果是发布到 PyPI，直接重新运行相同的命令就行，已经上传的文件会被自动忽略</li><li>如果是其他仓库，可以用 <code>--check-url 你的索引网址</code> 参数，uv 会智能地跳过已上传的文件，避免重复上传</li></ul><h4 id=64-测试你发布的包>6.4 测试你发布的包</h4><p>用这个命令测试你的包是否可以正常安装和使用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 安装并测试导入</span>
+</span></span><span class=line><span class=cl>uv run --with 包名 --no-project -- python -c <span class=s2>&#34;import 包名&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>用 <code>--no-project</code> 参数是为了确保测试的是从 PyPI 安装的包，而不是你本地的代码。</p><p><strong>小技巧</strong>：如果你刚刚发布过这个包，可能需要加上 <code>--refresh-package 包名</code> 参数，这样 uv 会忽略缓存，强制下载最新版本。</p><h4 id=65-发布到测试平台>6.5 发布到测试平台</h4><p>如果你想先在测试环境试一下，可以发布到测试 PyPI：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 发布到测试 PyPI</span>
+</span></span><span class=line><span class=cl>uv publish --repository testpypi
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 发布到其他自定义仓库</span>
+</span></span><span class=line><span class=cl>uv publish --repository 仓库地址
+</span></span></code></pre></td></tr></table></div></div><h2 id=二高级功能与特性>二、高级功能与特性</h2><h3 id=1-脚本运行与命令执行>1. 脚本运行与命令执行</h3><h4 id=11-运行无依赖的脚本>1.1 运行无依赖的脚本</h4><p>如果脚本没有依赖，可以直接用 <code>uv run</code> 执行：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 运行无依赖的脚本</span>
+</span></span><span class=line><span class=cl>uv run example.py
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 脚本可以使用标准库</span>
+</span></span><span class=line><span class=cl><span class=c1># 例如：import os, sys, json 等</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 传递参数给脚本</span>
+</span></span><span class=line><span class=cl>uv run example.py arg1 arg2
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 从标准输入读取脚本</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;print(&#34;hello world!&#34;)&#39;</span> <span class=p>|</span> uv run -
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 如果脚本不依赖当前项目, 想在干净的基础 Python 环境中运行，使用 --no-project 标志</span>
+</span></span><span class=line><span class=cl>uv run --no-project example.py
+</span></span></code></pre></td></tr></table></div></div><h4 id=12-运行有依赖的脚本>1.2 运行有依赖的脚本</h4><p>当脚本需要其他包时，必须将这些包安装到脚本运行的环境中。uv 倾向于按需创建这些环境，而不是使用手动管理依赖的长期虚拟环境。这需要明确声明脚本所需的依赖。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 使用 --with 选项请求依赖</span>
+</span></span><span class=line><span class=cl>uv run --with rich example.py
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 指定依赖版本约束</span>
+</span></span><span class=line><span class=cl>uv run --with <span class=s1>&#39;rich&gt;12,&lt;13&#39;</span> example.py
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 请求多个依赖</span>
+</span></span><span class=line><span class=cl>uv run --with rich --with requests example.py
+</span></span></code></pre></td></tr></table></div></div><p><strong>注意</strong>：如果在<strong>项目</strong>中使用 <code>uv run</code>（即带有 <code>pyproject.toml</code> 的目录），这些依赖将<strong>添加到</strong>项目的依赖中。要选择退出此行为，请使用 <code>--no-project</code> 标志。</p><h4 id=13-创建-python-脚本>1.3 创建 Python 脚本</h4><p>Python 最近添加了一种标准格式用于<strong>内联脚本元数据</strong>。它允许选择 Python 版本和定义依赖。使用 <code>uv init --script</code> 初始化带有内联元数据的脚本：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 创建带有内联元数据的脚本</span>
+</span></span><span class=line><span class=cl>uv init --script example.py --python 3.12
+</span></span></code></pre></td></tr></table></div></div><h4 id=14-声明脚本依赖>1.4 声明脚本依赖</h4><p>内联元数据格式允许在脚本本身中声明脚本的依赖。</p><p>uv 支持为你添加和更新内联脚本元数据。使用 <code>uv add --script</code> 声明脚本的依赖：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 为脚本添加依赖</span>
+</span></span><span class=line><span class=cl>uv add --script example.py <span class=s1>&#39;requests&lt;3&#39;</span> <span class=s1>&#39;rich&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p>这将在脚本顶部添加一个 <code>script</code> 部分，使用 TOML 声明依赖：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># /// script</span>
+</span></span><span class=line><span class=cl><span class=c1># dependencies = [</span>
+</span></span><span class=line><span class=cl><span class=c1>#   &#34;requests&lt;3&#34;,</span>
+</span></span><span class=line><span class=cl><span class=c1>#   &#34;rich&#34;,</span>
+</span></span><span class=line><span class=cl><span class=c1># ]</span>
+</span></span><span class=line><span class=cl><span class=c1># ///</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>requests</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>rich.pretty</span> <span class=kn>import</span> <span class=n>pprint</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>resp</span> <span class=o>=</span> <span class=n>requests</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s2>&#34;https://peps.python.org/api/peps.json&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>data</span> <span class=o>=</span> <span class=n>resp</span><span class=o>.</span><span class=n>json</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>pprint</span><span class=p>([(</span><span class=n>k</span><span class=p>,</span> <span class=n>v</span><span class=p>[</span><span class=s2>&#34;title&#34;</span><span class=p>])</span> <span class=k>for</span> <span class=n>k</span><span class=p>,</span> <span class=n>v</span> <span class=ow>in</span> <span class=n>data</span><span class=o>.</span><span class=n>items</span><span class=p>()][:</span><span class=mi>10</span><span class=p>])</span>
+</span></span></code></pre></td></tr></table></div></div><p>uv 将自动创建一个包含运行脚本所需依赖的环境。</p><p><strong>重要</strong>：使用内联脚本元数据时，即使在<strong>项目</strong>中使用 <code>uv run</code>，项目的依赖也会被忽略。不需要 <code>--no-project</code> 标志。</p><p>uv 还支持 Python 版本要求：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># /// script</span>
+</span></span><span class=line><span class=cl><span class=c1># requires-python = &#34;&gt;=3.12&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># dependencies = []</span>
+</span></span><span class=line><span class=cl><span class=c1># ///</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 Python 3.12 中添加的语法</span>
+</span></span><span class=line><span class=cl><span class=nb>type</span> <span class=n>Point</span> <span class=o>=</span> <span class=nb>tuple</span><span class=p>[</span><span class=nb>float</span><span class=p>,</span> <span class=nb>float</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>Point</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>注意</strong>：即使为空，也必须提供 <code>dependencies</code> 字段。</p><p><code>uv run</code> 将搜索并使用所需的 Python 版本。如果未安装 Python 版本，将下载该版本。</p><h4 id=15-使用替代包索引>1.5 使用替代包索引</h4><p>如果你想使用替代包索引来解析依赖，可以使用 <code>--index</code> 选项提供索引：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 使用替代包索引添加依赖</span>
+</span></span><span class=line><span class=cl>uv add --index <span class=s2>&#34;https://example.com/simple&#34;</span> --script example.py <span class=s1>&#39;requests&lt;3&#39;</span> <span class=s1>&#39;rich&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p>这将在内联元数据中包含包数据：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># [[tool.uv.index]]</span>
+</span></span><span class=line><span class=cl><span class=c1># url = &#34;https://example.com/simple&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>如果需要身份验证才能访问包索引，请参阅包索引文档。</p><h4 id=16-锁定依赖>1.6 锁定依赖</h4><p>uv 支持使用 <code>uv.lock</code> 文件格式锁定 PEP 723 脚本的依赖。与项目不同，脚本必须使用 <code>uv lock</code> 显式锁定：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 锁定脚本依赖</span>
+</span></span><span class=line><span class=cl>uv lock --script example.py
+</span></span></code></pre></td></tr></table></div></div><p>运行 <code>uv lock --script</code> 将在脚本旁边创建一个 <code>.lock</code> 文件（例如，<code>example.py.lock</code>）。</p><p>锁定后，后续操作如 <code>uv run --script</code>、<code>uv add --script</code>、<code>uv export --script</code> 和 <code>uv tree --script</code> 将重用锁定的依赖，必要时更新锁文件。</p><p>如果不存在此类锁文件，<code>uv export --script</code> 等命令仍将按预期运行，但不会创建锁文件。</p><h4 id=17-提高可重现性>1.7 提高可重现性</h4><p>除了锁定依赖外，uv 还支持在内联脚本元数据的 <code>tool.uv</code> 部分中使用 <code>exclude-newer</code> 字段，限制 uv 只考虑在特定日期之前发布的分发包。这对于提高脚本在稍后时间运行时的可重现性很有用。</p><p>日期必须指定为 RFC 3339 时间戳（例如，<code>2006-12-02T02:07:43Z</code>）。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># /// script</span>
+</span></span><span class=line><span class=cl><span class=c1># dependencies = [</span>
+</span></span><span class=line><span class=cl><span class=c1>#   &#34;requests&#34;,</span>
+</span></span><span class=line><span class=cl><span class=c1># ]</span>
+</span></span><span class=line><span class=cl><span class=c1># [tool.uv]</span>
+</span></span><span class=line><span class=cl><span class=c1># exclude-newer = &#34;2023-10-16T00:00:00Z&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># ///</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>requests</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>requests</span><span class=o>.</span><span class=n>__version__</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=18-使用不同的-python-版本>1.8 使用不同的 Python 版本</h4><p>uv 允许在每个脚本调用时请求任意 Python 版本，例如：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 使用默认 Python 版本</span>
+</span></span><span class=line><span class=cl>uv run example.py
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用特定 Python 版本</span>
+</span></span><span class=line><span class=cl>uv run --python 3.10 example.py
+</span></span></code></pre></td></tr></table></div></div><h4 id=19-使用-gui-脚本>1.9 使用 GUI 脚本</h4><p>在 Windows 上，<code>uv</code> 将使用 <code>pythonw</code> 运行以 <code>.pyw</code> 扩展名结尾的脚本：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 在 Windows 上运行 GUI 脚本</span>
+</span></span><span class=line><span class=cl>uv run example.pyw
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 带依赖的 GUI 脚本</span>
+</span></span><span class=line><span class=cl>uv run --with PyQt5 example_pyqt.pyw
+</span></span></code></pre></td></tr></table></div></div><h3 id=2-全局工具管理>2. 全局工具管理</h3><h4 id=21-临时运行工具>2.1 临时运行工具</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 使用 uvx 别名在临时环境中运行工具</span>
+</span></span><span class=line><span class=cl>uvx ruff check .
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 等同于</span>
+</span></span><span class=line><span class=cl>uv tool run ruff check .
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 指定工具版本</span>
+</span></span><span class=line><span class=cl>uvx ruff@0.1.0 check .
+</span></span></code></pre></td></tr></table></div></div><h4 id=22-安装全局工具>2.2 安装全局工具</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 安装工具到全局</span>
+</span></span><span class=line><span class=cl>uv tool install ruff
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 安装特定版本</span>
+</span></span><span class=line><span class=cl>uv tool install <span class=nv>ruff</span><span class=o>==</span>0.1.0
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 安装多个工具</span>
+</span></span><span class=line><span class=cl>uv tool install ruff black isort
+</span></span></code></pre></td></tr></table></div></div><h4 id=23-管理已安装的工具>2.3 管理已安装的工具</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 列出已安装的工具</span>
+</span></span><span class=line><span class=cl>uv tool list
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 升级工具</span>
+</span></span><span class=line><span class=cl>uv tool upgrade ruff
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 升级所有工具</span>
+</span></span><span class=line><span class=cl>uv tool upgrade --all
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 卸载工具</span>
+</span></span><span class=line><span class=cl>uv tool uninstall ruff
+</span></span></code></pre></td></tr></table></div></div><h3 id=3-兼容性与扩展>3. 兼容性与扩展</h3><h4 id=31-缓存管理>3.1 缓存管理</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 查看缓存信息</span>
+</span></span><span class=line><span class=cl>uv cache info
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 清理缓存</span>
+</span></span><span class=line><span class=cl>uv cache clear
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 清理特定缓存</span>
+</span></span><span class=line><span class=cl>uv cache clear --wheels
+</span></span></code></pre></td></tr></table></div></div><h4 id=32-并行处理>3.2 并行处理</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 设置最大并行任务数</span>
+</span></span><span class=line><span class=cl>uv pip install -r requirements.txt --jobs <span class=m>8</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=33-迁移现有项目>3.3 迁移现有项目</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 从 pip 迁移</span>
+</span></span><span class=line><span class=cl>uv pip freeze &gt; requirements.txt
+</span></span><span class=line><span class=cl>uv init --from-requirements requirements.txt my-project
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 从 poetry 迁移</span>
+</span></span><span class=line><span class=cl><span class=c1># poetry 项目中已有 pyproject.toml</span>
+</span></span><span class=line><span class=cl>uv init --from-poetry .
+</span></span></code></pre></td></tr></table></div></div><h2 id=三对比传统工具的优势>三、对比传统工具的优势</h2><h3 id=1-一体化设计>1. 一体化设计</h3><p>uv 作为一个全面的 Python 包管理和项目管理工具，通过其出色的性能和丰富的功能集，正在改变 Python 开发者的工作方式。从简单的包安装到复杂的项目管理，uv 都提供了优雅且高效的解决方案。</p><ul><li><strong>替代多工具组合</strong>：uv 可以替代 <code>pip</code> + <code>virtualenv</code> + <code>poetry</code> + <code>pipx</code> 等多工具组合</li><li><strong>统一命令接口</strong>：所有功能通过一致的命令接口提供，降低学习成本</li><li><strong>全局工具管理</strong>：通过 <code>uvx</code> 和 <code>uv tool</code> 命令提供全局工具管理功能</li></ul><h3 id=2-现代化标准>2. 现代化标准</h3><ul><li><strong>原生支持 pyproject.toml</strong>：与 Rust/Node.js 生态对齐，采用现代项目配置标准</li><li><strong>锁文件机制</strong>：提供可靠的依赖锁定机制，确保环境一致性</li><li><strong>工作区支持</strong>：原生支持多包项目工作区，简化复杂项目管理</li></ul><h3 id=3-跨平台一致性>3. 跨平台一致性</h3><ul><li><strong>命令语法统一</strong>：在所有支持的平台上提供一致的命令语法</li><li><strong>环境隔离</strong>：提供可靠的虚拟环境隔离，确保项目依赖不冲突</li><li><strong>缓存优化</strong>：全局缓存系统实现依赖去重，节省磁盘空间</li></ul><h2 id=参考资料>参考资料</h2><ul><li><a href=https://docs.astral.sh/uv/ target=_blank rel="external nofollow noopener noreferrer">uv 官方文档<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></li><li><a href=https://github.com/astral-sh/uv target=_blank rel="external nofollow noopener noreferrer">GitHub 仓库<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></li><li><a href=https://astral.sh target=_blank rel="external nofollow noopener noreferrer">Astral 官网<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></li></ul><h2 id=总结>总结</h2><p>uv 作为一个全面的 Python 包管理和项目管理工具，通过其出色的性能和丰富的功能集，正在改变 Python 开发者的工作方式。从简单的包安装到复杂的项目管理，uv 都提供了优雅且高效的解决方案。</p><p>无论你是 Python 初学者还是经验丰富的开发者，采用 uv 都将显著提升你的开发效率和体验。这个由 Rust 驱动的下一代 Python 工具，代表了 Python 生态系统工具链的未来。</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2025-04-15 21:18:11">更新于 2025-04-15 21:18&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/python/ class=post-tag>python</a><a href=/tags/uv/ class=post-tag>uv</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/729592950/ class=post-nav-item rel=prev title=Pyotp实现命令行查看2FA><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>Pyotp实现命令行查看2FA</a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wx.png alt="SoulChild 微信号">
+<span data-animation>微信号</span></div><div><img src=/images/wechatpay.png alt="SoulChild 微信打赏">
+<span data-animation>微信打赏</span></div></div></div><div id=comments><div id=giscus><script src=https://giscus.app/client.js data-repo=SoulChildTc/soulchild-blog data-repo-id=R_kgDOIwJKxg data-category=General data-category-id=DIC_kwDOIwJKxs4CTwRk data-mapping=title data-theme=preferred_color_scheme data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-lang=zh-CN data-loading=lazy crossorigin=anonymous async defer></script></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://giscus.app/ rel="external nofollow noopener noreferrer">giscus</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?7b986d4ea8e2e50e9c04984b78170660",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})(),function(){window.tip_chato_color="#fff",window.tip_chato_bg="#47AF3E",window.chato_iframe_src="https://chato.cn/b/v1xje74g117m24yw",window.chato_script_checkDomain="https://api.chato.cn/chato/api/v1/domains/v1xje74g117m24yw/whitelist_sites/check";var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="/js/iframe.min.js",document.head.insertBefore(e,document.getElementsByTagName("script")[0])}()</script><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright fa-fw" aria-hidden=true></i>
+<span itemprop=copyrightYear>2017 - 2025</span><span class=author itemprop=copyrightHolder>
+<a href=https://www.soulchild.cn target=_blank rel="external nofollow noopener noreferrer">SoulChild</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class=site-time title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden=true></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor"><span id=busuanzi_container_site_uv title=总访客数><i class="fa-regular fa-user fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_uv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span><span id=busuanzi_container_site_pv class=footer-divider title=总访问量><i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_pv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span></div><div class="footer-line beian"><span class="icp footer-divider">特别感谢
+<a href=https://gohugo.io target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.109.0">Hugo</a> |
+<a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v0.2.17-RC">FixIt</a> |
+<a href=https://github.com target=_blank rel="noopener noreffer">GitHub</a> |
+<a href=https://vercel.com target=_blank rel="noopener noreffer">Vercel</a></span></div></div></footer></div><div class=widgets><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role=button aria-label=回到顶部><i class="fa-solid fa-arrow-up fa-fw" aria-hidden=true></i><span class=variant-numeric>0%</span></div><div class="fixed-button view-comments d-none" role=button aria-label=查看评论><i class="fa-solid fa-comment fa-fw" aria-hidden=true></i></div></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0;--bg-progress:#438a55;--bg-progress-dark:#438a55></div><noscript><div class=noscript-warning>FixIt 主题在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/lightgallery/css/lightgallery-bundle.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/pace/themes/green/pace-theme-bounce.css><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/algoliasearch-lite.umd.min.js defer></script><script src=/lib/lazysizes/lazysizes.min.js async defer></script><script src=/lib/lightgallery/lightgallery.min.js defer></script><script src=/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js defer></script><script src=/lib/lightgallery/plugins/zoom/lg-zoom.min.js defer></script><script src=/lib/typeit/index.umd.js defer></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/lib/pangu/pangu.min.js defer></script><script src=/lib/cell-watermark/watermark.min.js defer></script><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async defer></script><script src=/lib/pace/pace.min.js async defer></script><script>window.config={autoBookmark:!0,code:{copyTitle:"复制到剪贴板",editLockTitle:"锁定可编辑代码块",editUnLockTitle:"解锁可编辑代码块",editable:!0,maxShownLines:50},comment:{enable:!0,expired:!1,giscus:{darkTheme:"dark",lightTheme:"light"}},data:{"typeit-header-subtitle-desktop":"/usr/bin/sleep infinity","typeit-header-subtitle-mobile":"/usr/bin/sleep infinity"},enablePWA:!0,lightgallery:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},pangu:{enable:!0,selector:"article"},search:{algoliaAppID:"CE9G7Q4H6N",algoliaIndex:"soulchild-blog",algoliaSearchKey:"0f69a431d92a03c2cf4143d8dbc6af0a",highlightTag:"em",maxResultLength:20,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},siteTime:"2017-06-08T21:38:36+08:00",typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},duration:-1,speed:100},watermark:{appendto:".wrapper\u003emain",colspacing:300,content:"SoulChild随笔记",enable:!0,fontfamily:"inherit",fontsize:.85,height:300,opacity:.1,rotate:15,rowspacing:100,width:300}}</script><script src=/js/theme.min.js defer></script></body></html>
