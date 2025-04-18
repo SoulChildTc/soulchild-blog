@@ -119,7 +119,7 @@ uv pip compile requirements.in --universal --output-file requirements.txt
 uv pip compile requirements.in --generate-hashes --output-file requirements.txt
 ```
 
-##### 3.2.3 自定义包源
+##### 3.2.3 自定义包源(镜像源)
 
 有时候我们需要从不同的包源安装包，比如使用国内镜像源或者私有仓库。uv 提供了多种方式来配置包源：
 
@@ -252,31 +252,6 @@ uv pip install --no-deps requests
 ```
 
 ##### 3.2.6 实际应用场景
-
-1. **开发环境与生产环境分离**
-```bash
-# 开发环境依赖
-uv pip compile requirements.in --output-file requirements-dev.txt
-
-# 生产环境依赖（不包含开发工具）
-uv pip compile requirements.in --output-file requirements-prod.txt --no-dev
-```
-
-2. **多环境依赖管理**
-```bash
-# 为不同 Python 版本生成依赖文件
-uv pip compile requirements.in --python-version 3.8 --output-file requirements-3.8.txt
-uv pip compile requirements.in --python-version 3.9 --output-file requirements-3.9.txt
-```
-
-3. **依赖锁定与更新**
-```bash
-# 锁定所有依赖到特定版本
-uv pip compile requirements.in --generate-hashes --output-file requirements.lock
-
-# 更新所有依赖到最新版本
-uv pip compile requirements.in --upgrade --output-file requirements.txt
-```
 
 ### 4. 项目初始化与工作流
 
@@ -433,7 +408,7 @@ uv 在搜索 Python 版本时，会按以下顺序检查以下位置：
 
 #### 5.7 禁用自动 Python 下载
 
-默认情况下，uv 会在需要时自动下载 Python 版本。可以通过 [https://docs.astral.sh/uv/reference/settings/#python-downloads](python-downloads) 选项禁用此行为：
+默认情况下，uv 会在需要时自动下载 Python 版本。可以通过 [python-downloads](https://docs.astral.sh/uv/reference/settings/#python-downloads) 选项禁用此行为：
 
 ```bash
 # 如果没有发现可用的 python 版本, 禁用自动下载
@@ -515,8 +490,6 @@ uv build 项目路径
 # 在多项目工作区中打包特定项目
 uv build --package 项目名称
 ```
-
-**小贴士**：默认情况下，`uv build` 会按照你在 `tool.uv.sources` 里的设置去找构建依赖。如果你要发布包，建议用 `uv build --no-sources` 命令，这样可以确保在其他人用不同工具构建时也能成功。
 
 #### 6.3 发布到 PyPI
 
@@ -814,25 +787,6 @@ uv cache clear
 
 # 清理特定缓存
 uv cache clear --wheels
-```
-
-#### 3.2 并行处理
-
-```bash
-# 设置最大并行任务数
-uv pip install -r requirements.txt --jobs 8
-```
-
-#### 3.3 迁移现有项目
-
-```bash
-# 从 pip 迁移
-uv pip freeze > requirements.txt
-uv init --from-requirements requirements.txt my-project
-
-# 从 poetry 迁移
-# poetry 项目中已有 pyproject.toml
-uv init --from-poetry .
 ```
 
 ## 三、对比传统工具的优势
