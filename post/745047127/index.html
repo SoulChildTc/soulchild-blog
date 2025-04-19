@@ -1,0 +1,891 @@
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>基于 MCP SSE 实现 AI 对接天气服务 - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路，一个记录运维开发、自动化运维、DevOps、Kubernetes、Docker、编程等技术笔记的博客，与您分享实用技巧和心得"><meta name=keywords content><meta itemprop=name content="基于 MCP SSE 实现 AI 对接天气服务"><meta itemprop=description content><meta itemprop=datePublished content="2025-04-19T15:18:47+08:00"><meta itemprop=dateModified content="2025-04-19T15:18:47+08:00"><meta itemprop=wordCount content="1737"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content=","><meta property="og:title" content="基于 MCP SSE 实现 AI 对接天气服务"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/745047127/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-04-19T15:18:47+08:00"><meta property="article:modified_time" content="2025-04-19T15:18:47+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="基于 MCP SSE 实现 AI 对接天气服务"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/745047127/><link rel=prev href=https://www.soulchild.cn/post/744723091/><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"基于 MCP SSE 实现 AI 对接天气服务","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/745047127\/"},"genre":"posts","keywords":"","wordcount":1737,"url":"https:\/\/www.soulchild.cn\/post\/745047127\/","datePublished":"2025-04-19T15:18:47+08:00","dateModified":"2025-04-19T15:18:47+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item text-start"><a class=menu-link href=https://www.travellings.cn title=开往 rel="noopener noreferrer" target=_blank><i class="fa-solid fa-train-subway fa-sm fa-fw fa-sm" aria-hidden=true></i> 开往</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item text-start"><a class=menu-link href=https://www.travellings.cn title=开往 rel="noopener noreferrer" target=_blank><i class="fa-solid fa-train-subway fa-sm fa-fw fa-sm" aria-hidden=true></i> 开往</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden=true></i></h2><div class="toc-content always-active" id=toc-content-auto></div></aside><aside class=aside-custom></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>基于 MCP SSE 实现 AI 对接天气服务</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/ai/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> AI</a></span></div><div class=post-meta-line><span title="2025-04-19 15:18:47"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2025-04-19 15:18">2025-04-19 15:18</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 1737 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 9 分钟</span>&nbsp;<span id=busuanzi_container_page_pv class="busuanzi_visitors comment-visitors" data-flag-title="基于 MCP SSE 实现 AI 对接天气服务">
+<i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_page_pv>-</span>&nbsp;次阅读
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#server-实现>server 实现</a></li><li><a href=#client-本地测试>client 本地测试</a></li></ul></li></ul></nav></div></div><div class=content id=content data-end-flag=---><h3 id=server-实现>server 实现</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span><span class=lnt>194
+</span><span class=lnt>195
+</span><span class=lnt>196
+</span><span class=lnt>197
+</span><span class=lnt>198
+</span><span class=lnt>199
+</span><span class=lnt>200
+</span><span class=lnt>201
+</span><span class=lnt>202
+</span><span class=lnt>203
+</span><span class=lnt>204
+</span><span class=lnt>205
+</span><span class=lnt>206
+</span><span class=lnt>207
+</span><span class=lnt>208
+</span><span class=lnt>209
+</span><span class=lnt>210
+</span><span class=lnt>211
+</span><span class=lnt>212
+</span><span class=lnt>213
+</span><span class=lnt>214
+</span><span class=lnt>215
+</span><span class=lnt>216
+</span><span class=lnt>217
+</span><span class=lnt>218
+</span><span class=lnt>219
+</span><span class=lnt>220
+</span><span class=lnt>221
+</span><span class=lnt>222
+</span><span class=lnt>223
+</span><span class=lnt>224
+</span><span class=lnt>225
+</span><span class=lnt>226
+</span><span class=lnt>227
+</span><span class=lnt>228
+</span><span class=lnt>229
+</span><span class=lnt>230
+</span><span class=lnt>231
+</span><span class=lnt>232
+</span><span class=lnt>233
+</span><span class=lnt>234
+</span><span class=lnt>235
+</span><span class=lnt>236
+</span><span class=lnt>237
+</span><span class=lnt>238
+</span><span class=lnt>239
+</span><span class=lnt>240
+</span><span class=lnt>241
+</span><span class=lnt>242
+</span><span class=lnt>243
+</span><span class=lnt>244
+</span><span class=lnt>245
+</span><span class=lnt>246
+</span><span class=lnt>247
+</span><span class=lnt>248
+</span><span class=lnt>249
+</span><span class=lnt>250
+</span><span class=lnt>251
+</span><span class=lnt>252
+</span><span class=lnt>253
+</span><span class=lnt>254
+</span><span class=lnt>255
+</span><span class=lnt>256
+</span><span class=lnt>257
+</span><span class=lnt>258
+</span><span class=lnt>259
+</span><span class=lnt>260
+</span><span class=lnt>261
+</span><span class=lnt>262
+</span><span class=lnt>263
+</span><span class=lnt>264
+</span><span class=lnt>265
+</span><span class=lnt>266
+</span><span class=lnt>267
+</span><span class=lnt>268
+</span><span class=lnt>269
+</span><span class=lnt>270
+</span><span class=lnt>271
+</span><span class=lnt>272
+</span><span class=lnt>273
+</span><span class=lnt>274
+</span><span class=lnt>275
+</span><span class=lnt>276
+</span><span class=lnt>277
+</span><span class=lnt>278
+</span><span class=lnt>279
+</span><span class=lnt>280
+</span><span class=lnt>281
+</span><span class=lnt>282
+</span><span class=lnt>283
+</span><span class=lnt>284
+</span><span class=lnt>285
+</span><span class=lnt>286
+</span><span class=lnt>287
+</span><span class=lnt>288
+</span><span class=lnt>289
+</span><span class=lnt>290
+</span><span class=lnt>291
+</span><span class=lnt>292
+</span><span class=lnt>293
+</span><span class=lnt>294
+</span><span class=lnt>295
+</span><span class=lnt>296
+</span><span class=lnt>297
+</span><span class=lnt>298
+</span><span class=lnt>299
+</span><span class=lnt>300
+</span><span class=lnt>301
+</span><span class=lnt>302
+</span><span class=lnt>303
+</span><span class=lnt>304
+</span><span class=lnt>305
+</span><span class=lnt>306
+</span><span class=lnt>307
+</span><span class=lnt>308
+</span><span class=lnt>309
+</span><span class=lnt>310
+</span><span class=lnt>311
+</span><span class=lnt>312
+</span><span class=lnt>313
+</span><span class=lnt>314
+</span><span class=lnt>315
+</span><span class=lnt>316
+</span><span class=lnt>317
+</span><span class=lnt>318
+</span><span class=lnt>319
+</span><span class=lnt>320
+</span><span class=lnt>321
+</span><span class=lnt>322
+</span><span class=lnt>323
+</span><span class=lnt>324
+</span><span class=lnt>325
+</span><span class=lnt>326
+</span><span class=lnt>327
+</span><span class=lnt>328
+</span><span class=lnt>329
+</span><span class=lnt>330
+</span><span class=lnt>331
+</span><span class=lnt>332
+</span><span class=lnt>333
+</span><span class=lnt>334
+</span><span class=lnt>335
+</span><span class=lnt>336
+</span><span class=lnt>337
+</span><span class=lnt>338
+</span><span class=lnt>339
+</span><span class=lnt>340
+</span><span class=lnt>341
+</span><span class=lnt>342
+</span><span class=lnt>343
+</span><span class=lnt>344
+</span><span class=lnt>345
+</span><span class=lnt>346
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;context&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;encoding/json&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;errors&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;io&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;log&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;net/http&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;net/url&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;os&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;strings&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/mark3labs/mcp-go/mcp&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/mark3labs/mcp-go/server&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 存储认证信息到上下文的 key
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>type</span> <span class=nx>authKey</span> <span class=kd>struct</span><span class=p>{}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 从 http.Request 中获取 Authorization 的值, 设置到上下文,  key: authKey{} value: 认证信息
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=nf>authFromRequest</span><span class=p>(</span><span class=nx>ctx</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Context</span><span class=p>,</span> <span class=nx>r</span> <span class=o>*</span><span class=nx>http</span><span class=p>.</span><span class=nx>Request</span><span class=p>)</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Context</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>context</span><span class=p>.</span><span class=nf>WithValue</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>authKey</span><span class=p>{},</span> <span class=nx>r</span><span class=p>.</span><span class=nx>Header</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=s>&#34;Authorization&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>var</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 和风天气API密钥, 优先从环境变量 QWEATHER_API_KEY 读取
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>qweatherAPIKey</span> <span class=p>=</span> <span class=nf>getEnv</span><span class=p>(</span><span class=s>&#34;QWEATHER_API_KEY&#34;</span><span class=p>,</span> <span class=s>&#34;&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 和风天气基础URL, 优先从环境变量 QWEATHER_BASE_URL 读取
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>qweatherBaseURL</span> <span class=p>=</span> <span class=nf>getEnv</span><span class=p>(</span><span class=s>&#34;QWEATHER_BASE_URL&#34;</span><span class=p>,</span> <span class=s>&#34;https://xxx&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 创建可重用的HTTP客户端
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>httpClient</span> <span class=p>=</span> <span class=o>&amp;</span><span class=nx>http</span><span class=p>.</span><span class=nx>Client</span><span class=p>{}</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// Helper function to get environment variable or default value
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=nf>getEnv</span><span class=p>(</span><span class=nx>key</span><span class=p>,</span> <span class=nx>fallback</span> <span class=kt>string</span><span class=p>)</span> <span class=kt>string</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>value</span><span class=p>,</span> <span class=nx>ok</span> <span class=o>:=</span> <span class=nx>os</span><span class=p>.</span><span class=nf>LookupEnv</span><span class=p>(</span><span class=nx>key</span><span class=p>);</span> <span class=nx>ok</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=nx>value</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>fallback</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// --- Weather API Structs ---
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=kd>type</span> <span class=nx>WeatherResponse</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Code</span> <span class=kt>string</span>     <span class=s>`json:&#34;code&#34;`</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Now</span>  <span class=nx>WeatherNow</span> <span class=s>`json:&#34;now&#34;`</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>type</span> <span class=nx>WeatherNow</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>ObsTime</span>   <span class=kt>string</span> <span class=s>`json:&#34;obsTime&#34;`</span>   <span class=c1>// 数据观测时间
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>Temp</span>      <span class=kt>string</span> <span class=s>`json:&#34;temp&#34;`</span>      <span class=c1>// 温度
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>FeelsLike</span> <span class=kt>string</span> <span class=s>`json:&#34;feelsLike&#34;`</span> <span class=c1>// 体感温度
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>Icon</span>      <span class=kt>string</span> <span class=s>`json:&#34;icon&#34;`</span>      <span class=c1>// 天气状况图标代码
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>Text</span>      <span class=kt>string</span> <span class=s>`json:&#34;text&#34;`</span>      <span class=c1>// 天气状况文字描述
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>Wind360</span>   <span class=kt>string</span> <span class=s>`json:&#34;wind360&#34;`</span>   <span class=c1>// 风向360角度
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>WindDir</span>   <span class=kt>string</span> <span class=s>`json:&#34;windDir&#34;`</span>   <span class=c1>// 风向
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>WindScale</span> <span class=kt>string</span> <span class=s>`json:&#34;windScale&#34;`</span> <span class=c1>// 风力等级
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>WindSpeed</span> <span class=kt>string</span> <span class=s>`json:&#34;windSpeed&#34;`</span> <span class=c1>// 风速，公里/小时
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>Humidity</span>  <span class=kt>string</span> <span class=s>`json:&#34;humidity&#34;`</span>  <span class=c1>// 相对湿度
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>Precip</span>    <span class=kt>string</span> <span class=s>`json:&#34;precip&#34;`</span>    <span class=c1>// 当前小时降水量，毫米
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>Pressure</span>  <span class=kt>string</span> <span class=s>`json:&#34;pressure&#34;`</span>  <span class=c1>// 大气压强，百帕
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>Vis</span>       <span class=kt>string</span> <span class=s>`json:&#34;vis&#34;`</span>       <span class=c1>// 能见度，公里
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>Cloud</span>     <span class=kt>string</span> <span class=s>`json:&#34;cloud&#34;`</span>     <span class=c1>// 云量 (可能为空)
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>Dew</span>       <span class=kt>string</span> <span class=s>`json:&#34;dew&#34;`</span>       <span class=c1>// 露点温度 (可能为空)
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// --- Geo API Structs ---
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=kd>type</span> <span class=nx>GeoResponse</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Code</span>     <span class=kt>string</span>         <span class=s>`json:&#34;code&#34;`</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Location</span> <span class=p>[]</span><span class=nx>LocationInfo</span> <span class=s>`json:&#34;location&#34;`</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>type</span> <span class=nx>LocationInfo</span> <span class=kd>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Name</span> <span class=kt>string</span> <span class=s>`json:&#34;name&#34;`</span>
+</span></span><span class=line><span class=cl>	<span class=nx>ID</span>   <span class=kt>string</span> <span class=s>`json:&#34;id&#34;`</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Lat</span>  <span class=kt>string</span> <span class=s>`json:&#34;lat&#34;`</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Lon</span>  <span class=kt>string</span> <span class=s>`json:&#34;lon&#34;`</span>
+</span></span><span class=line><span class=cl>	<span class=nx>Adm1</span> <span class=kt>string</span> <span class=s>`json:&#34;adm1&#34;`</span> <span class=c1>// 省份
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>Adm2</span> <span class=kt>string</span> <span class=s>`json:&#34;adm2&#34;`</span> <span class=c1>// 城市
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 从上下文中提取认证信息
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=nf>tokenFromContext</span><span class=p>(</span><span class=nx>ctx</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Context</span><span class=p>)</span> <span class=p>(</span><span class=kt>string</span><span class=p>,</span> <span class=kt>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>auth</span><span class=p>,</span> <span class=nx>ok</span> <span class=o>:=</span> <span class=nx>ctx</span><span class=p>.</span><span class=nf>Value</span><span class=p>(</span><span class=nx>authKey</span><span class=p>{}).(</span><span class=kt>string</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>!</span><span class=nx>ok</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=s>&#34;&#34;</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;missing auth&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>auth</span><span class=p>,</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// --- Helper Function for API Calls ---
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=c1>// callQweatherAPI 是调用和风天气 API 的通用函数
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=nf>callQweatherAPI</span><span class=p>(</span><span class=nx>ctx</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Context</span><span class=p>,</span> <span class=nx>apiPath</span> <span class=kt>string</span><span class=p>,</span> <span class=nx>params</span> <span class=nx>url</span><span class=p>.</span><span class=nx>Values</span><span class=p>)</span> <span class=p>([]</span><span class=kt>byte</span><span class=p>,</span> <span class=kt>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 添加 key 参数
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>params</span><span class=p>.</span><span class=nf>Set</span><span class=p>(</span><span class=s>&#34;key&#34;</span><span class=p>,</span> <span class=nx>qweatherAPIKey</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 构建完整 URL
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>fullURL</span> <span class=o>:=</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Sprintf</span><span class=p>(</span><span class=s>&#34;%s%s?%s&#34;</span><span class=p>,</span> <span class=nx>qweatherBaseURL</span><span class=p>,</span> <span class=nx>apiPath</span><span class=p>,</span> <span class=nx>params</span><span class=p>.</span><span class=nf>Encode</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 创建请求
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>req</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>http</span><span class=p>.</span><span class=nf>NewRequestWithContext</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=s>&#34;GET&#34;</span><span class=p>,</span> <span class=nx>fullURL</span><span class=p>,</span> <span class=kc>nil</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;创建 API 请求失败 (%s): %w&#34;</span><span class=p>,</span> <span class=nx>apiPath</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 发送请求
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>resp</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>httpClient</span><span class=p>.</span><span class=nf>Do</span><span class=p>(</span><span class=nx>req</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;发送 API 请求失败 (%s): %w&#34;</span><span class=p>,</span> <span class=nx>apiPath</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>defer</span> <span class=nx>resp</span><span class=p>.</span><span class=nx>Body</span><span class=p>.</span><span class=nf>Close</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 读取响应体
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>body</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>io</span><span class=p>.</span><span class=nf>ReadAll</span><span class=p>(</span><span class=nx>resp</span><span class=p>.</span><span class=nx>Body</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;读取 API 响应失败 (%s): %w&#34;</span><span class=p>,</span> <span class=nx>apiPath</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 检查 HTTP 状态码
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>resp</span><span class=p>.</span><span class=nx>StatusCode</span> <span class=o>!=</span> <span class=nx>http</span><span class=p>.</span><span class=nx>StatusOK</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;API 请求失败 (%s)，状态码: %d, 响应: %s&#34;</span><span class=p>,</span> <span class=nx>apiPath</span><span class=p>,</span> <span class=nx>resp</span><span class=p>.</span><span class=nx>StatusCode</span><span class=p>,</span> <span class=nb>string</span><span class=p>(</span><span class=nx>body</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>body</span><span class=p>,</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>getCurrentWeatherHandler</span><span class=p>(</span><span class=nx>ctx</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Context</span><span class=p>,</span> <span class=nx>request</span> <span class=nx>mcp</span><span class=p>.</span><span class=nx>CallToolRequest</span><span class=p>)</span> <span class=p>(</span><span class=o>*</span><span class=nx>mcp</span><span class=p>.</span><span class=nx>CallToolResult</span><span class=p>,</span> <span class=kt>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>location</span><span class=p>,</span> <span class=nx>ok</span> <span class=o>:=</span> <span class=nx>request</span><span class=p>.</span><span class=nx>Params</span><span class=p>.</span><span class=nx>Arguments</span><span class=p>[</span><span class=s>&#34;location&#34;</span><span class=p>].(</span><span class=kt>string</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>!</span><span class=nx>ok</span> <span class=o>||</span> <span class=nx>location</span> <span class=o>==</span> <span class=s>&#34;&#34;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>errors</span><span class=p>.</span><span class=nf>New</span><span class=p>(</span><span class=s>&#34;location 参数不能为空&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 使用通用函数调用 API
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>params</span> <span class=o>:=</span> <span class=nx>url</span><span class=p>.</span><span class=nx>Values</span><span class=p>{}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>params</span><span class=p>.</span><span class=nf>Set</span><span class=p>(</span><span class=s>&#34;location&#34;</span><span class=p>,</span> <span class=nx>location</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>body</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nf>callQweatherAPI</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=s>&#34;/v7/weather/now&#34;</span><span class=p>,</span> <span class=nx>params</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>err</span> <span class=c1>// 错误已在 callQweatherAPI 中格式化
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 解析JSON响应
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=kd>var</span> <span class=nx>weatherResp</span> <span class=nx>WeatherResponse</span>
+</span></span><span class=line><span class=cl>	<span class=nx>err</span> <span class=p>=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>Unmarshal</span><span class=p>(</span><span class=nx>body</span><span class=p>,</span> <span class=o>&amp;</span><span class=nx>weatherResp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;解析天气响应 JSON 失败: %w, 原始响应: %s&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>,</span> <span class=nb>string</span><span class=p>(</span><span class=nx>body</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 检查API业务状态码
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>weatherResp</span><span class=p>.</span><span class=nx>Code</span> <span class=o>!=</span> <span class=s>&#34;200&#34;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;天气 API 业务错误，代码: %s, 原始响应: %s&#34;</span><span class=p>,</span> <span class=nx>weatherResp</span><span class=p>.</span><span class=nx>Code</span><span class=p>,</span> <span class=nb>string</span><span class=p>(</span><span class=nx>body</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 格式化输出
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>now</span> <span class=o>:=</span> <span class=nx>weatherResp</span><span class=p>.</span><span class=nx>Now</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 更新格式化字符串以包含更多信息
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>resultText</span> <span class=o>:=</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Sprintf</span><span class=p>(</span><span class=s>&#34;观测时间：%s\n天气：%s，气温：%s℃ (体感 %s℃)\n风：%s %s级 (%s km/h)\n湿度：%s%%，降水：%s mm，气压：%s hPa\n能见度：%s km&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>now</span><span class=p>.</span><span class=nx>ObsTime</span><span class=p>,</span> <span class=c1>// 添加观测时间
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>now</span><span class=p>.</span><span class=nx>Text</span><span class=p>,</span> <span class=nx>now</span><span class=p>.</span><span class=nx>Temp</span><span class=p>,</span> <span class=nx>now</span><span class=p>.</span><span class=nx>FeelsLike</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>now</span><span class=p>.</span><span class=nx>WindDir</span><span class=p>,</span> <span class=nx>now</span><span class=p>.</span><span class=nx>WindScale</span><span class=p>,</span> <span class=nx>now</span><span class=p>.</span><span class=nx>WindSpeed</span><span class=p>,</span> <span class=c1>// 添加风速
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>now</span><span class=p>.</span><span class=nx>Humidity</span><span class=p>,</span> <span class=nx>now</span><span class=p>.</span><span class=nx>Precip</span><span class=p>,</span> <span class=nx>now</span><span class=p>.</span><span class=nx>Pressure</span><span class=p>,</span> <span class=c1>// 添加降水和气压
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>now</span><span class=p>.</span><span class=nx>Vis</span><span class=p>)</span> <span class=c1>// 添加能见度
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>mcp</span><span class=p>.</span><span class=nf>NewToolResultText</span><span class=p>(</span><span class=nx>resultText</span><span class=p>),</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>getGeoHandler</span><span class=p>(</span><span class=nx>ctx</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Context</span><span class=p>,</span> <span class=nx>request</span> <span class=nx>mcp</span><span class=p>.</span><span class=nx>CallToolRequest</span><span class=p>)</span> <span class=p>(</span><span class=o>*</span><span class=nx>mcp</span><span class=p>.</span><span class=nx>CallToolResult</span><span class=p>,</span> <span class=kt>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>city</span><span class=p>,</span> <span class=nx>ok</span> <span class=o>:=</span> <span class=nx>request</span><span class=p>.</span><span class=nx>Params</span><span class=p>.</span><span class=nx>Arguments</span><span class=p>[</span><span class=s>&#34;city&#34;</span><span class=p>].(</span><span class=kt>string</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>!</span><span class=nx>ok</span> <span class=o>||</span> <span class=nx>city</span> <span class=o>==</span> <span class=s>&#34;&#34;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>errors</span><span class=p>.</span><span class=nf>New</span><span class=p>(</span><span class=s>&#34;city 参数不能为空&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 使用通用函数调用 API
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>params</span> <span class=o>:=</span> <span class=nx>url</span><span class=p>.</span><span class=nx>Values</span><span class=p>{}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>params</span><span class=p>.</span><span class=nf>Set</span><span class=p>(</span><span class=s>&#34;location&#34;</span><span class=p>,</span> <span class=nx>city</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>body</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nf>callQweatherAPI</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=s>&#34;/geo/v2/city/lookup&#34;</span><span class=p>,</span> <span class=nx>params</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>err</span> <span class=c1>// 错误已在 callQweatherAPI 中格式化
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 解析JSON响应
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=kd>var</span> <span class=nx>geoResp</span> <span class=nx>GeoResponse</span>
+</span></span><span class=line><span class=cl>	<span class=nx>err</span> <span class=p>=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>Unmarshal</span><span class=p>(</span><span class=nx>body</span><span class=p>,</span> <span class=o>&amp;</span><span class=nx>geoResp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;解析地理位置响应 JSON 失败: %w, 原始响应: %s&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>,</span> <span class=nb>string</span><span class=p>(</span><span class=nx>body</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 检查API业务状态码
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>geoResp</span><span class=p>.</span><span class=nx>Code</span> <span class=o>!=</span> <span class=s>&#34;200&#34;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;地理位置 API 业务错误，代码: %s, 原始响应: %s&#34;</span><span class=p>,</span> <span class=nx>geoResp</span><span class=p>.</span><span class=nx>Code</span><span class=p>,</span> <span class=nb>string</span><span class=p>(</span><span class=nx>body</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=nx>geoResp</span><span class=p>.</span><span class=nx>Location</span><span class=p>)</span> <span class=o>==</span> <span class=mi>0</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;未找到指定城市 &#39;%s&#39; 的地理位置信息&#34;</span><span class=p>,</span> <span class=nx>city</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 格式化输出 (通常返回第一个匹配项)
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>loc</span> <span class=o>:=</span> <span class=nx>geoResp</span><span class=p>.</span><span class=nx>Location</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>	<span class=nx>resultText</span> <span class=o>:=</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Sprintf</span><span class=p>(</span><span class=s>&#34;城市：%s (%s, %s), 经度: %s, 纬度: %s, ID: %s&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>loc</span><span class=p>.</span><span class=nx>Name</span><span class=p>,</span> <span class=nx>loc</span><span class=p>.</span><span class=nx>Adm2</span><span class=p>,</span> <span class=nx>loc</span><span class=p>.</span><span class=nx>Adm1</span><span class=p>,</span> <span class=nx>loc</span><span class=p>.</span><span class=nx>Lon</span><span class=p>,</span> <span class=nx>loc</span><span class=p>.</span><span class=nx>Lat</span><span class=p>,</span> <span class=nx>loc</span><span class=p>.</span><span class=nx>ID</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>mcp</span><span class=p>.</span><span class=nf>NewToolResultText</span><span class=p>(</span><span class=nx>resultText</span><span class=p>),</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 新增：智能天气查询处理函数
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=nf>getSmartWeatherHandler</span><span class=p>(</span><span class=nx>ctx</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Context</span><span class=p>,</span> <span class=nx>request</span> <span class=nx>mcp</span><span class=p>.</span><span class=nx>CallToolRequest</span><span class=p>)</span> <span class=p>(</span><span class=o>*</span><span class=nx>mcp</span><span class=p>.</span><span class=nx>CallToolResult</span><span class=p>,</span> <span class=kt>error</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>query</span><span class=p>,</span> <span class=nx>ok</span> <span class=o>:=</span> <span class=nx>request</span><span class=p>.</span><span class=nx>Params</span><span class=p>.</span><span class=nx>Arguments</span><span class=p>[</span><span class=s>&#34;query&#34;</span><span class=p>].(</span><span class=kt>string</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>!</span><span class=nx>ok</span> <span class=o>||</span> <span class=nx>query</span> <span class=o>==</span> <span class=s>&#34;&#34;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>errors</span><span class=p>.</span><span class=nf>New</span><span class=p>(</span><span class=s>&#34;query 参数不能为空&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// token, err := tokenFromContext(ctx)
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// if err != nil || token != &#34;soulchild&#34; {
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// 	return nil, fmt.Errorf(&#34;用户认证失败&#34;)
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// }
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=kd>var</span> <span class=nx>locationCoords</span> <span class=kt>string</span>
+</span></span><span class=line><span class=cl>	<span class=c1>// var err error
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=c1>// 检查 query 是否包含逗号，判断是城市名还是经纬度
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>if</span> <span class=nx>strings</span><span class=p>.</span><span class=nf>Contains</span><span class=p>(</span><span class=nx>query</span><span class=p>,</span> <span class=s>&#34;,&#34;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=c1>// 认为是经纬度
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>locationCoords</span> <span class=p>=</span> <span class=nx>query</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=c1>// 认为是城市名，先获取经纬度
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>geoParams</span> <span class=o>:=</span> <span class=nx>url</span><span class=p>.</span><span class=nx>Values</span><span class=p>{}</span>
+</span></span><span class=line><span class=cl>		<span class=nx>geoParams</span><span class=p>.</span><span class=nf>Set</span><span class=p>(</span><span class=s>&#34;location&#34;</span><span class=p>,</span> <span class=nx>query</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=nx>geoBody</span><span class=p>,</span> <span class=nx>geoErr</span> <span class=o>:=</span> <span class=nf>callQweatherAPI</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=s>&#34;/geo/v2/city/lookup&#34;</span><span class=p>,</span> <span class=nx>geoParams</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=nx>geoErr</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;智能查询：获取 &#39;%s&#39; 的地理位置失败: %w&#34;</span><span class=p>,</span> <span class=nx>query</span><span class=p>,</span> <span class=nx>geoErr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=kd>var</span> <span class=nx>geoResp</span> <span class=nx>GeoResponse</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=nx>err</span> <span class=p>=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>Unmarshal</span><span class=p>(</span><span class=nx>geoBody</span><span class=p>,</span> <span class=o>&amp;</span><span class=nx>geoResp</span><span class=p>);</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;智能查询：解析 &#39;%s&#39; 的地理位置响应 JSON 失败: %w, 原始响应: %s&#34;</span><span class=p>,</span> <span class=nx>query</span><span class=p>,</span> <span class=nx>err</span><span class=p>,</span> <span class=nb>string</span><span class=p>(</span><span class=nx>geoBody</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=nx>geoResp</span><span class=p>.</span><span class=nx>Code</span> <span class=o>!=</span> <span class=s>&#34;200&#34;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;智能查询：地理位置 API 业务错误 (城市: %s)，代码: %s, 原始响应: %s&#34;</span><span class=p>,</span> <span class=nx>query</span><span class=p>,</span> <span class=nx>geoResp</span><span class=p>.</span><span class=nx>Code</span><span class=p>,</span> <span class=nb>string</span><span class=p>(</span><span class=nx>geoBody</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=nx>geoResp</span><span class=p>.</span><span class=nx>Location</span><span class=p>)</span> <span class=o>==</span> <span class=mi>0</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;智能查询：未找到城市 &#39;%s&#39; 的地理位置信息&#34;</span><span class=p>,</span> <span class=nx>query</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=c1>// 使用第一个匹配到的位置
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>loc</span> <span class=o>:=</span> <span class=nx>geoResp</span><span class=p>.</span><span class=nx>Location</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>		<span class=nx>locationCoords</span> <span class=p>=</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Sprintf</span><span class=p>(</span><span class=s>&#34;%s,%s&#34;</span><span class=p>,</span> <span class=nx>loc</span><span class=p>.</span><span class=nx>Lon</span><span class=p>,</span> <span class=nx>loc</span><span class=p>.</span><span class=nx>Lat</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// --- 获取天气信息 --- (无论输入是城市还是坐标，现在都有了 locationCoords)
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>weatherParams</span> <span class=o>:=</span> <span class=nx>url</span><span class=p>.</span><span class=nx>Values</span><span class=p>{}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>weatherParams</span><span class=p>.</span><span class=nf>Set</span><span class=p>(</span><span class=s>&#34;location&#34;</span><span class=p>,</span> <span class=nx>locationCoords</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>body</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nf>callQweatherAPI</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=s>&#34;/v7/weather/now&#34;</span><span class=p>,</span> <span class=nx>weatherParams</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=c1>// 如果是地理位置查询失败导致的错误，之前的错误信息可能更具体
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=k>if</span> <span class=nx>errors</span><span class=p>.</span><span class=nf>Is</span><span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Canceled</span><span class=p>)</span> <span class=o>||</span> <span class=nx>errors</span><span class=p>.</span><span class=nf>Is</span><span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=nx>context</span><span class=p>.</span><span class=nx>DeadlineExceeded</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>err</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;智能查询：获取坐标 &#39;%s&#39; 的天气失败: %w&#34;</span><span class=p>,</span> <span class=nx>locationCoords</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 解析天气 JSON 响应
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=kd>var</span> <span class=nx>weatherResp</span> <span class=nx>WeatherResponse</span>
+</span></span><span class=line><span class=cl>	<span class=nx>err</span> <span class=p>=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>Unmarshal</span><span class=p>(</span><span class=nx>body</span><span class=p>,</span> <span class=o>&amp;</span><span class=nx>weatherResp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;智能查询：解析天气响应 JSON 失败: %w, 原始响应: %s&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>,</span> <span class=nb>string</span><span class=p>(</span><span class=nx>body</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>weatherResp</span><span class=p>.</span><span class=nx>Code</span> <span class=o>!=</span> <span class=s>&#34;200&#34;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>return</span> <span class=kc>nil</span><span class=p>,</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;智能查询：天气 API 业务错误 (坐标: %s)，代码: %s, 原始响应: %s&#34;</span><span class=p>,</span> <span class=nx>locationCoords</span><span class=p>,</span> <span class=nx>weatherResp</span><span class=p>.</span><span class=nx>Code</span><span class=p>,</span> <span class=nb>string</span><span class=p>(</span><span class=nx>body</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// 格式化天气输出
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>now</span> <span class=o>:=</span> <span class=nx>weatherResp</span><span class=p>.</span><span class=nx>Now</span>
+</span></span><span class=line><span class=cl>	<span class=nx>resultText</span> <span class=o>:=</span> <span class=nx>fmt</span><span class=p>.</span><span class=nf>Sprintf</span><span class=p>(</span><span class=s>&#34;查询地点：%s\n观测时间：%s\n天气：%s，气温：%s℃ (体感 %s℃)\n风：%s %s级 (%s km/h)\n湿度：%s%%，降水：%s mm，气压：%s hPa\n能见度：%s km&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>query</span><span class=p>,</span> <span class=c1>// 显示用户原始查询
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>now</span><span class=p>.</span><span class=nx>ObsTime</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>now</span><span class=p>.</span><span class=nx>Text</span><span class=p>,</span> <span class=nx>now</span><span class=p>.</span><span class=nx>Temp</span><span class=p>,</span> <span class=nx>now</span><span class=p>.</span><span class=nx>FeelsLike</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>now</span><span class=p>.</span><span class=nx>WindDir</span><span class=p>,</span> <span class=nx>now</span><span class=p>.</span><span class=nx>WindScale</span><span class=p>,</span> <span class=nx>now</span><span class=p>.</span><span class=nx>WindSpeed</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>now</span><span class=p>.</span><span class=nx>Humidity</span><span class=p>,</span> <span class=nx>now</span><span class=p>.</span><span class=nx>Precip</span><span class=p>,</span> <span class=nx>now</span><span class=p>.</span><span class=nx>Pressure</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>now</span><span class=p>.</span><span class=nx>Vis</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=nx>mcp</span><span class=p>.</span><span class=nf>NewToolResultText</span><span class=p>(</span><span class=nx>resultText</span><span class=p>),</span> <span class=kc>nil</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>mcpServer</span> <span class=o>:=</span> <span class=nx>server</span><span class=p>.</span><span class=nf>NewMCPServer</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>		<span class=s>&#34;weather-server&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=s>&#34;1.0.0&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>server</span><span class=p>.</span><span class=nf>WithResourceCapabilities</span><span class=p>(</span><span class=kc>true</span><span class=p>,</span> <span class=kc>true</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=nx>server</span><span class=p>.</span><span class=nf>WithPromptCapabilities</span><span class=p>(</span><span class=kc>true</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=nx>server</span><span class=p>.</span><span class=nf>WithToolCapabilities</span><span class=p>(</span><span class=kc>true</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>	<span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// --- Tool Definitions ---
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>weatherTool</span> <span class=o>:=</span> <span class=nx>mcp</span><span class=p>.</span><span class=nf>NewTool</span><span class=p>(</span><span class=s>&#34;get_current_weather&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>mcp</span><span class=p>.</span><span class=nf>WithDescription</span><span class=p>(</span><span class=s>&#34;获取指定经纬度的当前天气信息&#34;</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=nx>mcp</span><span class=p>.</span><span class=nf>WithString</span><span class=p>(</span><span class=s>&#34;location&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			<span class=nx>mcp</span><span class=p>.</span><span class=nf>Description</span><span class=p>(</span><span class=s>&#34;位置坐标，格式为 经度,纬度 例如 116.41,39.92&#34;</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>),</span>
+</span></span><span class=line><span class=cl>	<span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>geoTool</span> <span class=o>:=</span> <span class=nx>mcp</span><span class=p>.</span><span class=nf>NewTool</span><span class=p>(</span><span class=s>&#34;get_geo&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>mcp</span><span class=p>.</span><span class=nf>WithDescription</span><span class=p>(</span><span class=s>&#34;获取城市名称对应的位置坐标信息&#34;</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=nx>mcp</span><span class=p>.</span><span class=nf>WithString</span><span class=p>(</span><span class=s>&#34;city&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			<span class=nx>mcp</span><span class=p>.</span><span class=nf>Description</span><span class=p>(</span><span class=s>&#34;城市名称, 例如 北京&#34;</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>),</span>
+</span></span><span class=line><span class=cl>	<span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>smartWeatherTool</span> <span class=o>:=</span> <span class=nx>mcp</span><span class=p>.</span><span class=nf>NewTool</span><span class=p>(</span><span class=s>&#34;get_smart_weather&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>mcp</span><span class=p>.</span><span class=nf>WithDescription</span><span class=p>(</span><span class=s>&#34;智能查询天气，自动识别城市名称或经纬度坐标&#34;</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=nx>mcp</span><span class=p>.</span><span class=nf>WithString</span><span class=p>(</span><span class=s>&#34;query&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>			<span class=nx>mcp</span><span class=p>.</span><span class=nf>Description</span><span class=p>(</span><span class=s>&#34;查询条件，可以是城市名称（如 北京）或经纬度坐标（如 116.41,39.92）&#34;</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>),</span>
+</span></span><span class=line><span class=cl>	<span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// --- Add Tool Handlers ---
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>mcpServer</span><span class=p>.</span><span class=nf>AddTool</span><span class=p>(</span><span class=nx>weatherTool</span><span class=p>,</span> <span class=nx>getCurrentWeatherHandler</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>mcpServer</span><span class=p>.</span><span class=nf>AddTool</span><span class=p>(</span><span class=nx>geoTool</span><span class=p>,</span> <span class=nx>getGeoHandler</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>mcpServer</span><span class=p>.</span><span class=nf>AddTool</span><span class=p>(</span><span class=nx>smartWeatherTool</span><span class=p>,</span> <span class=nx>getSmartWeatherHandler</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// create sse server
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>sseServer</span> <span class=o>:=</span> <span class=nx>server</span><span class=p>.</span><span class=nf>NewSSEServer</span><span class=p>(</span><span class=nx>mcpServer</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>server</span><span class=p>.</span><span class=nf>WithBaseURL</span><span class=p>(</span><span class=s>&#34;http://localhost:8080&#34;</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=nx>server</span><span class=p>.</span><span class=nf>WithBasePath</span><span class=p>(</span><span class=s>&#34;/weather&#34;</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=c1>// 使用 authFromRequest 作为 SSE 上下文函数, 请求进入的时候可以执行 authFromRequest 设置上下文内容, 实现认证信息的传递
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=nx>server</span><span class=p>.</span><span class=nf>WithSSEContextFunc</span><span class=p>(</span><span class=nx>authFromRequest</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>	<span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// start sse server
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>log</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;SSE server listening on :8080&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>sseServer</span><span class=p>.</span><span class=nf>Start</span><span class=p>(</span><span class=s>&#34;:8080&#34;</span><span class=p>);</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>log</span><span class=p>.</span><span class=nf>Fatalf</span><span class=p>(</span><span class=s>&#34;Server error: %v&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>  mcp client 配置
+</span></span></span><span class=line><span class=cl><span class=cm>	&#34;weather-sse-server&#34;: {
+</span></span></span><span class=line><span class=cl><span class=cm>		&#34;url&#34;: &#34;http://localhost:8080/weather/sse&#34;
+</span></span></span><span class=line><span class=cl><span class=cm>	}
+</span></span></span><span class=line><span class=cl><span class=cm>*/</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=client-本地测试>client 本地测试</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span><span class=lnt>80
+</span><span class=lnt>81
+</span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
+</span><span class=lnt>85
+</span><span class=lnt>86
+</span><span class=lnt>87
+</span><span class=lnt>88
+</span><span class=lnt>89
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kn>package</span> <span class=nx>main</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;context&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;encoding/json&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;fmt&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;log&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;time&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/mark3labs/mcp-go/client&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=s>&#34;github.com/mark3labs/mcp-go/mcp&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nx>c</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>client</span><span class=p>.</span><span class=nf>NewSSEMCPClient</span><span class=p>(</span><span class=s>&#34;http://localhost:8080/weather/sse&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>client</span><span class=p>.</span><span class=nf>WithHeaders</span><span class=p>(</span><span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kt>string</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=s>&#34;Authorization&#34;</span><span class=p>:</span> <span class=s>&#34;soulchild&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=p>}),</span>
+</span></span><span class=line><span class=cl>	<span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>log</span><span class=p>.</span><span class=nf>Fatalf</span><span class=p>(</span><span class=s>&#34;Failed to create client: %v&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>defer</span> <span class=nx>c</span><span class=p>.</span><span class=nf>Close</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// Create context with timeout
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>ctx</span><span class=p>,</span> <span class=nx>cancel</span> <span class=o>:=</span> <span class=nx>context</span><span class=p>.</span><span class=nf>WithTimeout</span><span class=p>(</span><span class=nx>context</span><span class=p>.</span><span class=nf>Background</span><span class=p>(),</span> <span class=mi>30</span><span class=o>*</span><span class=nx>time</span><span class=p>.</span><span class=nx>Second</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>defer</span> <span class=nf>cancel</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>c</span><span class=p>.</span><span class=nf>Start</span><span class=p>(</span><span class=nx>ctx</span><span class=p>);</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>log</span><span class=p>.</span><span class=nf>Fatalf</span><span class=p>(</span><span class=s>&#34;Failed to start client: %v&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// Initialize the client
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Initializing client...&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>initRequest</span> <span class=o>:=</span> <span class=nx>mcp</span><span class=p>.</span><span class=nx>InitializeRequest</span><span class=p>{}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>initRequest</span><span class=p>.</span><span class=nx>Params</span><span class=p>.</span><span class=nx>ProtocolVersion</span> <span class=p>=</span> <span class=nx>mcp</span><span class=p>.</span><span class=nx>LATEST_PROTOCOL_VERSION</span>
+</span></span><span class=line><span class=cl>	<span class=nx>initRequest</span><span class=p>.</span><span class=nx>Params</span><span class=p>.</span><span class=nx>ClientInfo</span> <span class=p>=</span> <span class=nx>mcp</span><span class=p>.</span><span class=nx>Implementation</span><span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Name</span><span class=p>:</span>    <span class=s>&#34;weather-client&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>Version</span><span class=p>:</span> <span class=s>&#34;1.0.0&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nx>initResult</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>c</span><span class=p>.</span><span class=nf>Initialize</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>initRequest</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>log</span><span class=p>.</span><span class=nf>Fatalf</span><span class=p>(</span><span class=s>&#34;Failed to initialize: %v&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>		<span class=s>&#34;Initialized with server: %s %s\n\n&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>initResult</span><span class=p>.</span><span class=nx>ServerInfo</span><span class=p>.</span><span class=nx>Name</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=nx>initResult</span><span class=p>.</span><span class=nx>ServerInfo</span><span class=p>.</span><span class=nx>Version</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>	<span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// List Tools
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Listing available tools...&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>toolsRequest</span> <span class=o>:=</span> <span class=nx>mcp</span><span class=p>.</span><span class=nx>ListToolsRequest</span><span class=p>{}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>tools</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>c</span><span class=p>.</span><span class=nf>ListTools</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>toolsRequest</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>log</span><span class=p>.</span><span class=nf>Fatalf</span><span class=p>(</span><span class=s>&#34;Failed to list tools: %v&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>for</span> <span class=nx>_</span><span class=p>,</span> <span class=nx>tool</span> <span class=o>:=</span> <span class=k>range</span> <span class=nx>tools</span><span class=p>.</span><span class=nx>Tools</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>fmt</span><span class=p>.</span><span class=nf>Printf</span><span class=p>(</span><span class=s>&#34;- %s: %s\n&#34;</span><span class=p>,</span> <span class=nx>tool</span><span class=p>.</span><span class=nx>Name</span><span class=p>,</span> <span class=nx>tool</span><span class=p>.</span><span class=nx>Description</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// call tool
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=s>&#34;Call get_smart_weather...&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>listTmpRequest</span> <span class=o>:=</span> <span class=nx>mcp</span><span class=p>.</span><span class=nx>CallToolRequest</span><span class=p>{}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>listTmpRequest</span><span class=p>.</span><span class=nx>Params</span><span class=p>.</span><span class=nx>Name</span> <span class=p>=</span> <span class=s>&#34;get_smart_weather&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=nx>listTmpRequest</span><span class=p>.</span><span class=nx>Params</span><span class=p>.</span><span class=nx>Arguments</span> <span class=p>=</span> <span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kd>interface</span><span class=p>{}{</span>
+</span></span><span class=line><span class=cl>		<span class=s>&#34;query&#34;</span><span class=p>:</span> <span class=s>&#34;上海&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=nx>result</span><span class=p>,</span> <span class=nx>err</span> <span class=o>:=</span> <span class=nx>c</span><span class=p>.</span><span class=nf>CallTool</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>listTmpRequest</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nx>log</span><span class=p>.</span><span class=nf>Fatalf</span><span class=p>(</span><span class=s>&#34;Failed to list directory: %v&#34;</span><span class=p>,</span> <span class=nx>err</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=nf>printToolResult</span><span class=p>(</span><span class=nx>result</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// Helper function to print tool results
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>func</span> <span class=nf>printToolResult</span><span class=p>(</span><span class=nx>result</span> <span class=o>*</span><span class=nx>mcp</span><span class=p>.</span><span class=nx>CallToolResult</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=k>for</span> <span class=nx>_</span><span class=p>,</span> <span class=nx>content</span> <span class=o>:=</span> <span class=k>range</span> <span class=nx>result</span><span class=p>.</span><span class=nx>Content</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=nx>textContent</span><span class=p>,</span> <span class=nx>ok</span> <span class=o>:=</span> <span class=nx>content</span><span class=p>.(</span><span class=nx>mcp</span><span class=p>.</span><span class=nx>TextContent</span><span class=p>);</span> <span class=nx>ok</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nx>textContent</span><span class=p>.</span><span class=nx>Text</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=nx>jsonBytes</span><span class=p>,</span> <span class=nx>_</span> <span class=o>:=</span> <span class=nx>json</span><span class=p>.</span><span class=nf>MarshalIndent</span><span class=p>(</span><span class=nx>content</span><span class=p>,</span> <span class=s>&#34;&#34;</span><span class=p>,</span> <span class=s>&#34;  &#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>			<span class=nx>fmt</span><span class=p>.</span><span class=nf>Println</span><span class=p>(</span><span class=nb>string</span><span class=p>(</span><span class=nx>jsonBytes</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2025-04-19 15:18:47">更新于 2025-04-19 15:18&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/ class=post-tag>Tags</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/744723091/ class=post-nav-item rel=prev title="Python Uv备忘"><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>Python Uv备忘</a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wx.png alt="SoulChild 微信号">
+<span data-animation>微信号</span></div><div><img src=/images/wechatpay.png alt="SoulChild 微信打赏">
+<span data-animation>微信打赏</span></div></div></div><div id=comments><div id=giscus><script src=https://giscus.app/client.js data-repo=SoulChildTc/soulchild-blog data-repo-id=R_kgDOIwJKxg data-category=General data-category-id=DIC_kwDOIwJKxs4CTwRk data-mapping=title data-theme=preferred_color_scheme data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-lang=zh-CN data-loading=lazy crossorigin=anonymous async defer></script></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://giscus.app/ rel="external nofollow noopener noreferrer">giscus</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?7b986d4ea8e2e50e9c04984b78170660",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})(),function(){window.tip_chato_color="#fff",window.tip_chato_bg="#47AF3E",window.chato_iframe_src="https://chato.cn/b/v1xje74g117m24yw",window.chato_script_checkDomain="https://api.chato.cn/chato/api/v1/domains/v1xje74g117m24yw/whitelist_sites/check";var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="/js/iframe.min.js",document.head.insertBefore(e,document.getElementsByTagName("script")[0])}()</script><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright fa-fw" aria-hidden=true></i>
+<span itemprop=copyrightYear>2017 - 2025</span><span class=author itemprop=copyrightHolder>
+<a href=https://www.soulchild.cn target=_blank rel="external nofollow noopener noreferrer">SoulChild</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class=site-time title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden=true></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor"><span id=busuanzi_container_site_uv title=总访客数><i class="fa-regular fa-user fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_uv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span><span id=busuanzi_container_site_pv class=footer-divider title=总访问量><i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_pv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span></div><div class="footer-line beian"><span class="icp footer-divider">特别感谢
+<a href=https://gohugo.io target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.109.0">Hugo</a> |
+<a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v0.2.17-RC">FixIt</a> |
+<a href=https://github.com target=_blank rel="noopener noreffer">GitHub</a> |
+<a href=https://vercel.com target=_blank rel="noopener noreffer">Vercel</a></span></div></div></footer></div><div class=widgets><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role=button aria-label=回到顶部><i class="fa-solid fa-arrow-up fa-fw" aria-hidden=true></i><span class=variant-numeric>0%</span></div><div class="fixed-button view-comments d-none" role=button aria-label=查看评论><i class="fa-solid fa-comment fa-fw" aria-hidden=true></i></div></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0;--bg-progress:#438a55;--bg-progress-dark:#438a55></div><noscript><div class=noscript-warning>FixIt 主题在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/lightgallery/css/lightgallery-bundle.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/pace/themes/green/pace-theme-bounce.css><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/algoliasearch-lite.umd.min.js defer></script><script src=/lib/lazysizes/lazysizes.min.js async defer></script><script src=/lib/lightgallery/lightgallery.min.js defer></script><script src=/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js defer></script><script src=/lib/lightgallery/plugins/zoom/lg-zoom.min.js defer></script><script src=/lib/typeit/index.umd.js defer></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/lib/pangu/pangu.min.js defer></script><script src=/lib/cell-watermark/watermark.min.js defer></script><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async defer></script><script src=/lib/pace/pace.min.js async defer></script><script>window.config={autoBookmark:!0,code:{copyTitle:"复制到剪贴板",editLockTitle:"锁定可编辑代码块",editUnLockTitle:"解锁可编辑代码块",editable:!0,maxShownLines:50},comment:{enable:!0,expired:!1,giscus:{darkTheme:"dark",lightTheme:"light"}},data:{"typeit-header-subtitle-desktop":"/usr/bin/sleep infinity","typeit-header-subtitle-mobile":"/usr/bin/sleep infinity"},enablePWA:!0,lightgallery:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},pangu:{enable:!0,selector:"article"},search:{algoliaAppID:"CE9G7Q4H6N",algoliaIndex:"soulchild-blog",algoliaSearchKey:"0f69a431d92a03c2cf4143d8dbc6af0a",highlightTag:"em",maxResultLength:20,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},siteTime:"2017-06-08T21:38:36+08:00",typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},duration:-1,speed:100},watermark:{appendto:".wrapper\u003emain",colspacing:300,content:"SoulChild随笔记",enable:!0,fontfamily:"inherit",fontsize:.85,height:300,opacity:.1,rotate:15,rowspacing:100,width:300}}</script><script src=/js/theme.min.js defer></script></body></html>
