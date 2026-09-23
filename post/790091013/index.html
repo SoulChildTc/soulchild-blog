@@ -1,0 +1,342 @@
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>Kafka 4_x 集群部署（KRaft 模式） - SoulChild随笔记</title><meta name=author content="SoulChild"><meta name=author-link content="https://www.soulchild.cn"><meta name=description content="小牛之路，一个记录运维开发、自动化运维、DevOps、Kubernetes、Docker、编程等技术笔记的博客，与您分享实用技巧和心得"><meta name=keywords content="kafka,消息队列"><meta itemprop=name content="Kafka 4_x 集群部署（KRaft 模式）"><meta itemprop=description content><meta itemprop=datePublished content="2026-09-22T23:30:13+08:00"><meta itemprop=dateModified content="2026-09-22T23:30:13+08:00"><meta itemprop=wordCount content="946"><meta itemprop=image content="https://www.soulchild.cn/logo.png"><meta itemprop=keywords content="kafka,消息队列,"><meta property="og:title" content="Kafka 4_x 集群部署（KRaft 模式）"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="https://www.soulchild.cn/post/790091013/"><meta property="og:image" content="https://www.soulchild.cn/logo.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-09-22T23:30:13+08:00"><meta property="article:modified_time" content="2026-09-22T23:30:13+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.soulchild.cn/logo.png"><meta name=twitter:title content="Kafka 4_x 集群部署（KRaft 模式）"><meta name=twitter:description content><meta name=application-name content="SoulChild随笔记"><meta name=apple-mobile-web-app-title content="SoulChild随笔记"><meta name=theme-color data-light=#f8f8f8 data-dark=#252627 content="#f8f8f8"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://www.soulchild.cn/post/790091013/><link rel=prev href=https://www.soulchild.cn/post/agentgateway%E4%BB%8B%E7%BB%8D/><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kafka 4_x 集群部署（KRaft 模式）","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/www.soulchild.cn\/post\/790091013\/"},"image":["https:\/\/www.soulchild.cn\/logo.png"],"genre":"posts","keywords":"kafka, 消息队列","wordcount":946,"url":"https:\/\/www.soulchild.cn\/post\/790091013\/","datePublished":"2026-09-22T23:30:13+08:00","dateModified":"2026-09-22T23:30:13+08:00","publisher":{"@type":"Organization","name":"SoulChild"},"author":{"@type":"Person","name":"SoulChild"},"description":""}</script></head><body data-header-desktop=sticky data-header-mobile=auto><script>(window.localStorage?.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("data-theme","dark")</script><div class=wrapper><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-desktop class="typeit header-subtitle"></span></div><nav><ul class=menu><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start has-children"><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start has-children"><a class=menu-link href=/ title=我的站点><i class="fa-fw fas fa-sitemap fa-fw fa-sm" aria-hidden=true></i> 我的站点</a><i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden=true></i><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=https://p.soulchild.cn/ title=摄影学习 rel="noopener noreferrer" target=_blank><i class="fa-fw fas fa-camera fa-fw fa-sm" aria-hidden=true></i> 摄影学习</a></li><li class="menu-item text-start"><a class=menu-link href=https://tools.soulchild.cn/ title=在线工具 rel="noopener noreferrer" target=_blank><i class="fa-fw fas fa-tools fa-fw fa-sm" aria-hidden=true></i> 在线工具</a></li><li class="menu-item text-start"><a class=menu-link href=https://md.soulchild.cn/ title=Md2x公众号排版 rel="noopener noreferrer" target=_blank><i class="fa-fw fas fa-file-alt fa-fw fa-sm" aria-hidden=true></i> 公众号排版</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item text-start"><a class=menu-link href=https://www.travellings.cn/go.html title=开往 rel="noopener noreferrer" target=_blank><i class="fa-solid fa-train-subway fa-sm fa-fw fa-sm" aria-hidden=true></i> 开往</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder="$grep " id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=SoulChild随笔记><span class=header-title-pre><i class='fa-brands fa-docker'></i></span><span class=header-title-text>SoulChild随笔记</span></a><span id=typeit-header-subtitle-mobile class="typeit header-subtitle"></span></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder="$grep " id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fa-solid fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class="menu-item text-start"><a class=menu-link href=/posts/ title=所有文章><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden=true></i> 所有文章</a></li><li class="menu-item text-start"><a class=menu-link href=/tags/ title=标签><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden=true></i> 标签</a></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/categories/ title=分类><i class="fa-fw fas fa-folder-open fa-fw fa-sm" aria-hidden=true></i> 分类</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=/categories/kubernetes title=Kubernetes><i class="fa-solid fa-dharmachakra fa-fw fa-sm" aria-hidden=true></i> Kubernetes</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/python title=Python><i class="fa-brands fa-python fa-fw fa-sm" aria-hidden=true></i> Python</a></li><li class="menu-item text-start"><a class=menu-link href=/categories/golang title=Golang><i class="fa-brands fa-golang fa-fw fa-sm" aria-hidden=true></i> Golang</a></li></ul></li><li class="menu-item text-start"><span class=nested-item><a class=menu-link href=/ title=我的站点><i class="fa-fw fas fa-sitemap fa-fw fa-sm" aria-hidden=true></i> 我的站点</a>
+<i class="dropdown-icon fa-solid fa-chevron-right" aria-hidden=true></i></span><ul class=sub-menu><li class="menu-item text-start"><a class=menu-link href=https://p.soulchild.cn/ title=摄影学习 rel="noopener noreferrer" target=_blank><i class="fa-fw fas fa-camera fa-fw fa-sm" aria-hidden=true></i> 摄影学习</a></li><li class="menu-item text-start"><a class=menu-link href=https://tools.soulchild.cn/ title=在线工具 rel="noopener noreferrer" target=_blank><i class="fa-fw fas fa-tools fa-fw fa-sm" aria-hidden=true></i> 在线工具</a></li><li class="menu-item text-start"><a class=menu-link href=https://md.soulchild.cn/ title=Md2x公众号排版 rel="noopener noreferrer" target=_blank><i class="fa-fw fas fa-file-alt fa-fw fa-sm" aria-hidden=true></i> 公众号排版</a></li></ul></li><li class="menu-item text-start"><a class=menu-link href=/friends/ title=友链><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden=true></i> 友链</a></li><li class="menu-item text-start"><a class=menu-link href=https://www.travellings.cn/go.html title=开往 rel="noopener noreferrer" target=_blank><i class="fa-solid fa-train-subway fa-sm fa-fw fa-sm" aria-hidden=true></i> 开往</a></li><li class="menu-item theme-switch" title=切换主题><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=container data-page-style=normal><aside class=toc id=toc-auto><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden=true></i></h2><div class="toc-content always-active" id=toc-content-auto></div></aside><aside class=aside-custom><div id=fun-fixed-container class=fun-fixed-container><div class=fun-aside-panel><h4 class=fun-title>休息一下</h4><div class=fun-section id=stickman-section><div class=stickman-container><svg id="stickman" width="80" height="120" viewBox="0 0 80 120" xmlns="http://www.w3.org/2000/svg"><circle class="head" cx="40" cy="25" r="15" stroke="#fff" stroke-width="2" fill="transparent"/><line class="body" x1="40" y1="40" x2="40" y2="75" stroke="#fff" stroke-width="2"/><line class="arm left-arm" x1="40" y1="50" x2="20" y2="60" stroke="#fff" stroke-width="2"/><line class="arm right-arm" x1="40" y1="50" x2="60" y2="60" stroke="#fff" stroke-width="2"/><line class="leg left-leg" x1="40" y1="75" x2="25" y2="110" stroke="#fff" stroke-width="2"/><line class="leg right-leg" x1="40" y1="75" x2="55" y2="110" stroke="#fff" stroke-width="2"/></svg></div></div><div class=fun-section id=youtube-section><h5 class=fun-header>3Blue1Brown 数学视频</h5><div class=youtube-container><iframe width=100% height=200 src="https://www.youtube.com/embed/videoseries?si=htm4xGgyRLnsSZZ4&list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" title="YouTube video player" frameborder=0 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy=strict-origin-when-cross-origin allowfullscreen></iframe></div></div><div class=fun-section id=weather-widget><h5 class=fun-header>今日心情</h5><div class=mood-container><div class=mood-emoji id=current-mood>😊</div><div class=mood-selector><button onclick='changeMood("😊")'>😊</button>
+<button onclick='changeMood("😂")'>😂</button>
+<button onclick='changeMood("😍")'>😍</button>
+<button onclick='changeMood("😴")'>😴</button>
+<button onclick='changeMood("🤔")'>🤔</button>
+<button onclick='changeMood("😎")'>😎</button></div></div></div><div class=fun-section id=quote-section><h5 class=fun-header>每日一言</h5><div class=quote-container><p id=random-quote>知识就是力量。</p><button onclick=getRandomQuote()>换一条</button></div></div></div></div><style>.fun-fixed-container{position:fixed;left:20px;right:auto;top:60px;width:19%;max-height:100%;overflow-y:auto;z-index:1000;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.2)transparent;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.1)}.fun-fixed-container::-webkit-scrollbar{width:6px}.fun-fixed-container::-webkit-scrollbar-track{background:0 0}.fun-fixed-container::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.2);border-radius:3px}[data-theme=dark] .fun-fixed-container::-webkit-scrollbar-thumb{background-color:rgba(255,255,255,.2)}.fun-aside-panel{background:#f9f9f9;padding:15px;font-family:-apple-system,BlinkMacSystemFont,segoe ui,Roboto,helvetica neue,Arial,sans-serif}@media only screen and (max-width:960px){.fun-fixed-container{position:static;width:100%;max-height:none;margin-bottom:20px;box-shadow:none}}.fun-title{margin-top:0;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid #e0e0e0;color:#333;font-size:1.2em;text-align:center}.fun-section{margin-bottom:18px;background:#333;border-radius:10px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.1)}.fun-header{margin-top:0;margin-bottom:10px;color:#eee;font-size:1em;text-align:center}.stickman-container{height:140px;display:flex;justify-content:center;align-items:center;position:relative;perspective:600px;overflow:hidden}#stickman{cursor:pointer;transform-origin:center bottom;transition:transform .3s ease-in-out;position:relative;left:0}@keyframes jump{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}@keyframes flip{0%{transform:rotateX(0)}50%{transform:rotateX(180deg)}100%{transform:rotateX(360deg)}}@keyframes spin{0%{transform:rotateY(0)}100%{transform:rotateY(360deg)}}@keyframes kungfu1{0%,100%{transform:rotate(0)}25%{transform:rotate(-15deg)translateY(-5px)}50%{transform:rotate(0)}75%{transform:rotate(15deg)translateY(-5px)}}@keyframes kungfu2{0%{transform:rotate(0)}30%{transform:rotate(30deg)}60%{transform:rotate(-30deg)}100%{transform:rotate(0)}}@keyframes punch{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)rotate(-10deg)}50%{transform:translateX(15px)rotate(10deg)}80%{transform:translateX(-5px)rotate(-5deg)}}@keyframes leftArmMove{0%,100%{transform:rotate(0)}30%{transform:rotate(-30deg)}60%{transform:rotate(20deg)}}@keyframes rightArmMove{0%,100%{transform:rotate(0)}30%{transform:rotate(30deg)}60%{transform:rotate(-20deg)}}@keyframes leftLegMove{0%,100%{transform:rotate(0)}25%{transform:rotate(-20deg)}50%{transform:rotate(0)}75%{transform:rotate(15deg)}}@keyframes rightLegMove{0%,100%{transform:rotate(0)}25%{transform:rotate(20deg)}50%{transform:rotate(0)}75%{transform:rotate(-15deg)}}@keyframes walkLegs{0%,100%{transform:rotate(0)}25%{transform:rotate(-25deg)}75%{transform:rotate(25deg)}}@keyframes walkLegsReverse{0%,100%{transform:rotate(0)}25%{transform:rotate(25deg)}75%{transform:rotate(-25deg)}}@keyframes walkArms{0%,100%{transform:rotate(0)}25%{transform:rotate(20deg)}75%{transform:rotate(-20deg)}}@keyframes walkArmsReverse{0%,100%{transform:rotate(0)}25%{transform:rotate(-20deg)}75%{transform:rotate(20deg)}}@keyframes bodyBobbing{0%,50%,100%{transform:translateY(0)}25%,75%{transform:translateY(-2px)}}.jumping{animation:jump .5s ease-in-out}.flipping{animation:flip .8s ease-in-out}.spinning{animation:spin .8s ease-in-out}.kungfu1{animation:kungfu1 .7s ease-in-out}.kungfu2 .left-arm{transform-origin:40px 50px;animation:kungfu2 .4s ease-in-out}.kungfu2 .right-arm{transform-origin:40px 50px;animation:kungfu2 .4s ease-in-out .2s}.punching{animation:punch .5s ease-in-out}.moving-limbs .left-arm{transform-origin:40px 50px;animation:leftArmMove 1.2s ease-in-out infinite}.moving-limbs .right-arm{transform-origin:40px 50px;animation:rightArmMove 1.2s ease-in-out infinite}.moving-limbs .left-leg{transform-origin:40px 75px;animation:leftLegMove 1.2s ease-in-out infinite}.moving-limbs .right-leg{transform-origin:40px 75px;animation:rightLegMove 1.2s ease-in-out infinite}.walking .body{animation:bodyBobbing .5s ease-in-out infinite}.walking .left-arm{transform-origin:40px 50px;animation:walkArms .5s ease-in-out infinite}.walking .right-arm{transform-origin:40px 50px;animation:walkArmsReverse .5s ease-in-out infinite}.walking .left-leg{transform-origin:40px 75px;animation:walkLegs .5s ease-in-out infinite}.walking .right-leg{transform-origin:40px 75px;animation:walkLegsReverse .5s ease-in-out infinite}.waving .right-arm{transform-origin:40px 50px;animation:armWave .8s ease-in-out infinite}.kicking .left-leg{transform-origin:40px 75px;animation:legKick .8s ease-in-out}.youtube-container{position:relative;width:100%;overflow:hidden;border-radius:8px;margin:0 auto}.youtube-container iframe{border:none;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.2)}[data-theme=dark] .youtube-container iframe{box-shadow:0 2px 8px rgba(0,0,0,.4)}.mood-container{text-align:center}.mood-emoji{font-size:3em;margin:10px 0;transition:transform .3s}.mood-selector{display:flex;justify-content:center;gap:5px;flex-wrap:wrap}.mood-selector button{background:0 0;border:none;font-size:1.5em;cursor:pointer;transition:transform .2s}.mood-selector button:hover{transform:scale(1.2)}.quote-container{text-align:center}#random-quote{font-style:italic;color:#eee;margin-bottom:10px;min-height:40px}.quote-container button{background:#f0f0f0;border:1px solid #ddd;border-radius:20px;padding:5px 10px;font-size:.85em;cursor:pointer}[data-theme=dark] .fun-aside-panel{background:#2a2a2a;box-shadow:0 2px 10px rgba(0,0,0,.2)}[data-theme=dark] .fun-title{color:#eee;border-bottom-color:#444}[data-theme=dark] .fun-section{background:#222;box-shadow:0 1px 3px rgba(0,0,0,.3)}[data-theme=dark] .drawing-controls button,[data-theme=dark] .quote-container button{background:#444;border-color:#555;color:#eee}[data-theme=dark] .drawing-controls button:hover,[data-theme=dark] .quote-container button:hover{background:#555}[data-theme=dark] #drawing-canvas{background:#444;border-color:#555}</style><script>document.addEventListener("DOMContentLoaded",function(){const t=document.getElementById("stickman"),e=document.querySelector(".stickman-container");if(t&&e){const o=["jump","flip","spin","kungfu1","kungfu2","punch","limbs","wave","kick","walk"];let i="";function n(){let a;do a=o[Math.floor(Math.random()*o.length)];while(a===i)switch(i=a,e.classList.remove("jumping","flipping","spinning","kungfu1","kungfu2","punching","moving-limbs","waving","kicking","walking"),t.style.left="0",void e.offsetWidth,a){case"jump":e.classList.add("jumping");break;case"flip":e.classList.add("flipping");break;case"spin":e.classList.add("spinning");break;case"kungfu1":e.classList.add("kungfu1");break;case"kungfu2":e.classList.add("kungfu2");break;case"punch":e.classList.add("punching");break;case"limbs":e.classList.add("moving-limbs");break;case"wave":e.classList.add("waving");break;case"kick":e.classList.add("kicking");break;case"walk":e.classList.add("walking"),s();break}let r=1e3;a==="limbs"?r=3e3:a==="walk"&&(r=4e3);const c=Math.floor(Math.random()*300)+200;setTimeout(function(){e.style.transition="opacity 0.2s ease-in-out",e.style.opacity="0.8",setTimeout(function(){e.style.opacity="1",n()},200)},r-c)}function s(){const n=Math.random()>.5?1:-1;n===-1?t.style.transform="scaleX(-1)":t.style.transform="scaleX(1)";const r=e.offsetWidth,c=t.getBoundingClientRect().width,s=r/2-c/2,o=4e3,l=performance.now(),i=parseInt(t.style.left||"0");function a(e){const r=e-l;if(r<o){const e=i+n*s*r/o;t.style.left=e+"px",requestAnimationFrame(a)}else t.style.left=i+n*s+"px"}requestAnimationFrame(a)}n(),t.addEventListener("click",function(){const n=o[Math.floor(Math.random()*o.length)];switch(e.classList.remove("jumping","flipping","spinning","kungfu1","kungfu2","punching","moving-limbs","waving","kicking","walking"),t.style.left="0",void e.offsetWidth,n){case"jump":e.classList.add("jumping");break;case"flip":e.classList.add("flipping");break;case"spin":e.classList.add("spinning");break;case"kungfu1":e.classList.add("kungfu1");break;case"kungfu2":e.classList.add("kungfu2");break;case"punch":e.classList.add("punching");break;case"limbs":e.classList.add("moving-limbs");break;case"wave":e.classList.add("waving");break;case"kick":e.classList.add("kicking");break;case"walk":e.classList.add("walking"),s();break}})}getRandomQuote()});function changeMood(e){const t=document.getElementById("current-mood");t.textContent=e,t.style.transform="scale(1.2)",setTimeout(()=>{t.style.transform="scale(1)"},200)}const quotes=["学习是一种态度，也是一种习惯。","真正的知识是从实践中获得的。","读书破万卷，下笔如有神。","好奇心是最好的老师。","科技就是力量。","人生就像代码，看起来很简单，写起来很难。","不积跬步，无以至千里；不积小流，无以成江海。","纸上得来终觉浅，绝知此事要躬行。","业精于勤，荒于嬉；行成于思，毁于随。","每一次失败都是迈向成功的一步。"];function getRandomQuote(){const e=document.getElementById("random-quote"),t=Math.floor(Math.random()*quotes.length);e.textContent=quotes[t],e.style.opacity=0,setTimeout(()=>{e.style.opacity=1},200)}</script></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span>Kafka 4_x 集群部署（KRaft 模式）</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://www.soulchild.cn title=作者 target=_blank rel="external nofollow noopener noreferrer author" class=author><img class="lazyload avatar" src=/svg/loading.min.svg data-src=/images/avatar.png data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x" data-sizes=auto alt=SoulChild title=SoulChild>&nbsp;SoulChild</a></span>
+<span class=post-category>收录于 <a href=/categories/elk%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86/><i class="fa-regular fa-folder fa-fw" aria-hidden=true></i> ELK日志收集</a></span></div><div class=post-meta-line><span title="2026-09-22 23:30:13"><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime="2026-09-22 23:30">2026-09-22 23:30</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden=true></i> 约 946 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden=true></i> 预计阅读 5 分钟</span>&nbsp;<span id=busuanzi_container_page_pv class="busuanzi_visitors comment-visitors" data-flag-title="Kafka 4_x 集群部署（KRaft 模式）">
+<i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_page_pv>-</span>&nbsp;次阅读
+</span>&nbsp;</div></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#一节点规划>一、节点规划</a></li><li><a href=#二前置条件所有节点>二、前置条件（所有节点）</a></li><li><a href=#三下载解压所有节点>三、下载解压（所有节点）</a></li><li><a href=#四配置文件>四、配置文件</a></li><li><a href=#五格式化存储首次启动前必须做>五、格式化存储（首次启动前必须做）</a></li><li><a href=#六启动所有节点>六、启动（所有节点）</a></li><li><a href=#七systemd-服务管理所有节点>七、systemd 服务管理（所有节点）</a></li><li><a href=#八验证>八、验证</a></li><li><a href=#九防火墙>九、防火墙</a></li><li><a href=#十运维常用知识点>十、运维常用知识点</a></li><li><a href=#总结>总结</a></li></ul></li></ul></nav></div></div><div class=content id=content data-end-flag=---><p>参考:</p><ul><li><a href=https://kafka.apache.org/documentation/#kraft target=_blank rel="external nofollow noopener noreferrer">https://kafka.apache.org/documentation/#kraft<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></li><li><a href=https://kafka.apache.org/quickstart target=_blank rel="external nofollow noopener noreferrer">https://kafka.apache.org/quickstart<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></li><li><a href=https://raw.githubusercontent.com/apache/kafka/trunk/docs/operations/kraft.md target=_blank rel="external nofollow noopener noreferrer">https://raw.githubusercontent.com/apache/kafka/trunk/docs/operations/kraft.md<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden=true></i></a></li></ul><p>4.0 起 Kafka 彻底移除了 ZooKeeper（2.8 引入 KRaft，3.3 生产可用），部署一个三节点集群只需要一个安装包，不需要再装 ZK。本文以 3 节点合并模式为例（每个节点同时是 broker + controller），单机部署的差异在文中以备注标出。</p><h3 id=一节点规划>一、节点规划</h3><table><thead><tr><th>节点</th><th>IP</th><th>node.id</th><th>角色</th><th>端口</th></tr></thead><tbody><tr><td>kafka1</td><td>172.16.1.11</td><td>1</td><td>broker,controller</td><td>9092 / 9093</td></tr><tr><td>kafka2</td><td>172.16.1.12</td><td>2</td><td>broker,controller</td><td>9092 / 9093</td></tr><tr><td>kafka3</td><td>172.16.1.13</td><td>3</td><td>broker,controller</td><td>9092 / 9093</td></tr></tbody></table><ul><li>9092: 数据面（客户端读写、broker 间复制）</li><li>9093: 控制面（controller 之间 Raft 通信、broker 心跳）</li></ul><blockquote><p>合并模式 3 节点可容忍挂 1 台。官方建议 controller 角色用 3 或 5 台：3 台容忍 1 故障，5 台容忍 2 故障</p><p>大规模集群可以把角色拆开（<code>process.roles=controller</code> 单独部署 3 台 controller，broker 只跑数据），小规模用合并模式即可</p></blockquote><h3 id=二前置条件所有节点>二、前置条件（所有节点）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Java 17+ 是 4.x 硬性要求</span>
+</span></span><span class=line><span class=cl>java -version
+</span></span><span class=line><span class=cl><span class=c1># openjdk version &#34;17.0.x&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 所有节点配置主机名解析(用主机名做监听地址, 换 IP 时不用改配置)</span>
+</span></span><span class=line><span class=cl>cat &gt;&gt; /etc/hosts <span class=s>&lt;&lt;&#39;EOF&#39;
+</span></span></span><span class=line><span class=cl><span class=s>172.16.1.11 kafka1
+</span></span></span><span class=line><span class=cl><span class=s>172.16.1.12 kafka2
+</span></span></span><span class=line><span class=cl><span class=s>172.16.1.13 kafka3
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 创建数据目录</span>
+</span></span><span class=line><span class=cl>mkdir -p /data/kafka
+</span></span></code></pre></td></tr></table></div></div><h3 id=三下载解压所有节点>三、下载解压（所有节点）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 版本号在 https://downloads.apache.org/kafka/ 找最新的</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> /server/tools
+</span></span><span class=line><span class=cl>wget https://downloads.apache.org/kafka/4.3.1/kafka_2.13-4.3.1.tgz
+</span></span><span class=line><span class=cl>tar -xzf kafka_2.13-4.3.1.tgz -C /server/
+</span></span><span class=line><span class=cl>ln -s /server/kafka_2.13-4.3.1 /server/kafka
+</span></span></code></pre></td></tr></table></div></div><blockquote><p><code>2.13</code> 是 Scala 编译版本号，不是 Kafka 版本</p></blockquote><h3 id=四配置文件>四、配置文件</h3><p>三个节点的配置只有 <code>node.id</code> 和 <code>advertised.listeners</code> 两处不同，其余完全一致。下面以 kafka1 为例：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-properties data-lang=properties><span class=line><span class=cl><span class=c1># KRaft 角色定义, 合并模式两者都写; 纯 controller 节点只写 controller</span>
+</span></span><span class=line><span class=cl><span class=na>process.roles</span><span class=o>=</span><span class=s>broker,controller</span>
+</span></span><span class=line><span class=cl><span class=c1># 节点 ID, 集群内唯一, kafka1/2/3 分别为 1/2/3 (取代老版本的 broker.id)</span>
+</span></span><span class=line><span class=cl><span class=na>node.id</span><span class=o>=</span><span class=s>1</span>
+</span></span><span class=line><span class=cl><span class=c1># controller quorum 成员地址, 三个节点写完全一样 (动态 quorum 用法)</span>
+</span></span><span class=line><span class=cl><span class=na>controller.quorum.bootstrap.servers</span><span class=o>=</span><span class=s>kafka1:9093,kafka2:9093,kafka3:9093</span>
+</span></span><span class=line><span class=cl><span class=c1># 监听器: 9092 数据面, 9093 控制面</span>
+</span></span><span class=line><span class=cl><span class=na>listeners</span><span class=o>=</span><span class=s>PLAINTEXT://:9092,CONTROLLER://:9093</span>
+</span></span><span class=line><span class=cl><span class=c1># broker 之间复制走数据面监听器</span>
+</span></span><span class=line><span class=cl><span class=na>inter.broker.listener.name</span><span class=o>=</span><span class=s>PLAINTEXT</span>
+</span></span><span class=line><span class=cl><span class=c1># 对外通告地址, 客户端拿到元数据后按这个地址来连, 必须写其他机器可达的地址</span>
+</span></span><span class=line><span class=cl><span class=na>advertised.listeners</span><span class=o>=</span><span class=s>PLAINTEXT://kafka1:9092,CONTROLLER://kafka1:9093</span>
+</span></span><span class=line><span class=cl><span class=na>controller.listener.names</span><span class=o>=</span><span class=s>CONTROLLER</span>
+</span></span><span class=line><span class=cl><span class=na>listener.security.protocol.map</span><span class=o>=</span><span class=s>CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT</span>
+</span></span><span class=line><span class=cl><span class=c1># 数据目录(元数据日志和数据分区都在这里), 生产环境放独立数据盘</span>
+</span></span><span class=line><span class=cl><span class=na>log.dirs</span><span class=o>=</span><span class=s>/data/kafka</span>
+</span></span><span class=line><span class=cl><span class=c1># 新建 topic 默认分区数</span>
+</span></span><span class=line><span class=cl><span class=na>num.partitions</span><span class=o>=</span><span class=s>3</span>
+</span></span><span class=line><span class=cl><span class=c1># 自动创建 topic 的默认副本数(不配默认是 1, 相当于裸奔)</span>
+</span></span><span class=line><span class=cl><span class=na>default.replication.factor</span><span class=o>=</span><span class=s>3</span>
+</span></span><span class=line><span class=cl><span class=c1># 消息保留时长, 默认 7 天</span>
+</span></span><span class=line><span class=cl><span class=na>log.retention.hours</span><span class=o>=</span><span class=s>168</span>
+</span></span><span class=line><span class=cl><span class=c1># 单个日志段文件大小, 到了就滚动新 segment, 删除过期数据按 segment 整个删</span>
+</span></span><span class=line><span class=cl><span class=na>log.segment.bytes</span><span class=o>=</span><span class=s>1073741824</span>
+</span></span><span class=line><span class=cl><span class=c1># 消费位移 topic 的副本数, 必须在首次启动前设对, 内部 topic 建好后再改不生效</span>
+</span></span><span class=line><span class=cl><span class=na>offsets.topic.replication.factor</span><span class=o>=</span><span class=s>3</span>
+</span></span><span class=line><span class=cl><span class=c1># 事务状态 topic 副本数和最小 ISR</span>
+</span></span><span class=line><span class=cl><span class=na>transaction.state.log.replication.factor</span><span class=o>=</span><span class=s>3</span>
+</span></span><span class=line><span class=cl><span class=na>transaction.state.log.min.isr</span><span class=o>=</span><span class=s>2</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p><strong>单机版差异</strong>: <code>node.id=1</code>；<code>controller.quorum.bootstrap.servers=localhost:9093</code>；<code>advertised.listeners=PLAINTEXT://localhost:9092</code>；三个 replication.factor 相关参数保持 1（单机没得选）</p><p>老版本教程里常见的 <code>controller.quorum.voters=1@kafka1:9093,...</code> 是静态 quorum 用法，和 <code>controller.quorum.bootstrap.servers</code> 二选一，动态 quorum 下配了 voters 反而起不来</p><p>元数据日志默认放在 <code>log.dirs</code> 的第一个目录里，不用单独配 <code>metadata.log.dir</code></p></blockquote><h3 id=五格式化存储首次启动前必须做>五、格式化存储（首次启动前必须做）</h3><p>新版本强制手动格式化，防止空目录自动格式化掩盖故障（比如多数 controller 拿空日志选主，元数据就没了）。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 在 kafka1 上生成 1 个集群 ID + 3 个节点目录 ID, 记下这 4 个值</span>
+</span></span><span class=line><span class=cl><span class=nv>CLUSTER_ID</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>bin/kafka-storage.sh random-uuid<span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>C1</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>bin/kafka-storage.sh random-uuid<span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>C2</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>bin/kafka-storage.sh random-uuid<span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>C3</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>bin/kafka-storage.sh random-uuid<span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在每个节点分别执行 format, 三个节点的 --initial-controllers 参数值必须完全一致</span>
+</span></span><span class=line><span class=cl><span class=c1># 格式: &lt;node.id&gt;@&lt;controller地址&gt;:&lt;端口&gt;:&lt;该节点的目录ID&gt;</span>
+</span></span><span class=line><span class=cl><span class=c1># kafka1 上执行:</span>
+</span></span><span class=line><span class=cl>bin/kafka-storage.sh format --cluster-id <span class=si>${</span><span class=nv>CLUSTER_ID</span><span class=si>}</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  --initial-controllers <span class=s2>&#34;1@kafka1:9093:</span><span class=si>${</span><span class=nv>C1</span><span class=si>}</span><span class=s2>,2@kafka2:9093:</span><span class=si>${</span><span class=nv>C2</span><span class=si>}</span><span class=s2>,3@kafka3:9093:</span><span class=si>${</span><span class=nv>C3</span><span class=si>}</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  -c /server/kafka/config/server.properties
+</span></span><span class=line><span class=cl><span class=c1># kafka2、kafka3 上执行同样的命令(参数不变)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 输出类似: Formatting /data/kafka with metadata.version 4.3-IV0.</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p><strong>单机版差异</strong>: 不用生成节点目录 ID，也用不着 <code>--initial-controllers</code>，直接
+<code>bin/kafka-storage.sh format --standalone -t ${CLUSTER_ID} -c /server/kafka/config/server.properties</code></p></blockquote><h3 id=六启动所有节点>六、启动（所有节点）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 前台启动(调试看日志用)</span>
+</span></span><span class=line><span class=cl>bin/kafka-server-start.sh /server/kafka/config/server.properties
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 后台启动, 堆默认 -Xmx1G -Xms1G(启动脚本写死), 生产按流量调</span>
+</span></span><span class=line><span class=cl><span class=nv>KAFKA_HEAP_OPTS</span><span class=o>=</span><span class=s2>&#34;-Xmx1G -Xms1G&#34;</span> bin/kafka-server-start.sh -daemon /server/kafka/config/server.properties
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 确认进程</span>
+</span></span><span class=line><span class=cl>jps -l <span class=p>|</span> grep kafka
+</span></span><span class=line><span class=cl><span class=c1># xxx kafka.Kafka</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=七systemd-服务管理所有节点>七、systemd 服务管理（所有节点）</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>cat &gt; /etc/systemd/system/kafka.service <span class=s>&lt;&lt;&#39;EOF&#39;
+</span></span></span><span class=line><span class=cl><span class=s>[Unit]
+</span></span></span><span class=line><span class=cl><span class=s>Description=Apache Kafka (KRaft)
+</span></span></span><span class=line><span class=cl><span class=s>After=network-online.target
+</span></span></span><span class=line><span class=cl><span class=s>Wants=network-online.target
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>[Service]
+</span></span></span><span class=line><span class=cl><span class=s>Type=simple
+</span></span></span><span class=line><span class=cl><span class=s>User=root
+</span></span></span><span class=line><span class=cl><span class=s>Environment=KAFKA_HEAP_OPTS=-Xmx1G -Xms1G
+</span></span></span><span class=line><span class=cl><span class=s>ExecStart=/server/kafka/bin/kafka-server-start.sh /server/kafka/config/server.properties
+</span></span></span><span class=line><span class=cl><span class=s>ExecStop=/server/kafka/bin/kafka-server-stop.sh
+</span></span></span><span class=line><span class=cl><span class=s>Restart=on-failure
+</span></span></span><span class=line><span class=cl><span class=s>LimitNOFILE=100000
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>[Install]
+</span></span></span><span class=line><span class=cl><span class=s>WantedBy=multi-user.target
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>systemctl daemon-reload
+</span></span><span class=line><span class=cl>systemctl <span class=nb>enable</span> kafka --now
+</span></span></code></pre></td></tr></table></div></div><h3 id=八验证>八、验证</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 1. 看 controller quorum 状态: Leader 应该是某个 node.id, 两个 Follower</span>
+</span></span><span class=line><span class=cl>bin/kafka-metadata-quorum.sh describe --status --bootstrap-server kafka1:9092
+</span></span><span class=line><span class=cl><span class=c1># ClusterId:              xxx</span>
+</span></span><span class=line><span class=cl><span class=c1># LeaderId:               1</span>
+</span></span><span class=line><span class=cl><span class=c1># LeaderEpoch:            1</span>
+</span></span><span class=line><span class=cl><span class=c1># HighWatermark:          10</span>
+</span></span><span class=line><span class=cl><span class=c1># [FollowerId: 2, ...] [FollowerId: 3, ...]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 2. 看 controller 复制是否同步: Lag 应为 0</span>
+</span></span><span class=line><span class=cl>bin/kafka-metadata-quorum.sh describe --replication --bootstrap-server kafka1:9092
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 3. 建 topic 副本分散到三台</span>
+</span></span><span class=line><span class=cl>bin/kafka-topics.sh --create --topic <span class=nb>test</span> --partitions <span class=m>3</span> --replication-factor <span class=m>3</span> --bootstrap-server kafka1:9092
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 4. 每个 partition 的 Leader/Replicas/Isr 应该是三个不同节点</span>
+</span></span><span class=line><span class=cl>bin/kafka-topics.sh --describe --topic <span class=nb>test</span> --bootstrap-server kafka1:9092
+</span></span><span class=line><span class=cl><span class=c1># Topic: test  Partition: 0  Leader: 2  Replicas: 2,3,1  Isr: 2,3,1</span>
+</span></span><span class=line><span class=cl><span class=c1># Topic: test  Partition: 1  Leader: 3  Replicas: 3,1,2  Isr: 3,1,2</span>
+</span></span><span class=line><span class=cl><span class=c1># Topic: test  Partition: 2  Leader: 1  Replicas: 1,2,3  Isr: 1,2,3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 5. 收发消息验证</span>
+</span></span><span class=line><span class=cl>bin/kafka-console-producer.sh --topic <span class=nb>test</span> --bootstrap-server kafka1:9092
+</span></span><span class=line><span class=cl>bin/kafka-console-consumer.sh --topic <span class=nb>test</span> --from-beginning --bootstrap-server kafka1:9092
+</span></span></code></pre></td></tr></table></div></div><h3 id=九防火墙>九、防火墙</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>firewall-cmd --permanent --add-port<span class=o>=</span>9092/tcp --add-port<span class=o>=</span>9093/tcp
+</span></span><span class=line><span class=cl>firewall-cmd --reload
+</span></span></code></pre></td></tr></table></div></div><h3 id=十运维常用知识点>十、运维常用知识点</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 1. 消费组管理(最常用)</span>
+</span></span><span class=line><span class=cl><span class=c1># 查看所有消费组(4.x 新增 kafka-groups.sh, 能看到组的类型)</span>
+</span></span><span class=line><span class=cl>bin/kafka-groups.sh --bootstrap-server kafka1:9092 --list
+</span></span><span class=line><span class=cl><span class=c1># GROUP                    TYPE                     PROTOCOL</span>
+</span></span><span class=line><span class=cl><span class=c1># my-consumer-group        Consumer                 consumer</span>
+</span></span><span class=line><span class=cl><span class=c1># my-share-group           Share                    share</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 老命令同样可用</span>
+</span></span><span class=line><span class=cl>bin/kafka-consumer-groups.sh --bootstrap-server kafka1:9092 --list
+</span></span><span class=line><span class=cl><span class=c1># test-consumer-group</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 查看某组消费进度和积压(核心: LAG = LOG-END-OFFSET - CURRENT-OFFSET)</span>
+</span></span><span class=line><span class=cl>bin/kafka-consumer-groups.sh --describe --group &lt;组名&gt; --bootstrap-server kafka1:9092
+</span></span><span class=line><span class=cl><span class=c1># 只看组状态和成员数</span>
+</span></span><span class=line><span class=cl>bin/kafka-consumer-groups.sh --describe --group &lt;组名&gt; --state --bootstrap-server kafka1:9092
+</span></span><span class=line><span class=cl><span class=c1># 删除空消费组(要求组内无活跃成员, 常用于清理测试遗留的组)</span>
+</span></span><span class=line><span class=cl>bin/kafka-consumer-groups.sh --delete --group &lt;组名&gt; --bootstrap-server kafka1:9092
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 2. topic 级配置动态修改: 单独给某个 topic 改保留时间(覆盖 broker 的 log.retention.hours)</span>
+</span></span><span class=line><span class=cl><span class=c1># 例: test 保留 3 天</span>
+</span></span><span class=line><span class=cl>bin/kafka-configs.sh --bootstrap-server kafka1:9092 --entity-type topics <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  --entity-name <span class=nb>test</span> --alter --add-config retention.ms<span class=o>=</span><span class=m>259200000</span>
+</span></span><span class=line><span class=cl><span class=c1># 删除 topic 级配置(恢复用 broker 默认值)</span>
+</span></span><span class=line><span class=cl>bin/kafka-configs.sh --bootstrap-server kafka1:9092 --entity-type topics <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  --entity-name <span class=nb>test</span> --alter --delete-config retention.ms
+</span></span><span class=line><span class=cl><span class=c1># 注意: topic 分区数只能加不能减</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 3. 排查数据: 用 --partition 裸读, 不产生消费组、不提交位移、不残留垃圾组</span>
+</span></span><span class=line><span class=cl>bin/kafka-console-consumer.sh --topic <span class=nb>test</span> --partition <span class=m>0</span> --offset earliest --bootstrap-server kafka1:9092
+</span></span><span class=line><span class=cl><span class=c1># 看某 topic 每个分区的起止位移</span>
+</span></span><span class=line><span class=cl>bin/kafka-get-offsets.sh --topic <span class=nb>test</span> --bootstrap-server kafka1:9092
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 4. controller quorum 健康检查(每次巡检/变更后必看)</span>
+</span></span><span class=line><span class=cl>bin/kafka-metadata-quorum.sh describe --status --bootstrap-server kafka1:9092
+</span></span><span class=line><span class=cl>bin/kafka-metadata-quorum.sh describe --replication --bootstrap-server kafka1:9092   <span class=c1># Lag 应为 0</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 5. 服务日志位置: 进程日志不在这里! 默认 $KAFKA_HOME/logs(LOG_DIR 环境变量可改)</span>
+</span></span><span class=line><span class=cl><span class=c1># systemd 部署时 LOG_DIR 未设置, 日志在 /server/kafka/logs/, 注意和数据目录 /data/kafka 区分开</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 6. 核心监控指标(JMX, 配 Prometheus JMX Exporter 采集)</span>
+</span></span><span class=line><span class=cl><span class=c1># kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions    期望 0, &gt;0 有副本掉出 ISR</span>
+</span></span><span class=line><span class=cl><span class=c1># kafka.server:type=ReplicaManager,name=UnderMinIsrPartitionCount    期望 0, &gt;0 写入面临拒绝(NotEnoughReplicas)</span>
+</span></span><span class=line><span class=cl><span class=c1># kafka.controller:type=KafkaController,name=ActiveControllerCount   全集群仅 1 台为 1, 其余为 0</span>
+</span></span><span class=line><span class=cl><span class=c1># kafka.controller:type=KafkaController,name=OfflinePartitionsCount  期望 0, &gt;0 有分区无 leader, 业务中断</span>
+</span></span><span class=line><span class=cl><span class=c1># kafka.server:type=KafkaRequestHandlerPool,name=RequestHandlerAvgIdlePercent  处理线程空闲率, 持续偏低说明 CPU 扛不住了</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>监控告警建议: UnderReplicatedPartitions 持续 > 0、OfflinePartitionsCount > 0、ActiveControllerCount ≠ 1，这三个是集群级红灯</p></blockquote><h3 id=总结>总结</h3><ol><li>集群版三步走: 改配置(只有 node.id 和 advertised.listeners 两个节点不同) -> format 存储 -> 启动</li><li><code>--initial-controllers</code> 里的目录 ID 每个节点一个，但三个节点执行的 format 命令参数必须完全一致</li><li><code>offsets.topic.replication.factor</code> 必须在首次启动前设成 3，内部 topic 建好后改配置无效</li><li>动态 quorum 用 <code>controller.quorum.bootstrap.servers</code>，不要再配 <code>controller.quorum.voters</code>（二选一）</li><li>验收集群是否健康: metadata-quorum 看 Leader 和 Lag，<code>--describe</code> 看 ISR 是否满 3 个</li><li>日常运维三板斧: consumer-groups 看积压、metadata-quorum 看控制面、JMX 三个集群级红灯指标</li><li>单机版差异: format 用 <code>--standalone</code>，副本数参数保持 1， advertised 写 localhost</li></ol></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="2026-09-22 23:30:13">更新于 2026-09-22 23:30&nbsp;</span></div><div class=post-info-license><span>本站使用「署名 4.0 国际」创作共享协议，可自由转载、引用，但需署名作者且注明文章出处</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags fa-fw me-1" aria-hidden=true></i><a href=/tags/kafka/ class=post-tag>kafka</a><a href=/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/ class=post-tag>消息队列</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/post/agentgateway%E4%BB%8B%E7%BB%8D/ class=post-nav-item rel=prev title=agentgateway介绍><i class="fa-solid fa-angle-left fa-fw" aria-hidden=true></i>agentgateway介绍</a></div></div><div class=post-reward><div class=comment>请我喝杯水</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward>赞赏</label><div class=reward-ways><div><img src=/images/wx.png alt="SoulChild 微信号">
+<span data-animation>微信号</span></div><div><img src=/images/wechatpay.png alt="SoulChild 微信打赏">
+<span data-animation>微信打赏</span></div></div></div><div id=comments><div id=giscus><script src=https://giscus.app/client.js data-repo=SoulChildTc/soulchild-blog data-repo-id=R_kgDOIwJKxg data-category=General data-category-id=DIC_kwDOIwJKxs4CTwRk data-mapping=title data-theme=preferred_color_scheme data-reactions-enabled=1 data-emit-metadata=0 data-input-position=bottom data-lang=zh-CN data-loading=lazy crossorigin=anonymous async defer></script></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://giscus.app/ rel="external nofollow noopener noreferrer">giscus</a>.</noscript></div></article></main><footer class=footer><div class=footer-container><script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?7b986d4ea8e2e50e9c04984b78170660",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})()</script><script src=/js/effect.js></script><style>body{position:relative;overflow-x:hidden}#canvas-effect{opacity:.7}</style><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright fa-fw" aria-hidden=true></i>
+<span itemprop=copyrightYear>2017 - 2026</span><span class=author itemprop=copyrightHolder>
+<a href=https://www.soulchild.cn target=_blank rel="external nofollow noopener noreferrer">SoulChild</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class=site-time title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden=true></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor"><span id=busuanzi_container_site_uv title=总访客数><i class="fa-regular fa-user fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_uv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span><span id=busuanzi_container_site_pv class=footer-divider title=总访问量><i class="fa-regular fa-eye fa-fw" aria-hidden=true></i>&nbsp;<span id=busuanzi_value_site_pv><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden=true></i></span></span></div><div class="footer-line beian"><span class="icp footer-divider">特别感谢
+<a href=https://gohugo.io target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.109.0">Hugo</a> |
+<a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v0.2.17-RC">FixIt</a> |
+<a href=https://github.com target=_blank rel="noopener noreffer">GitHub</a> |
+<a href=https://vercel.com target=_blank rel="noopener noreffer">Vercel</a></span></div></div></footer></div><div class=widgets><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role=button aria-label=回到顶部><i class="fa-solid fa-arrow-up fa-fw" aria-hidden=true></i><span class=variant-numeric>0%</span></div><div class="fixed-button view-comments d-none" role=button aria-label=查看评论><i class="fa-solid fa-comment fa-fw" aria-hidden=true></i></div></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0;--bg-progress:#438a55;--bg-progress-dark:#438a55></div><noscript><div class=noscript-warning>FixIt 主题在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/lightgallery/css/lightgallery-bundle.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/pace/themes/green/pace-theme-bounce.css><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/algoliasearch-lite.umd.min.js defer></script><script src=/lib/lazysizes/lazysizes.min.js async defer></script><script src=/lib/lightgallery/lightgallery.min.js defer></script><script src=/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js defer></script><script src=/lib/lightgallery/plugins/zoom/lg-zoom.min.js defer></script><script src=/lib/typeit/index.umd.js defer></script><script src=/lib/katex/katex.min.js defer></script><script src=/lib/katex/auto-render.min.js defer></script><script src=/lib/katex/copy-tex.min.js defer></script><script src=/lib/katex/mhchem.min.js defer></script><script src=/lib/pangu/pangu.min.js defer></script><script src=/lib/cell-watermark/watermark.min.js defer></script><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js async defer></script><script src=/lib/pace/pace.min.js async defer></script><script>window.config={autoBookmark:!0,code:{copyTitle:"复制到剪贴板",editLockTitle:"锁定可编辑代码块",editUnLockTitle:"解锁可编辑代码块",editable:!0,maxShownLines:50},comment:{enable:!0,expired:!1,giscus:{darkTheme:"dark",lightTheme:"light"}},data:{"typeit-header-subtitle-desktop":"/usr/bin/sleep infinity","typeit-header-subtitle-mobile":"/usr/bin/sleep infinity"},enablePWA:!0,lightgallery:!0,math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1},pangu:{enable:!0,selector:"article"},search:{algoliaAppID:"CE9G7Q4H6N",algoliaIndex:"soulchild-blog",algoliaSearchKey:"0f69a431d92a03c2cf4143d8dbc6af0a",highlightTag:"em",maxResultLength:20,noResultsFound:"没有找到结果",snippetLength:50,type:"algolia"},siteTime:"2017-06-08T21:38:36+08:00",typeit:{cursorChar:"|",cursorSpeed:1e3,data:{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},duration:-1,speed:100},watermark:{appendto:".wrapper\u003emain",colspacing:300,content:"SoulChild随笔记",enable:!0,fontfamily:"inherit",fontsize:.85,height:300,opacity:.1,rotate:15,rowspacing:100,width:300}}</script><script src=/js/theme.min.js defer></script></body></html>
